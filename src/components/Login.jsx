@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./Login.css";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import usersData from "../SystemFiles/Users.json";
+// import axios from "axios";
 
-const baseURL = process.env.REACT_APP_API_BASE_URL;
+// const baseURL = process.env.REACT_APP_API_BASE_URL;
 const image = process.env.PUBLIC_URL;
 
 const Login = () => {
@@ -53,32 +54,51 @@ const Login = () => {
         Cookies.remove("password");
       }
 
-      let apiUrl = `${baseURL}/admin/login`;
-
       try {
-        const response = await axios.post(apiUrl, requestData);
-        if (response.status === 200) {
-          const responToken = response.data.token;
-          const userType = response.data.userType;
-          const adminId = response.data.adminId;
+        const user = usersData.find(
+          (user) =>
+            user.username === requestData.username &&
+            user.password === requestData.password &&
+            user.userType === requestData.userType
+        );
 
-          localStorage.setItem("userToken", responToken);
-          localStorage.setItem("adminId", adminId);
-          localStorage.setItem("userType", userType);
-          navigate("/admin-dashboard");
+        if (user) {
+          localStorage.setItem("userType", user.userType);
+          navigate("/dashboard");
         } else {
-          setErrorMsg("Login failed. Please try again.");
+          setErrorMsg("Invalid username, password, or userType.");
         }
       } catch (error) {
-        if (error.response && error.response.status === 401) {
-          alert(error?.response?.data?.message);
-          setErrorMsg("Username or password is incorrect.");
-        } else {
-          setErrorMsg("An error occurred. Please try again.");
-        }
+        setErrorMsg("An error occurred. Please try again.");
       } finally {
         setLoading(false);
       }
+
+      // let apiUrl = `${baseURL}/admin/login`;
+      // try {
+      //   const response = await axios.post(apiUrl, requestData);
+      //   if (response.status === 200) {
+      //     const responToken = response.data.token;
+      //     const userType = response.data.userType;
+      //     const adminId = response.data.adminId;
+
+      //     localStorage.setItem("userToken", responToken);
+      //     localStorage.setItem("adminId", adminId);
+      //     localStorage.setItem("userType", userType);
+      //     navigate("/admin-dashboard");
+      //   } else {
+      //     setErrorMsg("Login failed. Please try again.");
+      //   }
+      // } catch (error) {
+      //   if (error.response && error.response.status === 401) {
+      //     alert(error?.response?.data?.message);
+      //     setErrorMsg("Username or password is incorrect.");
+      //   } else {
+      //     setErrorMsg("An error occurred. Please try again.");
+      //   }
+      // } finally {
+      //   setLoading(false);
+      // }
     }
   };
 
