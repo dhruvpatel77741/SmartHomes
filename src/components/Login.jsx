@@ -14,7 +14,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const [emailId, setEmailId] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -22,7 +22,7 @@ const Login = () => {
     const storedUserName = Cookies.get("userName");
     const storedPassword = Cookies.get("password");
     if (storedUserName && storedPassword) {
-      setEmailId(storedUserName);
+      setUsername(storedUserName);
       setPassword(storedPassword);
       setRememberMe(true);
     }
@@ -33,20 +33,20 @@ const Login = () => {
     setLoading(true);
 
     const requestData = {
-      emailId: emailId,
+      username: username,
       password: password,
       userType: userType,
     };
 
-    if (emailId === "") {
-      setErrorMsg("Please enter emailId");
+    if (username === "") {
+      setErrorMsg("Please enter username");
       setLoading(false);
     } else if (password === "") {
       setErrorMsg("Please enter password");
       setLoading(false);
     } else {
       if (rememberMe) {
-        Cookies.set("userName", emailId, { expires: 1 });
+        Cookies.set("userName", username, { expires: 1 });
         Cookies.set("password", password, { expires: 1 });
       } else {
         Cookies.remove("userName");
@@ -104,7 +104,7 @@ const Login = () => {
               type="button"
               style={{
                 backgroundColor:
-                  userType === "Retailer"
+                  userType === "StoreManager"
                     ? "rgba(0, 67, 229, 0.3)"
                     : "transparent",
                 color: "#333",
@@ -120,7 +120,7 @@ const Login = () => {
               type="button"
               style={{
                 backgroundColor:
-                  userType === "Trader"
+                  userType === "Customer"
                     ? "rgba(0, 67, 229, 0.3)"
                     : "transparent",
                 color: "#333",
@@ -136,7 +136,7 @@ const Login = () => {
               type="button"
               style={{
                 backgroundColor:
-                  userType === "Trader"
+                  userType === "Salesman"
                     ? "rgba(0, 67, 229, 0.3)"
                     : "transparent",
                 color: "#333",
@@ -156,9 +156,9 @@ const Login = () => {
                 <input
                   id="username"
                   type="text"
-                  value={emailId || ""}
-                  onChange={(e) => setEmailId(e.target.value)}
-                  placeholder="Email"
+                  value={username || ""}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Username"
                 />
                 <div className="login-form-imag"></div>
               </div>
@@ -176,6 +176,11 @@ const Login = () => {
                 <button onClick={eyeChange} type="button" className="eye-btn">
                   <img
                     className="eye-login"
+                    style={{
+                      width: "25px",
+                      height: "25px",
+                      paddingBottom: "10px",
+                    }}
                     src={
                       !eye
                         ? `${image}/Assets/Login/openview-eye.svg`
@@ -198,16 +203,16 @@ const Login = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    navigate("/forgotPassword");
+                    navigate("/signup");
                   }}
                   style={{
-                    display: "none",
+                    display: userType !== "Customer" ? "none" : "flex",
                     background: "none",
                     border: "none",
                     cursor: "pointer",
                   }}
                 >
-                  Forgot password?
+                  Create Account
                 </button>
               </div>
 
