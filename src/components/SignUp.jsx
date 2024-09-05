@@ -20,14 +20,37 @@ const SignUp = () => {
     e.preventDefault();
     setLoading(true);
 
-    const requestData = {
-      name: name,
-      username: username,
-      password: password,
-      userType: "Customer",
-    };
+    if (!name.trim() || !username.trim() || !password.trim()) {
+      window.alert("All fields are required.");
+      setLoading(false);
+      return;
+    }
 
-  
+    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
+    const isUsernameTaken = existingUsers.some(
+      (user) => user.username === username && user.userType === "Customer"
+    );
+    if (isUsernameTaken) {
+      window.alert("Username is already taken");
+      setLoading(false);
+    } else {
+      const requestData = {
+        name: name,
+        username: username,
+        password: password,
+        userType: "Customer",
+      };
+
+      existingUsers.push(requestData);
+
+      localStorage.setItem("users", JSON.stringify(existingUsers));
+      window.alert("User created successfully");
+      setName("");
+      setUsername("");
+      setPassword("");
+      setErrorMsg("");
+      navigate("/");
+    }
 
     // let apiUrl = `${baseURL}/admin/login`;
     // try {
@@ -85,6 +108,7 @@ const SignUp = () => {
                   value={name || ""}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Name"
+                  required
                 />
                 <div className="login-form-imag"></div>
               </div>
@@ -93,9 +117,9 @@ const SignUp = () => {
                   id="username"
                   type="text"
                   value={username || ""}
-                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Username"
+                  required
                 />
                 <div className="login-form-imag"></div>
               </div>
@@ -107,7 +131,10 @@ const SignUp = () => {
                   type={eye ? "text" : "password"}
                   value={password || ""}
                   placeholder="Password"
+                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$"
+                  title="Password must contain at least 8 characters, including uppercase, lowercase, numbers, and special characters."
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
                 <div className="login-form-imag lock-password"></div>
                 <button onClick={eyeChange} type="button" className="eye-btn">

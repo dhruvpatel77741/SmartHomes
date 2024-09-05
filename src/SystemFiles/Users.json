@@ -10,5 +10,11 @@
     "username": "Dev",
     "password": "Dev@777",
     "userType": "Salesman"
+  },
+  {
+    "name": "Princy Patel",
+    "username": "Princy",
+    "password": "Princy@777",
+    "userType": "Customer"
   }
 ]

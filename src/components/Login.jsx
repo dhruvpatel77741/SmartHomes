@@ -20,12 +20,17 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
+    // Retrieve stored username and password from cookies if available
     const storedUserName = Cookies.get("userName");
     const storedPassword = Cookies.get("password");
     if (storedUserName && storedPassword) {
       setUsername(storedUserName);
       setPassword(storedPassword);
       setRememberMe(true);
+    }
+
+    if (!localStorage.getItem("users")) {
+      localStorage.setItem("users", JSON.stringify(usersData));
     }
   }, []);
 
@@ -55,18 +60,23 @@ const Login = () => {
       }
 
       try {
-        const user = usersData.find(
+        const storedUsers = JSON.parse(localStorage.getItem("users"));
+
+        const user = storedUsers.find(
           (user) =>
             user.username === requestData.username &&
-            user.password === requestData.password &&
-            user.userType === requestData.userType
+            user.password === requestData.password
         );
 
         if (user) {
-          localStorage.setItem("userType", user.userType);
-          navigate("/dashboard");
+          if (user.userType === requestData.userType) {
+            localStorage.setItem("userType", user.userType);
+            navigate("/dashboard");
+          } else {
+            window.alert("Invalid User Type");
+          }
         } else {
-          setErrorMsg("Invalid username, password, or userType.");
+          window.alert("Invalid username or password.");
         }
       } catch (error) {
         setErrorMsg("An error occurred. Please try again.");
