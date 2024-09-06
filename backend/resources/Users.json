@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Dhruv Patel",
+    "username": "Dhruv",
+    "password": "Dhruv@777",
+    "userType": "StoreManager"
+  },
+  {
+    "name": "Dev Patel",
+    "username": "Dev",
+    "password": "Dev@777",
+    "userType": "Salesman"
+  },
+  {
+    "name": "Princy Patel",
+    "username": "Princy",
+    "password": "Princy@777",
+    "userType": "Customer"
+  }
+]
