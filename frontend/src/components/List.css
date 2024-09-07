@@ -451,3 +451,314 @@
     flex-direction: column;
     gap: 20px;
   }
+
+  .add-model-backdrop {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .add-model-content {
+    background-color: #fff;
+    padding: 20px 20px;
+    border-radius: 0;
+    width: auto;
+    max-width: 1170px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
+  .add-model-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .add-model-header > h3 {
+    color: rgb(21 67 176);
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .add-model-close-btn {
+    background: rgba(44, 58, 100, 1);
+    border-radius: 50px;
+    width: 23px;
+    height: 23px;
+    color: rgba(255, 255, 255, 1);
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .add-model-form {
+    display: flex;
+    flex-direction: column;
+    /* grid-template-columns: repeat(4, 1fr); */
+    gap: 10px;
+    margin-top: 18px;
+  }
+  
+  .add-name {
+    background: rgba(224, 237, 255, 1);
+    border-radius: 5px;
+    padding: 0 12px;
+    border: 0;
+    outline: 0;
+    width: 265px;
+    height: 52px;
+  }
+  
+  .add-email {
+    /* margin-left: 20px; */
+    padding: 0 12px;
+    background: rgba(224, 237, 255, 1);
+    border-radius: 5px;
+    border: 0;
+    outline: 0;
+    width: 265px;
+    height: 52px;
+  }
+  
+  .add-phone {
+    /* margin-left: 20px; */
+    padding: 0 12px;
+    background: rgba(224, 237, 255, 1);
+    border-radius: 5px;
+    border: 0;
+    outline: 0;
+    width: 265px;
+    height: 52px;
+  }
+  
+  .add-personphoto {
+    margin-left: 20px;
+    padding: 23px 12px;
+    background: rgba(224, 237, 255, 1);
+    border-radius: 5px;
+    border: 0;
+    outline: 0;
+    height: 52px;
+  }
+  
+  input.add-personphoto {
+    width: 274px;
+  }
+  
+  .photo-upload {
+    position: relative;
+    top: 0;
+    right: 0;
+  }
+  
+  .photo-main {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+  }
+  
+  .add-cce {
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 400;
+    background: rgba(224, 237, 255, 1);
+    border-radius: 5px;
+    padding: 0 12px;
+    border: 0;
+    outline: 0;
+    width: 200px;
+    height: 52px;
+  }
+  
+  .what-servesection {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    /* margin-top: 20px; */
+    font-size: 14px;
+    font-weight: 400;
+    background: rgba(224, 237, 255, 1);
+    border-radius: 5px;
+    padding: 0 12px;
+    border: 0;
+    outline: 0;
+    width: 70% !important;
+    height: 64px;
+    overflow: auto;
+    margin-bottom: 20px;
+  }
+  
+  .adddetail-input {
+    padding: 12px 15px;
+    border-radius: 5px;
+    border: none;
+    width: 200px;
+    height: 52px;
+    background: rgba(224, 237, 255, 1);
+    color: rgba(44, 58, 100, 1);
+    margin-right: 20px;
+    margin-top: 20px;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  
+  .add-ccephoto {
+    margin-top: 20px;
+    font-size: 10px;
+    font-weight: 400;
+    padding: 23px 12px;
+    background: rgba(224, 237, 255, 1);
+    border-radius: 5px;
+    border: 0;
+    outline: 0;
+    height: 52px;
+  }
+  
+  .ccephoto-size {
+    /* padding-top: 20px; */
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 50%;
+    font-weight: 400;
+  }
+  
+  input.add-ccephoto {
+    width: 200px;
+  }
+  
+  .addphoto-main {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+  }
+  
+  .add-model-form input,
+  .add-model-form select,
+  .add-model-form textarea {
+    border: 1px solid #ccc;
+    border: 0;
+  }
+  
+  .add-model-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+  }
+  
+  .add-model-actions button {
+    padding: 10px 20px;
+    background-color: transparent;
+    border-radius: 50px;
+    border: 1px solid rgb(21 67 176);
+    color: rgb(21 67 176);
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .add-model-actions button:hover {
+    background: rgb(21 67 176);
+    color: rgba(255, 255, 255, 1);
+  }
+  
+  cancel-hover {
+    background: rgb(21 67 176);
+    color: rgba(255, 255, 255, 1);
+  }
+  
+  .submit-hover {
+    background: rgb(21 67 176);
+    color: rgba(255, 255, 255, 1);
+  }
+  
+  .add-model-actions button[type="button"] {
+    background-color: transparent;
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid rgb(21 67 176);
+    color: rgb(21 67 176);
+    font-size: 16px;
+    font-weight: 400;
+  }
+  
+  label.label-text {
+    position: absolute;
+    left: 30px;
+    color: rgba(44, 58, 100, 1);
+    font-size: 14px;
+    font-weight: 400;
+  }
+  
+  .label-cce {
+    position: absolute;
+    top: 22px;
+    left: 14px;
+    color: rgba(44, 58, 100, 1);
+    font-size: 14px;
+    font-weight: 400;
+  }
+  
+  .label-eleid {
+    position: absolute;
+    top: 22px;
+    left: 14px;
+    color: rgba(44, 58, 100, 1);
+    font-size: 14px;
+    font-weight: 400;
+  }
+  
+  .label-design {
+    position: absolute;
+    top: 22px;
+    left: 14px;
+    color: rgba(44, 58, 100, 1);
+    font-size: 14px;
+    font-weight: 400;
+  }
+  
+  .addmap-section {
+    transform: translate(-1px, 20px);
+    display: inline-block;
+    margin: 0px 0 0 25px;
+    width: 421px;
+    height: 196px;
+  }
+  
+  #Addinstaller-PersonPhoto {
+    border: none;
+    color: #000;
+    font-family: Poppins;
+    font-size: var(--font-size-12);
+    width: auto;
+  }
+
+  .editInput {
+    width: 374px;
+    height: 52px;
+    border-radius: 5px;
+    border: transparent;
+    display: block;
+    padding-left: 50px;
+    background: rgba(224, 237, 255, 1);
+    margin: 0;
+    color: rgba(44, 58, 100, 1);
+  }
+  

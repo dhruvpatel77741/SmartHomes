@@ -37,7 +37,7 @@ const ViewProduct = ({ onClose }) => {
           style={{ height: "500px", width: "600px" }}
         >
           <div className="profile-model-header">
-            <h3 style={{ display: "flex", gap: "10px" }}>Product</h3>
+            <h3 style={{ display: "flex", gap: "10px" }}> View Product</h3>
             <button
               className="invite-model-close-btn"
               onClick={() => {

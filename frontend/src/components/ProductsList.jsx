@@ -4,6 +4,7 @@ import "./List.css";
 import axios from "axios";
 import Aside from "./Aside";
 import ViewProduct from "./ViewProduct";
+import EditProduct from "./EditProduct";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 const image = process.env.PUBLIC_URL;
@@ -18,7 +19,7 @@ const ProductsList = () => {
     try {
       const resp = await axios.get(apiUrl);
       const data = resp.data;
-      console.log(data)
+      console.log(data);
       setDataShow(data);
     } catch (err) {
       console.log("Error:", err);
@@ -50,7 +51,7 @@ const ProductsList = () => {
   //View Customer Model Ends
 
   //Edit Customer Model Starts
-  const editCustomer = (id) => {
+  const editProduct = (id) => {
     localStorage.setItem("productId", id);
 
     setEditProductOpen(true);
@@ -150,7 +151,7 @@ const ProductsList = () => {
                         <td className="team-data-actions">
                           <button
                             className="add-action"
-                            onClick={() => editCustomer(data.id)}
+                            onClick={() => editProduct(data.id)}
                           >
                             <img
                               src={`${image}/Assets/Teams/add-btn.svg`}
@@ -168,9 +169,7 @@ const ProductsList = () => {
                           </button>
                           <button
                             className="notview-action"
-                            onClick={() =>
-                              getIdToDelete(data.id)
-                            }
+                            onClick={() => getIdToDelete(data.id)}
                           >
                             <img
                               src={`${image}/Assets/Teams/not-view.svg`}
@@ -207,15 +206,15 @@ const ProductsList = () => {
                   localStorage.removeItem("installerId");
                 }}
               />
-            )}
+            )} */}
             {isEditProductOpen && (
-              <EditInstallationTeam
+              <EditProduct
                 onClose={() => {
                   setEditProductOpen(false);
-                  localStorage.removeItem("installerId");
+                  localStorage.removeItem("productId");
                 }}
               />
-            )} */}
+            )}
             {isViewProductOpen && (
               <ViewProduct
                 onClose={() => {
@@ -229,9 +228,13 @@ const ProductsList = () => {
               <div className="invite-model-backdrop">
                 <div
                   className="delete-model-content"
-                  style={{ width: "502px", backgroundColor:"white", borderRadius:"10px" }}
+                  style={{
+                    width: "502px",
+                    backgroundColor: "white",
+                    borderRadius: "10px",
+                  }}
                 >
-                  <h2 style={{display: "flex", justifyContent: "center"}}>
+                  <h2 style={{ display: "flex", justifyContent: "center" }}>
                     Are you sure you want to delete?
                   </h2>
                   <div
