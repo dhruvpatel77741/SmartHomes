@@ -1,0 +1,112 @@
+.MainOuterContainer {
+    display: flex;
+  }
+  
+  .main-part-ratailer {
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .product-detail-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .product-detail-left, .product-detail-right {
+    width: 48%;
+  }
+  
+  .add-to-cart-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .add-to-cart-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .accessories-section {
+    margin-top: 20px;
+  }
+  
+  .accessory-cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .accessory-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    width: 300px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    text-align: center;
+  }
+  
+
+  .accessory-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .accessory-card p {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  .quantity-control {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .quantity-control button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .quantity-control span {
+    margin: 0 10px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .accessory-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    width: 300px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .accessory-card.selected {
+    border: 2px solid #007bff;
+  }
+  
+  .accessory-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  
