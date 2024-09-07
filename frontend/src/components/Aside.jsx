@@ -5,9 +5,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 const image = process.env.PUBLIC_URL;
 
 const Aside = () => {
+  const userType = localStorage.getItem("userType");
   const navigate = useNavigate();
   const location = useLocation();
   const isHomeActive = location.pathname === "/dashboard";
+  const isCustomerListActive = location.pathname === "/customer-list";
 
   return (
     <div className="left-panel">
@@ -36,6 +38,29 @@ const Aside = () => {
           </div>
           <div className="left-text">Dashboard</div>
         </button>
+        {userType === "Salesman" ? (
+          <button
+            className={`left-part ${isCustomerListActive ? "active" : ""}`}
+            style={{ border: "none" }}
+            onClick={() => {
+              navigate("/customer-list");
+            }}
+          >
+            <div className="left-img">
+              <img
+                src={`${image}/Assets/LeftPanel/teams.svg`}
+                alt=""
+                className={`default-image ${isCustomerListActive ? "hide" : ""}`}
+              />
+              <img
+                src={`${image}/Assets/LeftPanel/teams-white.svg`}
+                alt=""
+                className={`selected-image ${isCustomerListActive ? "" : "hide"}`}
+              />
+            </div>
+            <div className="left-text">Customers</div>
+          </button>
+        ) : null}
         
         <button
           className={`left-part`}

@@ -1,0 +1,131 @@
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal-centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .main-part-ratailer {
+    width: 100%;
+    max-width: 100vw;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  .team-btn {
+    position: relative;
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+  }
+  
+  .btn-add {
+    background: rgb(21 67 176);
+    width: 87px;
+    height: 41px;
+    border-radius: 50px;
+    top: 25px;
+    right: 140px;
+    border: 0;
+    outline: 0;
+    color: rgba(255, 255, 255, 1);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 15px;
+    cursor: pointer;
+  }
+  
+  .team-main-bg {
+    background: rgba(224, 237, 255, 1);
+    width: 104%;
+    height: 55px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .team-data-main {
+    color: rgba(44, 58, 100, 1);
+    font-size: 14px;
+    margin: 15px 0px;
+    line-height: 27px;
+    width: 20%;
+    text-align: left;
+  }
+  
+  .team-data-role {
+    width: 20%;
+    color: rgba(44, 58, 100, 1);
+    font-size: 14px;
+    margin: 15px 0px;
+    line-height: 27px;
+  }
+  
+  .team-data-email {
+    width: 20%;
+    color: rgba(44, 58, 100, 1);
+    font-size: 14px;
+    margin: 15px 0px;
+    line-height: 27px;
+  }
+  
+  .team-data-mobile {
+    width: 20%;
+    color: rgba(44, 58, 100, 1);
+    font-size: 14px;
+    margin: 15px 0px;
+    line-height: 27px;
+  }
+  
+  .team-data-actions {
+    width: 20%;
+    color: rgba(44, 58, 100, 1);
+    font-size: 14px;
+    line-height: 27px;
+    margin: 15px 0px;
+  }
+  
+  .team-details {
+    display: flex;
+    margin: 15px 15px;
+    /* width: 191px; */
+    color: rgba(44, 58, 100, 1);
+    font-size: 14px;
+    line-height: 27px;
+  }
+  
+  .add-action,
+  .view-action,
+  .notview-action {
+    border: 0;
+    padding: 0px 0;
+    background: transparent;
+    margin-right: 8px;
+    cursor: pointer;
+  }
+
+  .TeamDetailsRowData {
+    display: flex;
+    justify-content: space-between;
+  }
