@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
-// import axios from "axios";
+import axios from "axios";
 
 // const baseURL = process.env.REACT_APP_API_BASE_URL;
 const image = process.env.PUBLIC_URL;
 
 const SignUp = () => {
   const [eye, setEye] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -26,58 +25,26 @@ const SignUp = () => {
       return;
     }
 
-    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
-    const isUsernameTaken = existingUsers.some(
-      (user) => user.username === username && user.userType === "Customer"
-    );
-    if (isUsernameTaken) {
-      window.alert("Username is already taken");
+    const requestData = {
+      name: name,
+      username: username,
+      password: password,
+      userType: "Customer",
+    };
+
+    let apiUrl = `http://localhost:8080/csp584_war_exploded/signup`;
+    try {
+      const response = await axios.post(apiUrl, requestData);
+      if (response.statusCode === 200) {
+        console.log(response);
+        navigate("/login");
+      } else {
+      }
+    } catch (error) {
+      window.alert("Username already exists");
+    } finally {
       setLoading(false);
-    } else {
-      const requestData = {
-        name: name,
-        username: username,
-        password: password,
-        userType: "Customer",
-      };
-
-      existingUsers.push(requestData);
-
-      localStorage.setItem("users", JSON.stringify(existingUsers));
-      window.alert("User created successfully");
-      setName("");
-      setUsername("");
-      setPassword("");
-      setErrorMsg("");
-      navigate("/");
     }
-
-    // let apiUrl = `${baseURL}/admin/login`;
-    // try {
-    //   const response = await axios.post(apiUrl, requestData);
-    //   if (response.status === 200) {
-    //     const responToken = response.data.token;
-    //     const userType = response.data.userType;
-    //     const adminId = response.data.adminId;
-
-    //     localStorage.setItem("userToken", responToken);
-    //     localStorage.setItem("adminId", adminId);
-    //     localStorage.setItem("userType", userType);
-    //     navigate("/admin-dashboard");
-    //   } else {
-    //     setErrorMsg("Login failed. Please try again.");
-    //   }
-    // } catch (error) {
-    //   if (error.response && error.response.status === 401) {
-    //     alert(error?.response?.data?.message);
-    //     setErrorMsg("Username or password is incorrect.");
-    //   } else {
-    //     setErrorMsg("An error occurred. Please try again.");
-    //   }
-    // } finally {
-    //   setLoading(false);
-    // }
-    // }
   };
 
   const eyeChange = () => {
@@ -202,17 +169,6 @@ const SignUp = () => {
                   Login
                 </button>
               </div>
-
-              <span
-                style={{
-                  color: "red",
-                  position: "relative",
-                  textAlign: "center",
-                  margin: "0 auto",
-                }}
-              >
-                {errorMsg}
-              </span>
             </form>
           </div>
         </section>

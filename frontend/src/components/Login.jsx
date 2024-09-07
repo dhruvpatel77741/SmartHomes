@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Login.css";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import usersData from "../SystemFiles/Users.json";
-// import axios from "axios";
+import axios from "axios";
 
 // const baseURL = process.env.REACT_APP_API_BASE_URL;
 const image = process.env.PUBLIC_URL;
@@ -20,17 +19,12 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
-    // Retrieve stored username and password from cookies if available
     const storedUserName = Cookies.get("userName");
     const storedPassword = Cookies.get("password");
     if (storedUserName && storedPassword) {
       setUsername(storedUserName);
       setPassword(storedPassword);
       setRememberMe(true);
-    }
-
-    if (!localStorage.getItem("users")) {
-      localStorage.setItem("users", JSON.stringify(usersData));
     }
   }, []);
 
@@ -59,56 +53,34 @@ const Login = () => {
         Cookies.remove("password");
       }
 
+      let apiUrl = `http://localhost:8080/csp584_war_exploded/login`;
       try {
-        const storedUsers = JSON.parse(localStorage.getItem("users"));
+        const response = await axios.post(apiUrl, requestData);
+        if (response.status === 200) {
+          console.log(response?.data?.user);
+          const name = response?.data?.user?.name;
+          const username = response?.data?.user?.username;
+          const userType = response?.data?.user?.userType;
+          const userId = response?.data?.user?._id;
 
-        const user = storedUsers.find(
-          (user) =>
-            user.username === requestData.username &&
-            user.password === requestData.password
-        );
-
-        if (user) {
-          if (user.userType === requestData.userType) {
-            localStorage.setItem("userType", user.userType);
-            navigate("/dashboard");
-          } else {
-            window.alert("Invalid User Type");
-          }
+          localStorage.setItem("name", name);
+          localStorage.setItem("username", username);
+          localStorage.setItem("userType", userType);
+          localStorage.setItem("userId", userId);
+          navigate("/dashboard");
         } else {
-          window.alert("Invalid username or password.");
+          setErrorMsg("Login failed. Please try again.");
         }
       } catch (error) {
-        setErrorMsg("An error occurred. Please try again.");
+        if (error.response && error.response.status === 401) {
+          alert(error?.response?.data?.message);
+          setErrorMsg("Username or password is incorrect.");
+        } else {
+          setErrorMsg("An error occurred. Please try again.");
+        }
       } finally {
         setLoading(false);
       }
-
-      // let apiUrl = `${baseURL}/admin/login`;
-      // try {
-      //   const response = await axios.post(apiUrl, requestData);
-      //   if (response.status === 200) {
-      //     const responToken = response.data.token;
-      //     const userType = response.data.userType;
-      //     const adminId = response.data.adminId;
-
-      //     localStorage.setItem("userToken", responToken);
-      //     localStorage.setItem("adminId", adminId);
-      //     localStorage.setItem("userType", userType);
-      //     navigate("/admin-dashboard");
-      //   } else {
-      //     setErrorMsg("Login failed. Please try again.");
-      //   }
-      // } catch (error) {
-      //   if (error.response && error.response.status === 401) {
-      //     alert(error?.response?.data?.message);
-      //     setErrorMsg("Username or password is incorrect.");
-      //   } else {
-      //     setErrorMsg("An error occurred. Please try again.");
-      //   }
-      // } finally {
-      //   setLoading(false);
-      // }
     }
   };
 
