@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-// const baseURL = process.env.REACT_APP_API_BASE_URL;
+const baseURL = process.env.REACT_APP_API_BASE_URL;
 const image = process.env.PUBLIC_URL;
 
 const Login = () => {
@@ -53,7 +53,7 @@ const Login = () => {
         Cookies.remove("password");
       }
 
-      let apiUrl = `http://localhost:8080/csp584_war_exploded/login`;
+      let apiUrl = `${baseURL}/login`;
       try {
         const response = await axios.post(apiUrl, requestData);
         if (response.status === 200) {

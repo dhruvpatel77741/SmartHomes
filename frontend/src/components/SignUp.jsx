@@ -3,7 +3,7 @@ import "./Login.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-// const baseURL = process.env.REACT_APP_API_BASE_URL;
+const baseURL = process.env.REACT_APP_API_BASE_URL;
 const image = process.env.PUBLIC_URL;
 
 const SignUp = () => {
@@ -32,7 +32,7 @@ const SignUp = () => {
       userType: "Customer",
     };
 
-    let apiUrl = `http://localhost:8080/csp584_war_exploded/signup`;
+    let apiUrl = `${baseURL}/signup`;
     try {
       const response = await axios.post(apiUrl, requestData);
       if (response.statusCode === 200) {
