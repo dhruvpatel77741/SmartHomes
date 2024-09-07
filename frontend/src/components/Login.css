@@ -1,5 +1,5 @@
 /* General styles */
-body, html {
+.login-container {
     height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
@@ -15,7 +15,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 875px;
     width: 100%;
     position: relative;
   }

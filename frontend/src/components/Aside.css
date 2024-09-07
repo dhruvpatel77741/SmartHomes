@@ -1,0 +1,116 @@
+.left-panel {
+    background: linear-gradient(180deg, #e1eaff 0%, rgba(255, 255, 255, 0) 100%);
+    height: fit-content;
+    /* position: fixed; */
+    /* width: 17vw; */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .left-part {
+    display: flex;
+    background: transparent;
+    color: rgba(44, 58, 100, 1);
+    border-radius: 50px;
+    width: 200px;
+    height: 56px;
+    margin: 0 15px;
+    margin-bottom: 7px;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    align-items: center;
+    justify-content: left;
+  }
+  
+  /* Hover state when it's not active */
+  .left-part:not(.active):hover {
+    background: rgb(21 67 176);
+    /* slightly transparent blue */
+    color: white;
+  }
+  
+  /* Active state */
+  .left-part.active {
+    background: rgb(21 67 176);
+    /* solid blue */
+    color: white;
+  }
+  
+  .left-img {
+    margin: 10px 15px 10px 10px;
+    width: 20%;
+  }
+  
+  .left-text {
+    margin: 18px 0px;
+    font-size: 13px;
+    font-weight: 400;
+    /* width: 90%; */
+    text-align: left;
+  }
+  
+  .hide {
+    display: none;
+  }
+  
+  .left-img .default-image:hover {
+    display: none;
+  }
+  
+  .left-img .selected-image {
+    display: none;
+  }
+  
+  .left-part:hover .selected-image,
+  .left-part.active .selected-image {
+    display: block;
+  }
+  
+  .left-part:hover .default-image,
+  .left-part.active .default-image {
+    display: none;
+  }
+  
+  .img-border {
+    border: 1px solid rgba(255, 255, 255, 1);
+    border-radius: 50px;
+  }
+  
+  .left-img {
+    color: rgb(21 67 176);
+  }
+  
+  .left-part .default-image {
+    display: block;
+    transition: all 0.5s;
+  }
+  
+  .left-part .selected-image {
+    display: none;
+  }
+  
+  .left-part:hover .default-image {
+    display: none;
+  }
+  
+  .left-part:hover .selected-image {
+    display: flex;
+  }
+  
+  .left-part:active .default-image {
+    display: none;
+  }
+  
+  .left-part:active .selected-image {
+    display: flex;
+  }
+
+  .Logo-image-sideMenu {
+    /* width: 70%; */
+    padding: 8%;
+  }
+
+  .sideBarMenu {
+    height: 82vh;
+  }
