@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState } from "react";
 import axios from "axios";
 import "./List.css";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
-const image = process.env.PUBLIC_URL;
 
-const EditProduct = ({ onClose }) => {
-  const location = useLocation();
-
-  const id = localStorage.getItem("productId");
-
-  const [dataShow, setDataShow] = useState({
+const AddProduct = ({ onClose }) => {
+  const [newProduct, setNewProduct] = useState({
     name: "",
     category: "",
     price: 0,
@@ -25,67 +19,59 @@ const EditProduct = ({ onClose }) => {
     manufacturerRebate: false,
   });
 
-  const [updatedProduct, setUpdatedProduct] = useState(dataShow);
-
-  useEffect(() => {
-    const getData = async () => {
-      const id = localStorage.getItem("productId");
-      let apiUrl = `${baseURL}/manageProducts`;
-      try {
-        const resp = await axios.get(apiUrl);
-        const data = resp.data;
-        const product = data.find((item) => item?.id == id);
-        setDataShow(product);
-        setUpdatedProduct(product);
-      } catch (err) {
-        console.log("Error:", err);
-      }
-    };
-    getData();
-  }, [id, location.pathname]);
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
-      setUpdatedProduct({ ...updatedProduct, [name]: checked });
+      setNewProduct({ ...newProduct, [name]: checked });
     } else {
-      setUpdatedProduct({ ...updatedProduct, [name]: value });
+      setNewProduct({ ...newProduct, [name]: value });
     }
   };
 
   const handleAccessoryChange = (index, e) => {
     const { name, value } = e.target;
-    const accessories = [...updatedProduct.accessories];
+    const accessories = [...newProduct.accessories];
     accessories[index][name] = value;
-    setUpdatedProduct({ ...updatedProduct, accessories });
+    setNewProduct({ ...newProduct, accessories });
   };
 
   const handleAddAccessory = () => {
-    setUpdatedProduct({
-      ...updatedProduct,
-      accessories: [...updatedProduct.accessories, { name: "", price: 0 }],
+    setNewProduct({
+      ...newProduct,
+      accessories: [...newProduct.accessories, { name: "", price: 0 }],
     });
   };
 
   const handleRemoveAccessory = (index) => {
-    const accessories = updatedProduct.accessories.filter(
-      (_, i) => i !== index
-    );
-    setUpdatedProduct({ ...updatedProduct, accessories });
+    const accessories = newProduct.accessories.filter((_, i) => i !== index);
+    setNewProduct({ ...newProduct, accessories });
   };
 
   const handleSubmit = async () => {
+    const productToSend = {
+      ...newProduct,
+      price: parseFloat(newProduct.price),
+      accessories: newProduct.accessories.map((accessory) => ({
+        ...accessory,
+        price: parseFloat(accessory.price),
+      })),
+      warranty: {
+        ...newProduct.warranty,
+        price: parseFloat(newProduct.warranty.price),
+      },
+    };
+
     try {
-      const response = await axios.put(
+      const response = await axios.post(
         `${baseURL}/manageProducts`,
-        updatedProduct
+        productToSend
       );
-      if (response.status === 200 || response.status === 200) {
-        window.alert("Product Details Updated Successfully");
+      if (response.status === 200 || response.status === 201) {
+        window.alert("Product Added Successfully");
         window.location.reload();
       }
     } catch (err) {
-      console.log("Error updating product:", err);
+      console.log("Error adding product:", err);
     }
   };
 
@@ -94,16 +80,13 @@ const EditProduct = ({ onClose }) => {
       <div className="profileview-model-backdrop">
         <div
           className="profileview-model-content"
-          style={{ height: "540px", width: "600px" }}
+          style={{ height: "500px", width: "600px" }}
         >
           <div className="profile-model-header">
-            <h3 style={{ display: "flex", gap: "10px" }}>Edit Product</h3>
+            <h3 style={{ display: "flex", gap: "10px" }}>Add Product</h3>
             <button
               className="invite-model-close-btn"
-              onClick={() => {
-                localStorage.removeItem("productId");
-                onClose();
-              }}
+              onClick={() => onClose()}
             >
               ✕
             </button>
@@ -118,7 +101,7 @@ const EditProduct = ({ onClose }) => {
                 <input
                   type="text"
                   name="name"
-                  value={updatedProduct.name}
+                  value={newProduct.name}
                   onChange={handleChange}
                   style={{ marginTop: "5px" }}
                   placeholder="Product Name"
@@ -126,7 +109,7 @@ const EditProduct = ({ onClose }) => {
                 <input
                   type="text"
                   name="category"
-                  value={updatedProduct.category}
+                  value={newProduct.category}
                   onChange={handleChange}
                   style={{ marginTop: "5px" }}
                   placeholder="Category"
@@ -134,7 +117,7 @@ const EditProduct = ({ onClose }) => {
                 <input
                   type="text"
                   name="description"
-                  value={updatedProduct.description}
+                  value={newProduct.description}
                   onChange={handleChange}
                   style={{ marginTop: "5px" }}
                   placeholder="Description"
@@ -142,7 +125,7 @@ const EditProduct = ({ onClose }) => {
                 <input
                   type="number"
                   name="price"
-                  value={updatedProduct.price}
+                  value={newProduct.price}
                   onChange={handleChange}
                   style={{ marginTop: "5px" }}
                   placeholder="Price"
@@ -154,11 +137,10 @@ const EditProduct = ({ onClose }) => {
           <div className="want-serve">
             <b>Accessories</b>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              {updatedProduct?.accessories?.length > 0 ? (
-                updatedProduct.accessories.map((accessory, index) => (
+              {newProduct?.accessories?.length > 0 ? (
+                newProduct.accessories.map((accessory, index) => (
                   <div key={index} style={{ marginTop: "10px" }}>
                     <input
-
                       type="text"
                       name="name"
                       value={accessory.name}
@@ -167,7 +149,6 @@ const EditProduct = ({ onClose }) => {
                       style={{ marginRight: "10px" }}
                     />
                     <input
-
                       type="number"
                       name="price"
                       value={accessory.price}
@@ -193,9 +174,7 @@ const EditProduct = ({ onClose }) => {
               </button>
             </div>
           </div>
-
           <br />
-
           <div className="want-serve">
             <b>Warranty</b>
             <div style={{ display: "flex", flexDirection: "column" }}>
@@ -203,12 +182,12 @@ const EditProduct = ({ onClose }) => {
                 <input
                   type="checkbox"
                   name="warranty.available"
-                  checked={updatedProduct.warranty.available}
+                  checked={newProduct.warranty.available}
                   onChange={(e) =>
-                    setUpdatedProduct({
-                      ...updatedProduct,
+                    setNewProduct({
+                      ...newProduct,
                       warranty: {
-                        ...updatedProduct.warranty,
+                        ...newProduct.warranty,
                         available: e.target.checked,
                       },
                     })
@@ -216,16 +195,16 @@ const EditProduct = ({ onClose }) => {
                 />
                 Warranty Available
               </label>
-              {updatedProduct.warranty.available && (
+              {newProduct.warranty.available && (
                 <input
                   type="number"
                   name="warranty.price"
-                  value={updatedProduct.warranty.price}
+                  value={newProduct.warranty.price}
                   onChange={(e) =>
-                    setUpdatedProduct({
-                      ...updatedProduct,
+                    setNewProduct({
+                      ...newProduct,
                       warranty: {
-                        ...updatedProduct.warranty,
+                        ...newProduct.warranty,
                         price: e.target.value,
                       },
                     })
@@ -235,13 +214,12 @@ const EditProduct = ({ onClose }) => {
               )}
             </div>
           </div>
-
           <div className="want-serve">
             <label>
               <input
                 type="checkbox"
                 name="specialDiscount"
-                checked={updatedProduct.specialDiscount}
+                checked={newProduct.specialDiscount}
                 onChange={handleChange}
               />
               Special Discount
@@ -250,27 +228,19 @@ const EditProduct = ({ onClose }) => {
               <input
                 type="checkbox"
                 name="manufacturerRebate"
-                checked={updatedProduct.manufacturerRebate}
+                checked={newProduct.manufacturerRebate}
                 onChange={handleChange}
               />
               Manufacturer Rebate
             </label>
           </div>
-
           <br />
-
           <div className="row">
             <span className="viewbottom-border"></span>
           </div>
           <div style={{ display: "flex" }}>
             <div className="add-model-actions">
-              <button
-                onClick={() => {
-                  onClose();
-                  localStorage.removeItem("productId");
-                }}
-                className="submit-hover"
-              >
+              <button onClick={() => onClose()} className="submit-hover">
                 Cancel
               </button>
               <button onClick={handleSubmit} className="submit-hover">
@@ -284,4 +254,4 @@ const EditProduct = ({ onClose }) => {
   );
 };
 
-export default EditProduct;
+export default AddProduct;

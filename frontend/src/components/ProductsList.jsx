@@ -5,6 +5,7 @@ import axios from "axios";
 import Aside from "./Aside";
 import ViewProduct from "./ViewProduct";
 import EditProduct from "./EditProduct";
+import AddProduct from "./AddProduct";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 const image = process.env.PUBLIC_URL;
@@ -12,7 +13,6 @@ const image = process.env.PUBLIC_URL;
 const ProductsList = () => {
   const location = useLocation();
 
-  // Team Data Mapping Starts
   const [dataShow, setDataShow] = useState([]);
   const getData = async () => {
     let apiUrl = `${baseURL}/manageProducts`;
@@ -31,34 +31,33 @@ const ProductsList = () => {
   }, [location.pathname]);
 
   const reverseData = [...dataShow].reverse();
-  // Team Data Mapping Ends
 
-  //Add Trader Model Starts
+  //Add Product Model Starts
   const [isAddModelOpen, setAddModelOpen] = useState(false);
   const [isViewProductOpen, setViewProductOpen] = useState(false);
   const [isEditProductOpen, setEditProductOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
-  //Add Trader Model Ends
+  //Add Product Model Ends
 
-  //View Customer Model Starts
+  //View Product Model Starts
   const viewProduct = (id) => {
     localStorage.setItem("productId", id);
 
     setViewProductOpen(true);
     document.body.classList.add("page-modal-open");
   };
-  //View Customer Model Ends
+  //View Product Model Ends
 
-  //Edit Customer Model Starts
+  //Edit Product Model Starts
   const editProduct = (id) => {
     localStorage.setItem("productId", id);
 
     setEditProductOpen(true);
   };
-  //Edit Customer Model Ends
+  //Edit Product Model Ends
 
-  //Delete Customer Starts
+  //Delete Product Starts
   const getIdToDelete = (id, status) => {
     localStorage.setItem("productId", id);
     setShowDeleteConfirmation(true);
@@ -86,7 +85,7 @@ const ProductsList = () => {
     }
     setShowDeleteConfirmation(false);
   };
-  //Delete Customer Ends
+  //Delete Product Ends
 
   return (
     <div id="myModel" className="modal">
@@ -197,16 +196,13 @@ const ProductsList = () => {
           </div>
 
           <div className="row">
-            {/* {isAddModelOpen && (
-              <AddTraderAndRetailer
+            {isAddModelOpen && (
+              <AddProduct
                 onClose={() => {
                   setAddModelOpen(false);
-                  localStorage.removeItem("traderId");
-                  localStorage.removeItem("retailerId");
-                  localStorage.removeItem("installerId");
                 }}
               />
-            )} */}
+            )}
             {isEditProductOpen && (
               <EditProduct
                 onClose={() => {

@@ -84,6 +84,16 @@ const ViewProduct = ({ onClose }) => {
                     fontSize: "16px",
                   }}
                 >
+                  Description: {dataShow?.description}
+                </span>
+                <span
+                  style={{
+                    display: "flex",
+                    color: "rgba(44, 58, 100, 1)",
+                    fontWeight: "400",
+                    fontSize: "16px",
+                  }}
+                >
                   Price: ${dataShow?.price}
                 </span>
               </div>
