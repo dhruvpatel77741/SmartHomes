@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Aside from "./Aside";
 import HeaderComponent from "./HeaderComponent";
 import "./ProductDetails.css";
 
 const ProductDetails = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { product } = location?.state || {};
 
   // States to handle the cart quantity, total price, warranty, and accessories
@@ -77,7 +78,7 @@ const ProductDetails = () => {
             </p>
           </div>
 
-          <div className="product-detail-right">
+          <div className="product-detail-right" style={{marginLeft: "300px"}}>
             {/* Total Amount Display */}
             <p style={{ fontWeight: "bold", fontSize: "18px" }}>
               Total: ${totalPrice.toFixed(2)}
@@ -116,6 +117,13 @@ const ProductDetails = () => {
                 </label>
               </div>
             )}
+            <br/>
+            <button
+                className="add-to-cart-btn"
+                onClick={() => {navigate("/cart")}}
+              >
+                Open Cart
+              </button>
           </div>
         </div>
 

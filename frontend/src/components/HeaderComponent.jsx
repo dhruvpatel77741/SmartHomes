@@ -16,7 +16,7 @@ const HeaderComponent = () => {
     <div className="header-container">
   <div className="dashboard-title">Dashboard</div>
   <div className="header-right">
-    <img src={`${image}/Assets/cart.svg`} alt="Cart" className="cart-icon" />
+    <img src={`${image}/Assets/cart.svg`} alt="Cart" className="cart-icon" onClick={() => {navigate("/cart")}} />
     <button className="profile-button">{NameInitials()}</button>
   </div>
 </div>

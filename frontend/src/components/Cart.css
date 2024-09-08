@@ -1,0 +1,112 @@
+/* Main container for the cart page */
+.MainOuterContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+  }
+  
+  /* Main content area */
+  .main-part {
+    width: 100%;
+    /* flex-grow: 1; */
+    padding: 20px;
+    background-color: #ffffff;
+  }
+  
+  /* Cart container */
+  .cart-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Cart title */
+  .cart-container h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Cart items list */
+  .cart-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Each cart item */
+  .cart-item {
+    padding: 20px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s;
+  }
+  
+  /* Cart item hover effect */
+  .cart-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  /* Product details */
+  .cart-item p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .cart-item p strong {
+    font-weight: bold;
+  }
+  
+  /* Remove button */
+  .remove-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .remove-btn:hover {
+    background-color: #e60000;
+  }
+  
+  /* Clear cart button */
+  .clear-cart-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  .clear-cart-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Empty cart message */
+  .cart-container p {
+    text-align: center;
+    font-size: 18px;
+    color: #888;
+  }
+  
