@@ -106,14 +106,21 @@ const AddProduct = ({ onClose }) => {
                   style={{ marginTop: "5px" }}
                   placeholder="Product Name"
                 />
-                <input
-                  type="text"
+                <select
                   name="category"
                   value={newProduct.category}
                   onChange={handleChange}
                   style={{ marginTop: "5px" }}
-                  placeholder="Category"
-                />
+                >
+                  <option value="" disabled>
+                    Select Category
+                  </option>
+                  <option value="Smart Doorbells">Smart Doorbells</option>
+                  <option value="Smart Doorlocks">Smart Doorlocks</option>
+                  <option value="Smart Speakers">Smart Speakers</option>
+                  <option value="Smart Lightings">Smart Lightings</option>
+                  <option value="Smart Thermostats">Smart Thermostats</option>
+                </select>
                 <input
                   type="text"
                   name="description"

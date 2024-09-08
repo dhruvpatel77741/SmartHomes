@@ -4,7 +4,6 @@ import axios from "axios";
 import "./List.css";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
-const image = process.env.PUBLIC_URL;
 
 const EditProduct = ({ onClose }) => {
   const location = useLocation();
@@ -123,14 +122,22 @@ const EditProduct = ({ onClose }) => {
                   style={{ marginTop: "5px" }}
                   placeholder="Product Name"
                 />
-                <input
-                  type="text"
+                <select
                   name="category"
                   value={updatedProduct.category}
                   onChange={handleChange}
                   style={{ marginTop: "5px" }}
-                  placeholder="Category"
-                />
+                >
+                  <option value="" disabled>
+                    Select Category
+                  </option>
+                  <option value="Smart Doorbells">Smart Doorbells</option>
+                  <option value="Smart Doorlocks">Smart Doorlocks</option>
+                  <option value="Smart Speakers">Smart Speakers</option>
+                  <option value="Smart Lightings">Smart Lightings</option>
+                  <option value="Smart Thermostats">Smart Thermostats</option>
+                </select>
+
                 <input
                   type="text"
                   name="description"
@@ -158,7 +165,6 @@ const EditProduct = ({ onClose }) => {
                 updatedProduct.accessories.map((accessory, index) => (
                   <div key={index} style={{ marginTop: "10px" }}>
                     <input
-
                       type="text"
                       name="name"
                       value={accessory.name}
@@ -167,7 +173,6 @@ const EditProduct = ({ onClose }) => {
                       style={{ marginRight: "10px" }}
                     />
                     <input
-
                       type="number"
                       name="price"
                       value={accessory.price}
