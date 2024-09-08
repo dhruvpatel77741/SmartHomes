@@ -68,3 +68,23 @@
   margin-bottom: 5px;
   font-size: 18px;
 }
+
+.filter-container {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.filter-btn {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background-color: #0056b3;
+}

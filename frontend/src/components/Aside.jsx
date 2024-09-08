@@ -8,7 +8,7 @@ const Aside = () => {
   const userType = localStorage.getItem("userType");
   const navigate = useNavigate();
   const location = useLocation();
-  const isHomeActive = location.pathname === "/dashboard";
+  const isHomeActive = location.pathname.startsWith("/dashboard");
   const isCustomerListActive = location.pathname === "/customer-list";
   const isProductListActive = location.pathname === "/product-list";
 

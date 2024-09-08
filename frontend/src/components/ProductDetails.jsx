@@ -50,7 +50,7 @@ const ProductDetails = () => {
 
   // Handle Quantity Decrement
   const decrementQuantity = () => {
-    if (quantity > 1) {
+    if (quantity > 0) {
       setQuantity(quantity - 1);
       totalPrice - product.price === 0.0
         ? setTotalPrice(0)
