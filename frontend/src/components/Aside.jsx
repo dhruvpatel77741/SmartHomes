@@ -9,7 +9,9 @@ const Aside = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isHomeActive =
-    location.pathname.startsWith("/dashboard") || location.pathname === "/cart";
+    location.pathname.startsWith("/dashboard") ||
+    location.pathname === "/cart" ||
+    location.pathname === "/checkout";
   const isCustomerListActive = location.pathname === "/customer-list";
   const isProductListActive = location.pathname === "/product-list";
 
