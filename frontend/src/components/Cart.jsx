@@ -3,10 +3,14 @@ import axios from "axios";
 import Aside from "./Aside";
 import HeaderComponent from "./HeaderComponent";
 import "./Cart.css";
+import { useNavigate } from "react-router-dom";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const Cart = () => {
+
+  const navigate = useNavigate();
+
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -33,7 +37,7 @@ const Cart = () => {
 
   useEffect(() => {
     fetchCartItems();
-  }, []);
+  });
 
   const removeItemFromCart = async (productId) => {
     const userId = localStorage.getItem("userId");
@@ -65,7 +69,7 @@ const Cart = () => {
   };
 
   const handleCheckout = () => {
-    console.log("Proceeding to checkout...");
+    navigate("/checkout", { state: { totalAmount } });
   };
 
   if (loading) {

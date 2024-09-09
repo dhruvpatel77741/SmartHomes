@@ -7,6 +7,7 @@ import CustomerList from './components/CustomerList';
 import ProductsList from './components/ProductsList';
 import ProductDetails from './components/ProductDetails';
 import Cart from './components/Cart';
+import Checkout from './components/Checkout';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path='/customer-list' element={<CustomerList/>}/>
       <Route path='/product-list' element={<ProductsList/>}/>
       <Route path='/cart' element={<Cart/>}/>
+      <Route path='/checkout' element= {<Checkout/>}/>
     </Routes>
   );
 }

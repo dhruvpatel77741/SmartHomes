@@ -1,0 +1,61 @@
+.MainOuterContainer {
+    display: flex;
+    width: 100%;
+  }
+  
+  .main-part {
+    flex: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+  }
+  
+  .checkout-container {
+    text-align: center;
+  }
+  
+  .tab-selection {
+    margin-top: 20px;
+  }
+  
+  .tab-btn {
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .pickup-details,
+  .home-delivery-form {
+    margin-top: 20px;
+  }
+  
+  .home-delivery-form form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .home-delivery-form input {
+    padding: 10px;
+    margin: 10px 0;
+    width: 300px;
+  }
+  
+  .checkout-actions {
+    margin-top: 20px;
+  }
+  
+  .back-btn,
+  .proceed-btn {
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
