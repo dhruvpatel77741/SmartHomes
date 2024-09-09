@@ -5,7 +5,6 @@ import "./Checkout.css";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Checkout = () => {
-
   const navigate = useNavigate();
 
   const name = localStorage.getItem("name");
@@ -14,13 +13,11 @@ const Checkout = () => {
 
   const [tab, setTab] = useState(null);
   const [formData, setFormData] = useState({
-    name: name,
+    name: "",
     phone: "",
-    addressLine1: "",
-    addressLine2: "",
-    city: "",
-    state: "",
-    zipCode: "",
+    creditCardNumber: "",
+    expiryDate: "",
+    cvv: "",
   });
 
   const handleTabSelect = (selectedTab) => {
@@ -29,6 +26,8 @@ const Checkout = () => {
 
   const handleBack = () => {
     setTab(null);
+    window.alert("Payment Failed.")
+    navigate("/cart");
   };
 
   const handleInputChange = (e) => {
@@ -36,15 +35,9 @@ const Checkout = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleProceed = () => {
-    if (tab === "pickup") {
-      window.alert(
-        "Order placed Succesfully. You can pickup your order from store and pay by cash or card."
-      );
-      navigate("/dashboard");
-    } else if (tab === "homeDelivery") {
-      navigate("/payment", { state: { totalAmount, formData } });
-    }
+  const handlePay = () => {
+    window.alert("Order placed Succesfully.");
+    navigate("/dashboard");
   };
 
   return (
@@ -55,21 +48,21 @@ const Checkout = () => {
         <div className="checkout-container">
           {tab === null ? (
             <div className="tab-selection">
-              <h2>Choose Checkout Method</h2>
+              <h2>Choose Payment Method</h2>
               <button
                 className="tab-btn"
-                onClick={() => handleTabSelect("pickup")}
+                onClick={() => handleTabSelect("cod")}
               >
-                Pickup
+                Cash
               </button>
               <button
                 className="tab-btn"
-                onClick={() => handleTabSelect("homeDelivery")}
+                onClick={() => handleTabSelect("creditCard")}
               >
-                Home Delivery
+                Credit Card
               </button>
             </div>
-          ) : tab === "pickup" ? (
+          ) : tab === "cod" ? (
             <div className="pickup-details">
               <h2>{`Hello, ${name}!`}</h2>
               <p>
@@ -79,25 +72,25 @@ const Checkout = () => {
                 <button className="back-btn" onClick={handleBack}>
                   Back
                 </button>
-                <button className="proceed-btn" onClick={handleProceed}>
-                  Proceed
+                <button className="proceed-btn" onClick={handlePay}>
+                  Confirm
                 </button>
               </div>
             </div>
           ) : (
             <div className="home-delivery-form">
-              <h2>Enter Your Delivery Details</h2>
+              <h2>Enter Your Credit Card Details</h2>
               <p>
                 Total Amount: <b>${totalAmount.toFixed(2)}</b>
               </p>
               <form>
-                <input
+              <input
                   type="text"
                   name="name"
-                  placeholder="Full Name"
+                  placeholder="Card Holder's Name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  readOnly
+                  required
                 />
                 <input
                   type="text"
@@ -109,40 +102,25 @@ const Checkout = () => {
                 />
                 <input
                   type="text"
-                  name="addressLine1"
-                  placeholder="Address Line 1"
-                  value={formData.addressLine1}
+                  name="creditCardNumber"
+                  placeholder="Credit Card Number"
+                  value={formData.creditCardNumber}
                   onChange={handleInputChange}
                   required
                 />
                 <input
                   type="text"
-                  name="addressLine2"
-                  placeholder="Address Line 2"
-                  value={formData.addressLine2}
-                  onChange={handleInputChange}
-                />
-                <input
-                  type="text"
-                  name="city"
-                  placeholder="City"
-                  value={formData.city}
+                  name="expiryDate"
+                  placeholder="Expiry Date (MM/YY)"
+                  value={formData.expiryDate}
                   onChange={handleInputChange}
                   required
                 />
                 <input
                   type="text"
-                  name="state"
-                  placeholder="State"
-                  value={formData.state}
-                  onChange={handleInputChange}
-                  required
-                />
-                <input
-                  type="text"
-                  name="zipCode"
-                  placeholder="Zip Code"
-                  value={formData.zipCode}
+                  name="cvv"
+                  placeholder="CVV"
+                  value={formData.cvv}
                   onChange={handleInputChange}
                   required
                 />
@@ -151,8 +129,8 @@ const Checkout = () => {
                 <button className="back-btn" onClick={handleBack}>
                   Back
                 </button>
-                <button className="proceed-btn" onClick={handleProceed}>
-                  Proceed
+                <button className="proceed-btn" onClick={handlePay}>
+                  Pay
                 </button>
               </div>
             </div>
