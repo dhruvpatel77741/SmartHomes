@@ -10,8 +10,8 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
 const Dashboard = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [categories, setCategories] = useState(['All']); // Default to include 'All'
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [categories, setCategories] = useState(["All"]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const getData = async () => {
     let apiUrl = `${baseURL}/manageProducts`;
@@ -20,9 +20,10 @@ const Dashboard = () => {
       const data = resp.data;
       setData(data);
       setFilteredData(data);
-      // Extract categories from data and add 'All' option
-      const uniqueCategories = Array.from(new Set(data.map(item => item.category)));
-      setCategories(['All', ...uniqueCategories]);
+      const uniqueCategories = Array.from(
+        new Set(data.map((item) => item.category))
+      );
+      setCategories(["All", ...uniqueCategories]);
     } catch (err) {
       console.log("Error:", err);
     }
@@ -32,13 +33,12 @@ const Dashboard = () => {
     getData();
   }, []);
 
-  // Handle category change
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    if (category === 'All') {
+    if (category === "All") {
       setFilteredData(data);
     } else {
-      const filteredItems = data.filter(item => item.category === category);
+      const filteredItems = data.filter((item) => item.category === category);
       setFilteredData(filteredItems);
     }
   };
@@ -49,13 +49,14 @@ const Dashboard = () => {
       <div className="main-part-ratailer">
         <HeaderComponent />
 
-        {/* Category filter buttons */}
         <div className="filter-container">
-          {categories.map(category => (
+          {categories.map((category) => (
             <button
               key={category}
               onClick={() => handleCategoryChange(category)}
-              className={`filter-btn ${selectedCategory === category ? 'active' : ''}`}
+              className={`filter-btn ${
+                selectedCategory === category ? "active" : ""
+              }`}
             >
               {category}
             </button>
@@ -72,9 +73,19 @@ const Dashboard = () => {
                 key={index}
                 style={{ textDecoration: "none" }}
               >
-                <h3 style={{ position: "relative", bottom: "50px" }}>{item.name}</h3>
+                <h3 style={{ position: "relative", bottom: "50px" }}>
+                  {item.name}
+                </h3>
                 <p>{item.description}</p>
-                <p style={{ position: "relative", top: "50px", fontWeight: "bolder" }}>${item.price}</p>
+                <p
+                  style={{
+                    position: "relative",
+                    top: "50px",
+                    fontWeight: "bolder",
+                  }}
+                >
+                  ${item.price}
+                </p>
               </Link>
             ))
           ) : (

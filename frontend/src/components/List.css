@@ -109,7 +109,6 @@
   .team-details {
     display: flex;
     margin: 15px 15px;
-    /* width: 191px; */
     color: rgba(44, 58, 100, 1);
     font-size: 14px;
     line-height: 27px;
@@ -156,7 +155,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* margin-bottom: 10px; */
   }
   
   .invite-model-header > h3 {
@@ -175,7 +173,6 @@
     display: inline-flex;
     opacity: 30%;
     width: 100%;
-    /* margin: 0 -20px; */
     padding: 0;
   }
   
@@ -404,8 +401,6 @@
   }
   
   .addmain-details {
-    /* margin: 0 60px 0 0; */
-    /* margin: 0 auto; */
   }
   
   .view-main-details {
@@ -508,7 +503,6 @@
   .add-model-form {
     display: flex;
     flex-direction: column;
-    /* grid-template-columns: repeat(4, 1fr); */
     gap: 10px;
     margin-top: 18px;
   }
@@ -524,7 +518,6 @@
   }
   
   .add-email {
-    /* margin-left: 20px; */
     padding: 0 12px;
     background: rgba(224, 237, 255, 1);
     border-radius: 5px;
@@ -535,7 +528,6 @@
   }
   
   .add-phone {
-    /* margin-left: 20px; */
     padding: 0 12px;
     background: rgba(224, 237, 255, 1);
     border-radius: 5px;
@@ -588,7 +580,6 @@
     display: flex;
     flex-direction: row;
     gap: 30px;
-    /* margin-top: 20px; */
     font-size: 14px;
     font-weight: 400;
     background: rgba(224, 237, 255, 1);
@@ -629,7 +620,6 @@
   }
   
   .ccephoto-size {
-    /* padding-top: 20px; */
     display: inline-block;
     font-size: 12px;
     font-weight: 400;

@@ -8,13 +8,14 @@ const Aside = () => {
   const userType = localStorage.getItem("userType");
   const navigate = useNavigate();
   const location = useLocation();
-  const isHomeActive = location.pathname.startsWith("/dashboard");
+  const isHomeActive =
+    location.pathname.startsWith("/dashboard") || location.pathname === "/cart";
   const isCustomerListActive = location.pathname === "/customer-list";
   const isProductListActive = location.pathname === "/product-list";
 
   return (
     <div className="left-panel">
-      <div className="dashboard-logo" style={{marginLeft: "20px"}}>
+      <div className="dashboard-logo" style={{ marginLeft: "20px" }}>
         <h1>Smart Homes</h1>
       </div>
       <div className="sideBarMenu">
@@ -51,12 +52,16 @@ const Aside = () => {
               <img
                 src={`${image}/Assets/LeftPanel/teams.svg`}
                 alt=""
-                className={`default-image ${isCustomerListActive ? "hide" : ""}`}
+                className={`default-image ${
+                  isCustomerListActive ? "hide" : ""
+                }`}
               />
               <img
                 src={`${image}/Assets/LeftPanel/teams-white.svg`}
                 alt=""
-                className={`selected-image ${isCustomerListActive ? "" : "hide"}`}
+                className={`selected-image ${
+                  isCustomerListActive ? "" : "hide"
+                }`}
               />
             </div>
             <div className="left-text">Customers</div>
@@ -79,13 +84,15 @@ const Aside = () => {
               <img
                 src={`${image}/Assets/LeftPanel/teams-white.svg`}
                 alt=""
-                className={`selected-image ${isProductListActive ? "" : "hide"}`}
+                className={`selected-image ${
+                  isProductListActive ? "" : "hide"
+                }`}
               />
             </div>
             <div className="left-text">Products</div>
           </button>
         ) : null}
-        
+
         <button
           className={`left-part`}
           style={{ border: "none" }}

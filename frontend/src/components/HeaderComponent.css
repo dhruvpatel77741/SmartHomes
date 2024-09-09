@@ -4,12 +4,12 @@
     align-items: center;
     width: 96%;
     padding: 10px;
-    background-color: #f8f9fa; /* Example background color */
+    background-color: #f8f9fa;
   }
   
   .dashboard-title {
     font-size: 1.5rem;
-    color: #1543b0; /* Blue text */
+    color: #1543b0;
     font-weight: bold;
   }
   
@@ -19,7 +19,7 @@
   }
   
   .cart-icon {
-    width: 24px; /* Adjust size as needed */
+    width: 24px;
     height: 24px;
     margin-right: 20px;
     cursor: pointer;

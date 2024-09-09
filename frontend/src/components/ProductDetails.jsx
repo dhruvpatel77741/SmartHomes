@@ -3,13 +3,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Aside from "./Aside";
 import HeaderComponent from "./HeaderComponent";
 import "./ProductDetails.css";
+import axios from "axios";
+
+const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const ProductDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { product } = location?.state || {};
 
-  // States to handle the cart quantity, total price, warranty, and accessories
   const [quantity, setQuantity] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [warrantyAdded, setWarrantyAdded] = useState(false);
@@ -19,7 +21,6 @@ const ProductDetails = () => {
     return <p>Loading...</p>;
   }
 
-  // Add or Remove Warranty
   const toggleWarranty = () => {
     if (warrantyAdded) {
       setTotalPrice(totalPrice - product.warranty.price);
@@ -29,7 +30,6 @@ const ProductDetails = () => {
     setWarrantyAdded(!warrantyAdded);
   };
 
-  // Add or Remove Accessory
   const toggleAccessory = (accessory) => {
     const isAccessorySelected = selectedAccessories.includes(accessory.name);
     if (isAccessorySelected) {
@@ -43,19 +43,48 @@ const ProductDetails = () => {
     }
   };
 
-  // Handle Quantity Increment
   const incrementQuantity = () => {
     setQuantity(quantity + 1);
     setTotalPrice(totalPrice + product.price);
   };
 
-  // Handle Quantity Decrement
   const decrementQuantity = () => {
     if (quantity > 0) {
       setQuantity(quantity - 1);
       totalPrice - product.price === 0.0
         ? setTotalPrice(0)
         : setTotalPrice(totalPrice - product.price);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const data = {
+      action: "addToCart",
+      userId: localStorage.getItem("userId"),
+      productId: product.id,
+      productName: product.name,
+      productPrice: product.price,
+      quantity: quantity,
+      warrantyAdded: warrantyAdded,
+      warrantyPrice: product.warranty.price,
+      accessories: selectedAccessories.map((name) => {
+        const accessory = product.accessories.find(
+          (accessory) => accessory.name === name
+        );
+        return {
+          name: accessory.name,
+          price: accessory.price,
+        };
+      }),
+    };
+
+    try {
+      const response = await axios.post(`${baseURL}/cart`, data);
+      console.log("Success:", response.data);
+
+      navigate("/cart");
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 
@@ -78,7 +107,7 @@ const ProductDetails = () => {
             </p>
           </div>
 
-          <div className="product-detail-right" style={{marginLeft: "300px"}}>
+          <div className="product-detail-right" style={{ marginLeft: "300px" }}>
             {/* Total Amount Display */}
             <p style={{ fontWeight: "bold", fontSize: "18px" }}>
               Total: ${totalPrice.toFixed(2)}
@@ -103,7 +132,6 @@ const ProductDetails = () => {
               </div>
             )}
 
-            {/* Option to Add Warranty */}
             {product.warranty.available && (
               <div>
                 <input
@@ -117,17 +145,18 @@ const ProductDetails = () => {
                 </label>
               </div>
             )}
-            <br/>
+            <br />
             <button
-                className="add-to-cart-btn"
-                onClick={() => {navigate("/cart")}}
-              >
-                Open Cart
-              </button>
+              className="add-to-cart-btn"
+              onClick={() => {
+                handleSubmit();
+              }}
+            >
+              Open Cart
+            </button>
           </div>
         </div>
 
-        {/* Accessories Section */}
         <div className="accessories-section">
           <h3>Accessories</h3>
           <div className="accessory-cards">

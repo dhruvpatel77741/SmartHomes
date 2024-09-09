@@ -14,7 +14,7 @@ const ViewProduct = ({ onClose }) => {
   const [dataShow, setDataShow] = useState();
   useEffect(() => {
     const getData = async () => {
-      const id =localStorage.getItem("productId");
+      const id = localStorage.getItem("productId");
       let apiUrl = `${baseURL}/manageProducts`;
       try {
         const resp = await axios.get(apiUrl);

@@ -38,26 +38,19 @@ const ProductsList = () => {
   const [isEditProductOpen, setEditProductOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
-  //Add Product Model Ends
-
-  //View Product Model Starts
   const viewProduct = (id) => {
     localStorage.setItem("productId", id);
 
     setViewProductOpen(true);
     document.body.classList.add("page-modal-open");
   };
-  //View Product Model Ends
 
-  //Edit Product Model Starts
   const editProduct = (id) => {
     localStorage.setItem("productId", id);
 
     setEditProductOpen(true);
   };
-  //Edit Product Model Ends
 
-  //Delete Product Starts
   const getIdToDelete = (id, status) => {
     localStorage.setItem("productId", id);
     setShowDeleteConfirmation(true);
@@ -85,7 +78,6 @@ const ProductsList = () => {
     }
     setShowDeleteConfirmation(false);
   };
-  //Delete Product Ends
 
   return (
     <div id="myModel" className="modal">

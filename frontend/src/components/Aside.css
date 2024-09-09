@@ -23,17 +23,13 @@
     justify-content: left;
   }
   
-  /* Hover state when it's not active */
   .left-part:not(.active):hover {
     background: rgb(21 67 176);
-    /* slightly transparent blue */
     color: white;
   }
   
-  /* Active state */
   .left-part.active {
     background: rgb(21 67 176);
-    /* solid blue */
     color: white;
   }
   
@@ -46,7 +42,6 @@
     margin: 18px 0px;
     font-size: 13px;
     font-weight: 400;
-    /* width: 90%; */
     text-align: left;
   }
   
@@ -107,7 +102,6 @@
   }
 
   .Logo-image-sideMenu {
-    /* width: 70%; */
     padding: 8%;
   }
 

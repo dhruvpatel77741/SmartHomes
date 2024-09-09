@@ -10,7 +10,6 @@ const image = process.env.PUBLIC_URL;
 const CustomerList = () => {
   const location = useLocation();
 
-  // Team Data Mapping Starts
   const [dataShow, setDataShow] = useState([]);
   const getData = async () => {
     let apiUrl = `${baseURL}/customers`;
@@ -28,38 +27,28 @@ const CustomerList = () => {
   }, [location.pathname]);
 
   const reverseData = [...dataShow].reverse();
-  // Team Data Mapping Ends
 
-  //Add Trader Model Starts
   const [isAddModelOpen, setAddModelOpen] = useState(false);
   const [isViewCustomerOpen, setViewCustomerOpen] = useState(false);
   const [isEditCustomerOpen, setEditCustomerOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [status, setStatus] = useState(false);
 
-  //Add Trader Model Ends
 
-  //View Customer Model Starts
   const viewCustomer = (id) => {
     localStorage.setItem("customerId", id);
 
     setViewCustomerOpen(true);
     document.body.classList.add("page-modal-open");
   };
-  //View Customer Model Ends
 
-  //Edit Customer Model Starts
   const editCustomer = (id) => {
     localStorage.setItem("customerId", id);
 
     setEditCustomerOpen(true);
   };
-  //Edit Customer Model Ends
 
-  //Delete Customer Starts
   const getIdToDelete = (id, status) => {
     localStorage.setItem("customer", id);
-    setStatus(status);
     setShowDeleteConfirmation(true);
   };
 
@@ -73,7 +62,6 @@ const CustomerList = () => {
 
       if (response.status === 200 || response.status === 201) {
         alert(`This customer has been deleted`);
-        setStatus(false);
         window.location.reload();
       } else {
         console.log("Error: " + (response.data || response.statusText));
@@ -83,7 +71,6 @@ const CustomerList = () => {
     }
     setShowDeleteConfirmation(false);
   };
-  //Delete Customer Ends
 
   return (
     <div id="myModel" className="modal">

@@ -7,7 +7,6 @@ const image = process.env.PUBLIC_URL;
 const HeaderComponent = () => {
   const navigate = useNavigate();
 
-  // function to get initials
   const NameInitials = (name) => {
     name = localStorage.getItem("name");
     return name?.match(/(\b\S)?/g).join("");
