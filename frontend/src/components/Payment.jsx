@@ -3,6 +3,9 @@ import Aside from "./Aside";
 import HeaderComponent from "./HeaderComponent";
 import "./Checkout.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -26,7 +29,7 @@ const Checkout = () => {
 
   const handleBack = () => {
     setTab(null);
-    window.alert("Payment Failed.")
+    window.alert("Payment Failed.");
     navigate("/cart");
   };
 
@@ -35,9 +38,43 @@ const Checkout = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handlePay = () => {
+  const clearCart = async () => {
+    const userId = localStorage.getItem("userId");
+
+    try {
+      await axios.post(`${baseURL}/cart`, {
+        action: "clearCart",
+        userId: userId,
+      });
+    } catch (error) {
+      console.error("Error adding address:", error);
+    }
+  };
+
+  const handlePay = async () => {
+    if (tab === "cod") {
+      console.log("Order Placed.")
+    } else {
+      const userId = localStorage.getItem("userId");
+
+      const data = {
+        id: userId,
+        creditCard: {
+          creditCardNumber: formData?.creditCardNumber,
+          expiryDate: formData?.expiryDate,
+          cvv: formData?.cvv,
+        },
+      };
+
+      try {
+        await axios.post(`${baseURL}/updateUser`, data);
+      } catch (error) {
+        console.error("Error adding credit card:", error);
+      }
+    }
     window.alert("Order placed Succesfully.");
     navigate("/dashboard");
+    clearCart();
   };
 
   return (
@@ -84,7 +121,7 @@ const Checkout = () => {
                 Total Amount: <b>${totalAmount.toFixed(2)}</b>
               </p>
               <form>
-              <input
+                <input
                   type="text"
                   name="name"
                   placeholder="Card Holder's Name"
@@ -99,6 +136,7 @@ const Checkout = () => {
                   value={formData.phone}
                   onChange={handleInputChange}
                   required
+                  maxLength={10}
                 />
                 <input
                   type="text"
@@ -107,6 +145,7 @@ const Checkout = () => {
                   value={formData.creditCardNumber}
                   onChange={handleInputChange}
                   required
+                  maxLength={16}
                 />
                 <input
                   type="text"
@@ -117,12 +156,13 @@ const Checkout = () => {
                   required
                 />
                 <input
-                  type="text"
+                  type="password"
                   name="cvv"
                   placeholder="CVV"
                   value={formData.cvv}
                   onChange={handleInputChange}
                   required
+                  maxLength={3}
                 />
               </form>
               <div className="checkout-actions">

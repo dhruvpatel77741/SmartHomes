@@ -20,7 +20,6 @@ const Cart = () => {
 
     try {
       const response = await axios.get(`${baseURL}/cart?userId=${userId}`);
-      console.log(response);
       setCartItems(response.data);
       calculateTotalAmount(response.data);
       setLoading(false);

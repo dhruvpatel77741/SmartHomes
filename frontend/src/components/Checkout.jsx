@@ -3,9 +3,11 @@ import Aside from "./Aside";
 import HeaderComponent from "./HeaderComponent";
 import "./Checkout.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const Checkout = () => {
-
   const navigate = useNavigate();
 
   const name = localStorage.getItem("name");
@@ -36,13 +38,47 @@ const Checkout = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleProceed = () => {
+  const clearCart = async () => {
+    const userId = localStorage.getItem("userId");
+
+    try {
+      await axios.post(`${baseURL}/cart`, {
+        action: "clearCart",
+        userId: userId,
+      });
+    } catch (error) {
+      console.error("Error adding address:", error);
+    }
+  };
+  console.log(formData);
+  const handleProceed = async () => {
     if (tab === "pickup") {
       window.alert(
         "Order placed Succesfully. You can pickup your order from store and pay by cash or card."
       );
+      clearCart();
       navigate("/dashboard");
     } else if (tab === "homeDelivery") {
+      const userId = localStorage.getItem("userId");
+
+      const data = {
+        id: userId,
+        phone: formData?.phone,
+        address: {
+          addressLine1: formData?.addressLine1,
+          addressLine2: formData?.addressLine2,
+          city: formData?.city,
+          state: formData?.state,
+          zipCode: formData?.zipCode,
+        },
+      };
+
+      try {
+        await axios.post(`${baseURL}/updateUser`, data);
+      } catch (error) {
+        console.error("Error clearing cart:", error);
+      }
+
       navigate("/payment", { state: { totalAmount, formData } });
     }
   };
