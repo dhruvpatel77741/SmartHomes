@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const Cart = () => {
-
   const navigate = useNavigate();
 
   const [cartItems, setCartItems] = useState([]);
@@ -36,7 +35,7 @@ const Cart = () => {
 
   useEffect(() => {
     fetchCartItems();
-  });
+  }, []);
 
   const removeItemFromCart = async (productId) => {
     const userId = localStorage.getItem("userId");
@@ -68,7 +67,7 @@ const Cart = () => {
   };
 
   const handleCheckout = () => {
-    navigate("/checkout", { state: { totalAmount } });
+    navigate("/checkout", { state: { totalAmount, cartItems } });
   };
 
   if (loading) {

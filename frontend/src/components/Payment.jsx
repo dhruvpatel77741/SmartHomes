@@ -7,13 +7,13 @@ import axios from "axios";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
-const Checkout = () => {
+const Payment = () => {
   const navigate = useNavigate();
 
   const name = localStorage.getItem("name");
   const location = useLocation();
-  const { totalAmount } = location.state;
-
+  const { totalAmount, address, cartItems } = location.state;
+  console.log(totalAmount, address, cartItems);
   const [tab, setTab] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -52,11 +52,36 @@ const Checkout = () => {
   };
 
   const handlePay = async () => {
+    const userId = localStorage.getItem("userId");
     if (tab === "cod") {
-      console.log("Order Placed.")
+      const orderData = {
+        userId: userId,
+        orderData: {
+          product: cartItems[0]?.productName,
+          price: totalAmount,
+          quantity: cartItems[0]?.quantity,
+        },
+        checkout: "HomeDelivery",
+        paymentMode: "Cash",
+        paymentDetails: {},
+        address: {
+          addressLine1: address?.addressLine1,
+          addressLine2: address?.addressLine2,
+          city: address?.city,
+          state: address?.state,
+          zipCode: address?.zipCode,
+        },
+      };
+      try {
+        await axios.post(
+          "http://localhost:8080/csp584_war_exploded/orders",
+          orderData
+        );
+      } catch (error) {
+        console.error("Error placing order:", error);
+      }
+      console.log("Order Placed Succesfully.");
     } else {
-      const userId = localStorage.getItem("userId");
-
       const data = {
         id: userId,
         creditCard: {
@@ -65,14 +90,45 @@ const Checkout = () => {
           cvv: formData?.cvv,
         },
       };
+      const orderData = {
+        userId: userId,
+        orderData: {
+          product: cartItems[0]?.productName,
+          price: totalAmount,
+          quantity: cartItems[0]?.quantity,
+        },
+        checkout: "HomeDelivery",
+        paymentMode: "Credit Card",
+        paymentDetails: {
+          creditCardNumber: formData?.creditCardNumber,
+          expiryDate: formData?.expiryDate,
+          cvv: formData?.cvv,
+        },
+        address: {
+          addressLine1: address?.addressLine1,
+          addressLine2: address?.addressLine2,
+          city: address?.city,
+          state: address?.state,
+          zipCode: address?.zipCode,
+        },
+      };
 
       try {
         await axios.post(`${baseURL}/updateUser`, data);
       } catch (error) {
         console.error("Error adding credit card:", error);
       }
+
+      try {
+        await axios.post(
+          "http://localhost:8080/csp584_war_exploded/orders",
+          orderData
+        );
+      } catch (error) {
+        console.error("Error placing order:", error);
+      }
     }
-    window.alert("Order placed Succesfully.");
+    window.alert("Order Placed Succesfully.");
     navigate("/dashboard");
     clearCart();
   };
@@ -181,4 +237,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default Payment;

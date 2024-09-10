@@ -1,119 +1,118 @@
 .login-container {
-    height: 100%;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-image: url('../../public/smartHome.jpg');
-    background-size: cover;
-    background-position: center;
-  }
-  
-  .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 875px;
-    width: 100%;
-    position: relative;
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../../public/smartHome.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 875px;
+  width: 100%;
+  position: relative;
+}
+
+.main-box {
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  position: relative;
+  left: 370px;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.retailer-logo p {
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-form input,
+.pas-form input {
+  width: 93%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.pas-form {
+  position: relative;
+}
+
+.eye-btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.Login_Fgpwd_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.login-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+span {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .main-box {
+    padding: 15px;
   }
 
-  
-  .main-box {
-    z-index: 2;
-    background-color: rgba(255, 255, 255, 0.85);
-    padding: 50px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    position: relative;
-    left: 370px;
+  .form-container input {
+    padding: 8px;
+    font-size: 14px;
   }
-  
-  .logo {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .retailer-logo p {
-    font-size: 24px;
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .form-container {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .user-form input, .pas-form input {
-    width: 93%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .pas-form {
-    position: relative;
-  }
-  
-  .eye-btn {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .Login_Fgpwd_container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
+
   .login-btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    border: none;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
+    padding: 8px;
+    font-size: 14px;
   }
-  
-  .login-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  span {
-    display: block;
-    text-align: center;
-    margin-top: 10px;
-  }
-  
-  @media (max-width: 768px) {
-    .main-box {
-      padding: 15px;
-    }
-  
-    .form-container input {
-      padding: 8px;
-      font-size: 14px;
-    }
-  
-    .login-btn {
-      padding: 8px;
-      font-size: 14px;
-    }
-  }
-  
+}

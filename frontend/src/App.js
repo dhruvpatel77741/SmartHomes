@@ -9,7 +9,8 @@ import ProductDetails from "./components/ProductDetails";
 import Cart from "./components/Cart";
 import Checkout from "./components/Checkout";
 import Payment from "./components/Payment";
-import PrivateRoute from "./components/PrivateRoute"; // Import PrivateRoute
+import PrivateRoute from "./components/PrivateRoute";
+import OrdersList from "./components/OrdersList";
 
 function App() {
   return (
@@ -70,6 +71,14 @@ function App() {
         element={
           <PrivateRoute>
             <Payment />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/order-list"
+        element={
+          <PrivateRoute>
+            <OrdersList />
           </PrivateRoute>
         }
       />

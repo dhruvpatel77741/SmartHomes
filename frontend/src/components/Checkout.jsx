@@ -12,8 +12,7 @@ const Checkout = () => {
 
   const name = localStorage.getItem("name");
   const location = useLocation();
-  const { totalAmount } = location.state;
-
+  const { totalAmount, cartItems } = location.state;
   const [tab, setTab] = useState(null);
   const [formData, setFormData] = useState({
     name: name,
@@ -50,9 +49,32 @@ const Checkout = () => {
       console.error("Error adding address:", error);
     }
   };
-  console.log(formData);
   const handleProceed = async () => {
     if (tab === "pickup") {
+      const userId = localStorage.getItem("userId");
+      const orderData = {
+        userId: userId,
+        orderData: {
+          product: cartItems[0]?.productName,
+          price: totalAmount,
+          quantity: cartItems[0]?.quantity,
+        },
+        checkout: "Pick Up",
+        paymentMode: "",
+        paymentDetails: {},
+        address: {},
+      };
+      try {
+        await axios.post(
+          "http://localhost:8080/csp584_war_exploded/orders",
+          orderData
+        );
+        window.alert(
+          "Order placed Successfully. You can pick up your order from the store and pay by cash or card."
+        );
+      } catch (error) {
+        console.error("Error placing order:", error);
+      }
       window.alert(
         "Order placed Succesfully. You can pickup your order from store and pay by cash or card."
       );
@@ -78,8 +100,9 @@ const Checkout = () => {
       } catch (error) {
         console.error("Error clearing cart:", error);
       }
-
-      navigate("/payment", { state: { totalAmount, formData } });
+      navigate("/payment", {
+        state: { totalAmount, address: data?.address, cartItems, formData },
+      });
     }
   };
 

@@ -1,754 +1,753 @@
 .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1040;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  
-  .modal-centered {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1050;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
-    width: 100%;
-    height: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+}
 
-  .main-part-ratailer {
-    width: 100%;
-    max-width: 100vw;
-    display: flex;
-    flex-direction: column;
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
+.modal-centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1050;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
-  .team-btn {
-    position: relative;
-    display: flex;
-    gap: 20px;
-    padding: 10px;
-  }
-  
-  .btn-add {
-    background: rgb(21 67 176);
-    width: 87px;
-    height: 41px;
-    border-radius: 50px;
-    top: 25px;
-    right: 140px;
-    border: 0;
-    outline: 0;
-    color: rgba(255, 255, 255, 1);
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 15px;
-    cursor: pointer;
-  }
-  
-  .team-main-bg {
-    background: rgba(224, 237, 255, 1);
-    width: 104%;
-    height: 55px;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .team-data-main {
-    color: rgba(44, 58, 100, 1);
-    font-size: 14px;
-    margin: 15px;
-    line-height: 27px;
-    width: 5%;
-    text-align: left;
-  }
-  
-  .team-data-role {
-    width: 20%;
-    color: rgba(44, 58, 100, 1);
-    font-size: 14px;
-    margin: 15px 0px;
-    line-height: 27px;
-  }
-  
-  .team-data-email {
-    width: 20%;
-    color: rgba(44, 58, 100, 1);
-    font-size: 14px;
-    margin: 15px 0px;
-    line-height: 27px;
-  }
-  
-  .team-data-mobile {
-    width: 20%;
-    color: rgba(44, 58, 100, 1);
-    font-size: 14px;
-    margin: 15px 0px;
-    line-height: 27px;
-  }
-  
-  .team-data-actions {
-    width: 20%;
-    color: rgba(44, 58, 100, 1);
-    font-size: 14px;
-    line-height: 27px;
-    margin: 15px 0px;
-  }
-  
-  .team-details {
-    display: flex;
-    margin: 15px 15px;
-    color: rgba(44, 58, 100, 1);
-    font-size: 14px;
-    line-height: 27px;
-  }
-  
-  .add-action,
-  .view-action,
-  .notview-action {
-    border: 0;
-    padding: 0px 0;
-    background: transparent;
-    margin-right: 8px;
-    cursor: pointer;
-  }
+.main-part-ratailer {
+  width: 100%;
+  max-width: 100vw;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
 
-  .TeamDetailsRowData {
-    display: flex;
-    justify-content: space-between;
-  }
+.team-btn {
+  position: relative;
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+}
 
-  .invite-model-backdrop {
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .invite-model-content {
-    background-color: rgba(255, 255, 255, 1);
-    padding: 20px 20px;
-    border-radius: 0;
-    width: auto;
-    height: auto;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  
-  .invite-model-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .invite-model-header > h3 {
-    color: rgb(21 67 176);
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .popupbottom-border {
-    color: rgba(44, 58, 100, 1);
-    display: inline-flex;
-    opacity: 30%;
-    width: 100%;
-    padding: 0;
-  }
-  
-  .invite-model-close-btn {
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    background: rgba(44, 58, 100, 1);
-    border-radius: 50px;
-    width: 23px;
-    height: 23px;
-    color: rgba(255, 255, 255, 1);
-    font-size: 16px;
-    font-weight: 700;
-  }
-  
-  .popup {
-    background: rgb(207, 207, 207);
-    width: 470px;
-    height: 330px;
-    margin: 0 auto;
-  }
-  
-  .main-popup {
-    margin: 20px 20px;
-    color: rgb(21 67 176);
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 15px;
-    position: relative;
-  }
-  
-  .popupbottomadd-border {
-    border-bottom: 1px solid rgba(44, 58, 100, 1);
-    display: inline-flex;
-    opacity: 30%;
-    width: -webkit-fill-available;
-  }
-  
-  .popup-email {
-    margin-top: 20px;
-    padding: 10px;
-    font-size: 14px;
-    font-weight: 400;
-    display: inline-flex;
-    border-radius: 5px;
-    background: rgba(224, 237, 255, 1);
-    color: rgba(44, 58, 100, 1);
-    text-align: left;
-    line-height: 13px;
-    width: 328px;
-    height: 52px;
-    border: 0;
-    outline: 0;
-  }
-  
-  .popup-checkbox {
-    margin-top: 10px;
-    margin-left: 10px;
-  }
-  
-  input.popup-checkbox {
-    border-color: #506eec;
-    border: 1px solid rgb(21 67 176);
-    width: 16px;
-    height: 16px;
-    vertical-align: sub;
-    cursor: pointer;
-  }
-  
-  span.check-text {
-    color: rgba(44, 58, 100, 1);
-    font-size: 15px;
-    font-weight: 400;
-    display: inline-flex;
-    margin-left: 10px;
-    vertical-align: middle;
-  }
-  
-  input.input-field {
-    padding: 0 20px;
-  }
-  
-  .btn-cancel {
-    border: 1px solid rgb(21 67 176);
-    background-color: transparent;
-    color: rgb(21 67 176);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100px;
-    height: 41px;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 15px;
-    border-radius: 50px;
-    outline: 0;
-    margin: 0;
-    cursor: pointer;
-    transition: all 0.5s ease-in-out;
-  }
-  
-  .button-invite {
-    border: 1px solid rgb(21 67 176);
-    background-color: transparent;
-    color: rgb(21 67 176);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100px;
-    height: 41px;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 15px;
-    border-radius: 50px;
-    margin: 15px;
-    outline: 0;
-    cursor: pointer;
-    transition: all 0.5s ease-in-out;
-  }
-  
-  .footer-popupbtn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-  }
-  
-  .button-invite:hover {
-    background: rgb(93, 112, 157);
-    color: rgba(255, 255, 255, 1);
-  }
-  
-  .btn-cancel:hover {
-    background: rgb(21 67 176);
-    color: rgba(255, 255, 255, 1);
-  }
+.btn-add {
+  background: rgb(21 67 176);
+  width: 87px;
+  height: 41px;
+  border-radius: 50px;
+  top: 25px;
+  right: 140px;
+  border: 0;
+  outline: 0;
+  color: rgba(255, 255, 255, 1);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 15px;
+  cursor: pointer;
+}
 
-  .profileview-model-backdrop {
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .profileview-model-content {
-    background-color: rgba(255, 255, 255, 1);
-    padding: 20px 20px;
-    border-radius: 0;
-    width: 865px;
-    height: 630px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  
-  .viewbottom-border {
-    border-bottom: 1px solid rgba(44, 58, 100, 1);
-    display: inline-flex;
-    opacity: 30%;
-    width: 865px;
-    margin: 15px -20px;
-    padding: 0;
-  }
-  
-  .profile-model-header > h3 {
-    color: rgb(21 67 176);
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 16px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .profile-model-header,
-  span {
-    color: rgba(44, 58, 100, 1);
-    font-weight: 700;
-    font-size: 12px;
-    line-height: 27px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-left: 0;
-  }
-  
-  .left-profile-photo {
-    margin: 20px 0;
-  }
-  
-  .right-profile-details {
-    margin: 20px 20px;
-  }
-  
-  .profile-addresss {
-    display: inline-flex;
-    vertical-align: super;
-    color: rgba(44, 58, 100, 1);
-    font-size: 14px;
-    font-weight: 400;
-    margin-left: 10px;
-  }
-  
-  .phone-receiver {
-    display: inline-flex;
-    vertical-align: super;
-    color: rgba(44, 58, 100, 1);
-    font-size: 14px;
-    font-weight: 400;
-    margin-left: 10px;
-  }
-  
-  .email-detail {
-    display: inline-flex;
-    vertical-align: super;
-    color: rgba(44, 58, 100, 1);
-    font-size: 14px;
-    font-weight: 400;
-    margin-left: 10px;
-  }
-  
-  .addmain-details {
-  }
-  
-  .view-main-details {
-    margin: 10px 0;
-    display: flex;
-    gap: 4px;
-    font-size: 12px;
-  }
-  
-  .serve-detail {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 20px 0;
-    color: rgba(44, 58, 100, 1);
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 15px;
-  }
-  
-  .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1040;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  
-  .modal-centered {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1050;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
-    width: 100%;
-    height: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
+.team-main-bg {
+  background: rgba(224, 237, 255, 1);
+  width: 104%;
+  height: 55px;
+  display: flex;
+  justify-content: space-between;
+}
 
-  .add-model-backdrop {
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .add-model-content {
-    background-color: #fff;
-    padding: 20px 20px;
-    border-radius: 0;
-    width: auto;
-    max-width: 1170px;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-  
-  .add-model-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .add-model-header > h3 {
-    color: rgb(21 67 176);
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .add-model-close-btn {
-    background: rgba(44, 58, 100, 1);
-    border-radius: 50px;
-    width: 23px;
-    height: 23px;
-    color: rgba(255, 255, 255, 1);
-    font-size: 16px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .add-model-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 18px;
-  }
-  
-  .add-name {
-    background: rgba(224, 237, 255, 1);
-    border-radius: 5px;
-    padding: 0 12px;
-    border: 0;
-    outline: 0;
-    width: 265px;
-    height: 52px;
-  }
-  
-  .add-email {
-    padding: 0 12px;
-    background: rgba(224, 237, 255, 1);
-    border-radius: 5px;
-    border: 0;
-    outline: 0;
-    width: 265px;
-    height: 52px;
-  }
-  
-  .add-phone {
-    padding: 0 12px;
-    background: rgba(224, 237, 255, 1);
-    border-radius: 5px;
-    border: 0;
-    outline: 0;
-    width: 265px;
-    height: 52px;
-  }
-  
-  .add-personphoto {
-    margin-left: 20px;
-    padding: 23px 12px;
-    background: rgba(224, 237, 255, 1);
-    border-radius: 5px;
-    border: 0;
-    outline: 0;
-    height: 52px;
-  }
-  
-  input.add-personphoto {
-    width: 274px;
-  }
-  
-  .photo-upload {
-    position: relative;
-    top: 0;
-    right: 0;
-  }
-  
-  .photo-main {
-    position: absolute;
-    right: 15px;
-    top: 10px;
-  }
-  
-  .add-cce {
-    margin-top: 20px;
-    font-size: 14px;
-    font-weight: 400;
-    background: rgba(224, 237, 255, 1);
-    border-radius: 5px;
-    padding: 0 12px;
-    border: 0;
-    outline: 0;
-    width: 200px;
-    height: 52px;
-  }
-  
-  .what-servesection {
-    display: flex;
-    flex-direction: row;
-    gap: 30px;
-    font-size: 14px;
-    font-weight: 400;
-    background: rgba(224, 237, 255, 1);
-    border-radius: 5px;
-    padding: 0 12px;
-    border: 0;
-    outline: 0;
-    width: 70% !important;
-    height: 64px;
-    overflow: auto;
-    margin-bottom: 20px;
-  }
-  
-  .adddetail-input {
-    padding: 12px 15px;
-    border-radius: 5px;
-    border: none;
-    width: 200px;
-    height: 52px;
-    background: rgba(224, 237, 255, 1);
-    color: rgba(44, 58, 100, 1);
-    margin-right: 20px;
-    margin-top: 20px;
-    font-size: 14px;
-    font-weight: 400;
-  }
-  
-  .add-ccephoto {
-    margin-top: 20px;
-    font-size: 10px;
-    font-weight: 400;
-    padding: 23px 12px;
-    background: rgba(224, 237, 255, 1);
-    border-radius: 5px;
-    border: 0;
-    outline: 0;
-    height: 52px;
-  }
-  
-  .ccephoto-size {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 400;
-    opacity: 50%;
-    font-weight: 400;
-  }
-  
-  input.add-ccephoto {
-    width: 200px;
-  }
-  
-  .addphoto-main {
-    position: absolute;
-    right: 30px;
-    top: 30px;
-  }
-  
-  .add-model-form input,
-  .add-model-form select,
-  .add-model-form textarea {
-    border: 1px solid #ccc;
-    border: 0;
-  }
-  
-  .add-model-actions {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-  }
-  
-  .add-model-actions button {
-    padding: 10px 20px;
-    background-color: transparent;
-    border-radius: 50px;
-    border: 1px solid rgb(21 67 176);
-    color: rgb(21 67 176);
-    font-size: 16px;
-    font-weight: 400;
-    cursor: pointer;
-    margin-left: 10px;
-    transition: all 0.5s ease-in-out;
-  }
-  
-  .add-model-actions button:hover {
-    background: rgb(21 67 176);
-    color: rgba(255, 255, 255, 1);
-  }
-  
-  cancel-hover {
-    background: rgb(21 67 176);
-    color: rgba(255, 255, 255, 1);
-  }
-  
-  .submit-hover {
-    background: rgb(21 67 176);
-    color: rgba(255, 255, 255, 1);
-  }
-  
-  .add-model-actions button[type="button"] {
-    background-color: transparent;
-    padding: 10px 20px;
-    border-radius: 50px;
-    border: 1px solid rgb(21 67 176);
-    color: rgb(21 67 176);
-    font-size: 16px;
-    font-weight: 400;
-  }
-  
-  label.label-text {
-    position: absolute;
-    left: 30px;
-    color: rgba(44, 58, 100, 1);
-    font-size: 14px;
-    font-weight: 400;
-  }
-  
-  .label-cce {
-    position: absolute;
-    top: 22px;
-    left: 14px;
-    color: rgba(44, 58, 100, 1);
-    font-size: 14px;
-    font-weight: 400;
-  }
-  
-  .label-eleid {
-    position: absolute;
-    top: 22px;
-    left: 14px;
-    color: rgba(44, 58, 100, 1);
-    font-size: 14px;
-    font-weight: 400;
-  }
-  
-  .label-design {
-    position: absolute;
-    top: 22px;
-    left: 14px;
-    color: rgba(44, 58, 100, 1);
-    font-size: 14px;
-    font-weight: 400;
-  }
-  
-  .addmap-section {
-    transform: translate(-1px, 20px);
-    display: inline-block;
-    margin: 0px 0 0 25px;
-    width: 421px;
-    height: 196px;
-  }
-  
-  #Addinstaller-PersonPhoto {
-    border: none;
-    color: #000;
-    font-family: Poppins;
-    font-size: var(--font-size-12);
-    width: auto;
-  }
+.team-data-main {
+  color: rgba(44, 58, 100, 1);
+  font-size: 14px;
+  margin: 15px;
+  line-height: 27px;
+  width: 5%;
+  text-align: left;
+}
 
-  .editInput {
-    width: 374px;
-    height: 52px;
-    border-radius: 5px;
-    border: transparent;
-    display: block;
-    padding-left: 50px;
-    background: rgba(224, 237, 255, 1);
-    margin: 0;
-    color: rgba(44, 58, 100, 1);
-  }
-  
+.team-data-role {
+  width: 20%;
+  color: rgba(44, 58, 100, 1);
+  font-size: 14px;
+  margin: 15px 0px;
+  line-height: 27px;
+}
+
+.team-data-email {
+  width: 20%;
+  color: rgba(44, 58, 100, 1);
+  font-size: 14px;
+  margin: 15px 0px;
+  line-height: 27px;
+}
+
+.team-data-mobile {
+  width: 20%;
+  color: rgba(44, 58, 100, 1);
+  font-size: 14px;
+  margin: 15px 0px;
+  line-height: 27px;
+}
+
+.team-data-actions {
+  width: 20%;
+  color: rgba(44, 58, 100, 1);
+  font-size: 14px;
+  line-height: 27px;
+  margin: 15px 0px;
+}
+
+.team-details {
+  display: flex;
+  margin: 15px 15px;
+  color: rgba(44, 58, 100, 1);
+  font-size: 14px;
+  line-height: 27px;
+}
+
+.add-action,
+.view-action,
+.notview-action {
+  border: 0;
+  padding: 0px 0;
+  background: transparent;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.TeamDetailsRowData {
+  display: flex;
+  justify-content: space-between;
+}
+
+.invite-model-backdrop {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invite-model-content {
+  background-color: rgba(255, 255, 255, 1);
+  padding: 20px 20px;
+  border-radius: 0;
+  width: auto;
+  height: auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.invite-model-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invite-model-header > h3 {
+  color: rgb(21 67 176);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.popupbottom-border {
+  color: rgba(44, 58, 100, 1);
+  display: inline-flex;
+  opacity: 30%;
+  width: 100%;
+  padding: 0;
+}
+
+.invite-model-close-btn {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  background: rgba(44, 58, 100, 1);
+  border-radius: 50px;
+  width: 23px;
+  height: 23px;
+  color: rgba(255, 255, 255, 1);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.popup {
+  background: rgb(207, 207, 207);
+  width: 470px;
+  height: 330px;
+  margin: 0 auto;
+}
+
+.main-popup {
+  margin: 20px 20px;
+  color: rgb(21 67 176);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 15px;
+  position: relative;
+}
+
+.popupbottomadd-border {
+  border-bottom: 1px solid rgba(44, 58, 100, 1);
+  display: inline-flex;
+  opacity: 30%;
+  width: -webkit-fill-available;
+}
+
+.popup-email {
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  display: inline-flex;
+  border-radius: 5px;
+  background: rgba(224, 237, 255, 1);
+  color: rgba(44, 58, 100, 1);
+  text-align: left;
+  line-height: 13px;
+  width: 328px;
+  height: 52px;
+  border: 0;
+  outline: 0;
+}
+
+.popup-checkbox {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+input.popup-checkbox {
+  border-color: #506eec;
+  border: 1px solid rgb(21 67 176);
+  width: 16px;
+  height: 16px;
+  vertical-align: sub;
+  cursor: pointer;
+}
+
+span.check-text {
+  color: rgba(44, 58, 100, 1);
+  font-size: 15px;
+  font-weight: 400;
+  display: inline-flex;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+input.input-field {
+  padding: 0 20px;
+}
+
+.btn-cancel {
+  border: 1px solid rgb(21 67 176);
+  background-color: transparent;
+  color: rgb(21 67 176);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 41px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 15px;
+  border-radius: 50px;
+  outline: 0;
+  margin: 0;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+
+.button-invite {
+  border: 1px solid rgb(21 67 176);
+  background-color: transparent;
+  color: rgb(21 67 176);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 41px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 15px;
+  border-radius: 50px;
+  margin: 15px;
+  outline: 0;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+
+.footer-popupbtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.button-invite:hover {
+  background: rgb(93, 112, 157);
+  color: rgba(255, 255, 255, 1);
+}
+
+.btn-cancel:hover {
+  background: rgb(21 67 176);
+  color: rgba(255, 255, 255, 1);
+}
+
+.profileview-model-backdrop {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profileview-model-content {
+  background-color: rgba(255, 255, 255, 1);
+  padding: 20px 20px;
+  border-radius: 0;
+  width: 865px;
+  height: 630px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.viewbottom-border {
+  border-bottom: 1px solid rgba(44, 58, 100, 1);
+  display: inline-flex;
+  opacity: 30%;
+  width: 865px;
+  margin: 15px -20px;
+  padding: 0;
+}
+
+.profile-model-header > h3 {
+  color: rgb(21 67 176);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 16px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.profile-model-header,
+span {
+  color: rgba(44, 58, 100, 1);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 27px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 0;
+}
+
+.left-profile-photo {
+  margin: 20px 0;
+}
+
+.right-profile-details {
+  margin: 20px 20px;
+}
+
+.profile-addresss {
+  display: inline-flex;
+  vertical-align: super;
+  color: rgba(44, 58, 100, 1);
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 10px;
+}
+
+.phone-receiver {
+  display: inline-flex;
+  vertical-align: super;
+  color: rgba(44, 58, 100, 1);
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 10px;
+}
+
+.email-detail {
+  display: inline-flex;
+  vertical-align: super;
+  color: rgba(44, 58, 100, 1);
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 10px;
+}
+
+.addmain-details {
+}
+
+.view-main-details {
+  margin: 10px 0;
+  display: flex;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.serve-detail {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px 0;
+  color: rgba(44, 58, 100, 1);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 15px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1050;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.add-model-backdrop {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-model-content {
+  background-color: #fff;
+  padding: 20px 20px;
+  border-radius: 0;
+  width: auto;
+  max-width: 1170px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.add-model-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.add-model-header > h3 {
+  color: rgb(21 67 176);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.add-model-close-btn {
+  background: rgba(44, 58, 100, 1);
+  border-radius: 50px;
+  width: 23px;
+  height: 23px;
+  color: rgba(255, 255, 255, 1);
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.add-model-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.add-name {
+  background: rgba(224, 237, 255, 1);
+  border-radius: 5px;
+  padding: 0 12px;
+  border: 0;
+  outline: 0;
+  width: 265px;
+  height: 52px;
+}
+
+.add-email {
+  padding: 0 12px;
+  background: rgba(224, 237, 255, 1);
+  border-radius: 5px;
+  border: 0;
+  outline: 0;
+  width: 265px;
+  height: 52px;
+}
+
+.add-phone {
+  padding: 0 12px;
+  background: rgba(224, 237, 255, 1);
+  border-radius: 5px;
+  border: 0;
+  outline: 0;
+  width: 265px;
+  height: 52px;
+}
+
+.add-personphoto {
+  margin-left: 20px;
+  padding: 23px 12px;
+  background: rgba(224, 237, 255, 1);
+  border-radius: 5px;
+  border: 0;
+  outline: 0;
+  height: 52px;
+}
+
+input.add-personphoto {
+  width: 274px;
+}
+
+.photo-upload {
+  position: relative;
+  top: 0;
+  right: 0;
+}
+
+.photo-main {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+
+.add-cce {
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: 400;
+  background: rgba(224, 237, 255, 1);
+  border-radius: 5px;
+  padding: 0 12px;
+  border: 0;
+  outline: 0;
+  width: 200px;
+  height: 52px;
+}
+
+.what-servesection {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  font-size: 14px;
+  font-weight: 400;
+  background: rgba(224, 237, 255, 1);
+  border-radius: 5px;
+  padding: 0 12px;
+  border: 0;
+  outline: 0;
+  width: 70% !important;
+  height: 64px;
+  overflow: auto;
+  margin-bottom: 20px;
+}
+
+.adddetail-input {
+  padding: 12px 15px;
+  border-radius: 5px;
+  border: none;
+  width: 200px;
+  height: 52px;
+  background: rgba(224, 237, 255, 1);
+  color: rgba(44, 58, 100, 1);
+  margin-right: 20px;
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.add-ccephoto {
+  margin-top: 20px;
+  font-size: 10px;
+  font-weight: 400;
+  padding: 23px 12px;
+  background: rgba(224, 237, 255, 1);
+  border-radius: 5px;
+  border: 0;
+  outline: 0;
+  height: 52px;
+}
+
+.ccephoto-size {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 50%;
+  font-weight: 400;
+}
+
+input.add-ccephoto {
+  width: 200px;
+}
+
+.addphoto-main {
+  position: absolute;
+  right: 30px;
+  top: 30px;
+}
+
+.add-model-form input,
+.add-model-form select,
+.add-model-form textarea {
+  border: 1px solid #ccc;
+  border: 0;
+}
+
+.add-model-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.add-model-actions button {
+  padding: 10px 20px;
+  background-color: transparent;
+  border-radius: 50px;
+  border: 1px solid rgb(21 67 176);
+  color: rgb(21 67 176);
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all 0.5s ease-in-out;
+}
+
+.add-model-actions button:hover {
+  background: rgb(21 67 176);
+  color: rgba(255, 255, 255, 1);
+}
+
+cancel-hover {
+  background: rgb(21 67 176);
+  color: rgba(255, 255, 255, 1);
+}
+
+.submit-hover {
+  background: rgb(21 67 176);
+  color: rgba(255, 255, 255, 1);
+}
+
+.add-model-actions button[type="button"] {
+  background-color: transparent;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 1px solid rgb(21 67 176);
+  color: rgb(21 67 176);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+label.label-text {
+  position: absolute;
+  left: 30px;
+  color: rgba(44, 58, 100, 1);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.label-cce {
+  position: absolute;
+  top: 22px;
+  left: 14px;
+  color: rgba(44, 58, 100, 1);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.label-eleid {
+  position: absolute;
+  top: 22px;
+  left: 14px;
+  color: rgba(44, 58, 100, 1);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.label-design {
+  position: absolute;
+  top: 22px;
+  left: 14px;
+  color: rgba(44, 58, 100, 1);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.addmap-section {
+  transform: translate(-1px, 20px);
+  display: inline-block;
+  margin: 0px 0 0 25px;
+  width: 421px;
+  height: 196px;
+}
+
+#Addinstaller-PersonPhoto {
+  border: none;
+  color: #000;
+  font-family: Poppins;
+  font-size: var(--font-size-12);
+  width: auto;
+}
+
+.editInput {
+  width: 374px;
+  height: 52px;
+  border-radius: 5px;
+  border: transparent;
+  display: block;
+  padding-left: 50px;
+  background: rgba(224, 237, 255, 1);
+  margin: 0;
+  color: rgba(44, 58, 100, 1);
+}

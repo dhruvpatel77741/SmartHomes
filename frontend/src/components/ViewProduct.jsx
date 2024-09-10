@@ -4,7 +4,6 @@ import axios from "axios";
 import "./List.css";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
-const image = process.env.PUBLIC_URL;
 
 const ViewProduct = ({ onClose }) => {
   const location = useLocation();

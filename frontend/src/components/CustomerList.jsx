@@ -33,7 +33,6 @@ const CustomerList = () => {
   const [isEditCustomerOpen, setEditCustomerOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
-
   const viewCustomer = (id) => {
     localStorage.setItem("customerId", id);
 

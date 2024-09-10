@@ -108,12 +108,9 @@ const ProductDetails = () => {
           </div>
 
           <div className="product-detail-right" style={{ marginLeft: "300px" }}>
-            {/* Total Amount Display */}
             <p style={{ fontWeight: "bold", fontSize: "18px" }}>
               Total: ${totalPrice.toFixed(2)}
             </p>
-
-            {/* Add to Cart Counter */}
             {quantity === 0 ? (
               <button
                 className="add-to-cart-btn"

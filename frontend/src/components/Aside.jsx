@@ -14,6 +14,7 @@ const Aside = () => {
     location.pathname === "/checkout";
   const isCustomerListActive = location.pathname === "/customer-list";
   const isProductListActive = location.pathname === "/product-list";
+  const isOrderListActive = location.pathname === "/order-list";
 
   return (
     <div className="left-panel">
@@ -94,6 +95,28 @@ const Aside = () => {
             <div className="left-text">Products</div>
           </button>
         ) : null}
+
+        <button
+          className={`left-part ${isOrderListActive ? "active" : ""}`}
+          style={{ border: "none" }}
+          onClick={() => {
+            navigate("/order-list");
+          }}
+        >
+          <div className="left-img">
+            <img
+              src={`${image}/Assets/LeftPanel/teams.svg`}
+              alt=""
+              className={`default-image ${isOrderListActive ? "hide" : ""}`}
+            />
+            <img
+              src={`${image}/Assets/LeftPanel/teams-white.svg`}
+              alt=""
+              className={`selected-image ${isOrderListActive ? "" : "hide"}`}
+            />
+          </div>
+          <div className="left-text">Orders</div>
+        </button>
 
         <button
           className={`left-part`}

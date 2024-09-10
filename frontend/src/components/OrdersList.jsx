@@ -1,73 +1,67 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import "./List.css";
 import axios from "axios";
 import Aside from "./Aside";
-import ViewProduct from "./ViewProduct";
-import EditProduct from "./EditProduct";
-import AddProduct from "./AddProduct";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
-const image = process.env.PUBLIC_URL;
 
-const ProductsList = () => {
-  const location = useLocation();
+const OrdersList = () => {
+  const userType = localStorage.getItem("userType");
+  const userId = localStorage.getItem("userId");
 
   const [dataShow, setDataShow] = useState([]);
   const getData = async () => {
-    let apiUrl = `${baseURL}/manageProducts`;
+    const endPoint =
+      userType === "Customer" ? `orders?userId=${userId}` : `orders`;
+    let apiUrl = `${baseURL}/${endPoint}`;
     try {
       const resp = await axios.get(apiUrl);
-      const data = resp.data;
-      console.log(data);
+      const data = resp.data.orders;
       setDataShow(data);
     } catch (err) {
       console.log("Error:", err);
     }
   };
   useEffect(() => {
-    setDataShow([]);
     getData();
-  }, [location.pathname]);
+  }, []);
 
   const reverseData = [...dataShow].reverse();
 
-  const [isAddModelOpen, setAddModelOpen] = useState(false);
-  const [isViewProductOpen, setViewProductOpen] = useState(false);
-  const [isEditProductOpen, setEditProductOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
-  const viewProduct = (id) => {
-    localStorage.setItem("productId", id);
-
-    setViewProductOpen(true);
-    document.body.classList.add("page-modal-open");
+  const handleUpdate = async (data) => {
+    const status = data?.status === "Order Placed" ? "In-Transit" : "Delivered";
+    try {
+      const response = await axios.put(`${baseURL}/orders`, {
+        orderId: data?.orderId,
+        status: status,
+      });
+      if (response.status === 200 || response.status === 200) {
+        window.alert("Order Details Updated Successfully");
+        window.location.reload();
+      }
+    } catch (err) {
+      console.log("Error updating order:", err);
+    }
   };
 
-  const editProduct = (id) => {
-    localStorage.setItem("productId", id);
-
-    setEditProductOpen(true);
-  };
-
-  const getIdToDelete = (id, status) => {
-    localStorage.setItem("productId", id);
+  const getIdToDelete = (id) => {
+    localStorage.setItem("orderId", id);
     setShowDeleteConfirmation(true);
   };
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    const id = localStorage.getItem("productId");
+    const orderId = localStorage.getItem("orderId");
     try {
-      const response = await axios.delete(`${baseURL}/manageProducts`, {
-        withCredentials: true,
-        data: {
-          id: id,
-        },
-      });
+      const response = await axios.delete(
+        `${baseURL}/orders?orderId=${orderId}`
+      );
 
       if (response.status === 200 || response.status === 201) {
-        alert(`The product has been deleted`);
+        alert(`The order has been deleted`);
+        localStorage.removeItem("orderId");
         window.location.reload();
       } else {
         console.log("Error: " + (response.data || response.statusText));
@@ -88,18 +82,7 @@ const ProductsList = () => {
           <div className="row">
             <div className="TemsTableHeadingContainer">
               <div style={{ padding: "10px" }}>
-                <b>Products</b>
-              </div>
-
-              <div className="team-btn" style={{ left: "1075px" }}>
-                <button
-                  className="btn-add"
-                  onClick={() => {
-                    setAddModelOpen(true);
-                  }}
-                >
-                  Add
-                </button>
+                <b>Orders</b>
               </div>
             </div>
             <div>
@@ -116,12 +99,14 @@ const ProductsList = () => {
                   className="team-main-bg TeamsTableHeading"
                   style={{ width: "100%" }}
                 >
-                  <td className="team-data-main">ID</td>
-                  <td className="team-data-role">Name</td>
+                  <td className="team-data-main">Sr. No.</td>
+                  <td className="team-data-role">Product Name</td>
                   <td className="team-data-email" style={{ width: "24%" }}>
-                    Price
+                    {userType === "Customer" ? "Price" : "Customer Name"}
                   </td>
-                  <td className="team-data-actions">Actions</td>
+                  <td className="team-data-actions">
+                    {userType === "Customer" ? "Status" : "Actions"}
+                  </td>
                 </th>
                 {reverseData.length > 0 ? (
                   reverseData.map((data, groupIndex) => {
@@ -133,39 +118,56 @@ const ProductsList = () => {
                             overflowWrap: "break-word",
                           }}
                         >
-                          {data?.id}
+                          {groupIndex + 1}
                         </td>
-                        <td className="team-data-role">{data?.name}</td>
-                        <td className="team-data-email">${data?.price}</td>
+                        <td className="team-data-role">
+                          {data?.orderData?.product}
+                        </td>
+                        <td className="team-data-email">
+                          {userType === "Customer"
+                            ? `$${data?.orderData?.price.toFixed(2)}`
+                            : `${data?.username}`}
+                        </td>
 
                         <td className="team-data-actions">
-                          <button
-                            className="add-action"
-                            onClick={() => editProduct(data.id)}
-                          >
-                            <img
-                              src={`${image}/Assets/Teams/add-btn.svg`}
-                              alt=""
-                            />
-                          </button>
-                          <button
-                            className="view-action"
-                            onClick={() => viewProduct(data.id)}
-                          >
-                            <img
-                              src={`${image}/Assets/Teams/view.svg`}
-                              alt=""
-                            />
-                          </button>
-                          <button
-                            className="notview-action"
-                            onClick={() => getIdToDelete(data.id)}
-                          >
-                            <img
-                              src={`${image}/Assets/Teams/not-view.svg`}
-                              alt=""
-                            />
-                          </button>
+                          {userType === "Customer" ? (
+                            data?.status
+                          ) : (
+                            <>
+                              <button
+                                className="notview-action"
+                                onClick={() => handleUpdate(data)}
+                                style={{
+                                  backgroundColor: "blue",
+                                  color: "white",
+                                  border: "none",
+                                  padding: "8px 16px",
+                                  fontSize: "16px",
+                                  borderRadius: "4px",
+                                  cursor: "pointer",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                Update
+                              </button>
+                              <button
+                                className="notview-action"
+                                onClick={() => getIdToDelete(data?.orderId)}
+                                style={{
+                                  backgroundColor: "#ff4d4d",
+                                  color: "white",
+                                  border: "none",
+                                  padding: "8px 16px",
+                                  fontSize: "16px",
+                                  borderRadius: "4px",
+                                  cursor: "pointer",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                DELETE
+                              </button>
+                            </>
+                          )}
                         </td>
                       </tr>
                     );
@@ -179,7 +181,7 @@ const ProductsList = () => {
                       padding: "20px 100px 0px 20px",
                     }}
                   >
-                    <p>No Products Found</p>
+                    <p>No Orders Found</p>
                   </div>
                 )}
               </table>
@@ -187,30 +189,6 @@ const ProductsList = () => {
           </div>
 
           <div className="row">
-            {isAddModelOpen && (
-              <AddProduct
-                onClose={() => {
-                  setAddModelOpen(false);
-                }}
-              />
-            )}
-            {isEditProductOpen && (
-              <EditProduct
-                onClose={() => {
-                  setEditProductOpen(false);
-                  localStorage.removeItem("productId");
-                }}
-              />
-            )}
-            {isViewProductOpen && (
-              <ViewProduct
-                onClose={() => {
-                  setViewProductOpen(false);
-                  localStorage.removeItem("productId");
-                }}
-              />
-            )}
-
             {showDeleteConfirmation && (
               <div className="invite-model-backdrop">
                 <div
@@ -237,7 +215,7 @@ const ProductsList = () => {
                     <button
                       className="button-invite"
                       onClick={() => {
-                        localStorage.removeItem("productId");
+                        localStorage.removeItem("orderId");
                         window.location.reload();
                       }}
                     >
@@ -254,4 +232,4 @@ const ProductsList = () => {
   );
 };
 
-export default ProductsList;
+export default OrdersList;
