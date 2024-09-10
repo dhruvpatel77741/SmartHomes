@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import "./List.css";
 import axios from "axios";
 import Aside from "./Aside";
+import ViewCustomer from "./Customer/ViewCustomer";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 const image = process.env.PUBLIC_URL;
@@ -46,8 +47,8 @@ const CustomerList = () => {
     setEditCustomerOpen(true);
   };
 
-  const getIdToDelete = (id, status) => {
-    localStorage.setItem("customer", id);
+  const getIdToDelete = (id) => {
+    localStorage.setItem("customerId", id);
     setShowDeleteConfirmation(true);
   };
 
@@ -55,9 +56,7 @@ const CustomerList = () => {
     e.preventDefault();
     const id = localStorage.getItem("customerId");
     try {
-      const response = await axios.delete(`${baseURL}/customer/delete/${id}`, {
-        withCredentials: true,
-      });
+      const response = await axios.delete(`${baseURL}/updateUser?id=${id}`);
 
       if (response.status === 200 || response.status === 201) {
         alert(`This customer has been deleted`);
@@ -150,11 +149,10 @@ const CustomerList = () => {
                               alt=""
                             />
                           </button>
+                          {console.log(data)}
                           <button
                             className="notview-action"
-                            onClick={() =>
-                              getIdToDelete(data._id, data.isFreezed)
-                            }
+                            onClick={() => getIdToDelete(data._id)}
                           >
                             <img
                               src={`${image}/Assets/Teams/not-view.svg`}
@@ -181,8 +179,8 @@ const CustomerList = () => {
             </div>
           </div>
 
-          {/* <div className="row">
-            {isAddModelOpen && (
+          <div className="row">
+            {/* {isAddModelOpen && (
               <AddTraderAndRetailer
                 onClose={() => {
                   setAddModelOpen(false);
@@ -199,12 +197,12 @@ const CustomerList = () => {
                   localStorage.removeItem("installerId");
                 }}
               />
-            )}
+            )} */}
             {isViewCustomerOpen && (
-              <ProfileInstallationTeam
+              <ViewCustomer
                 onClose={() => {
                   setViewCustomerOpen(false);
-                  localStorage.removeItem("installerId");
+                  localStorage.removeItem("customerId");
                 }}
               />
             )}
@@ -213,9 +211,13 @@ const CustomerList = () => {
               <div className="invite-model-backdrop">
                 <div
                   className="delete-model-content"
-                  style={{ width: "502px" }}
+                  style={{
+                    width: "502px",
+                    backgroundColor: "white",
+                    borderRadius: "10px",
+                  }}
                 >
-                  <h2>
+                  <h2 style={{ display: "flex", justifyContent: "center" }}>
                     Are you sure you want to delete?
                   </h2>
                   <div
@@ -225,15 +227,14 @@ const CustomerList = () => {
                       alignItems: "center",
                     }}
                   >
-                    <button className="btn-cancel" onClick={handleFreeze}>
+                    <button className="btn-cancel" onClick={handleDelete}>
                       Yes
                     </button>
                     <button
                       className="button-invite"
                       onClick={() => {
-                        localStorage.removeItem("retailerId");
-                        localStorage.removeItem("installerId");
-                        setShowDeleteConfirmation(false);
+                        localStorage.removeItem("customerId");
+                        window.location.reload();
                       }}
                     >
                       No
@@ -242,7 +243,7 @@ const CustomerList = () => {
                 </div>
               </div>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
