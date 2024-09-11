@@ -73,10 +73,7 @@ const Payment = () => {
         },
       };
       try {
-        await axios.post(
-          "http://localhost:8080/csp584_war_exploded/orders",
-          orderData
-        );
+        await axios.post(`${baseURL}/orders`, orderData);
       } catch (error) {
         console.error("Error placing order:", error);
       }
@@ -120,10 +117,7 @@ const Payment = () => {
       }
 
       try {
-        await axios.post(
-          "http://localhost:8080/csp584_war_exploded/orders",
-          orderData
-        );
+        await axios.post(`${baseURL}/orders`, orderData);
       } catch (error) {
         console.error("Error placing order:", error);
       }

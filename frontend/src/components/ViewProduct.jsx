@@ -18,8 +18,7 @@ const ViewProduct = ({ onClose }) => {
       try {
         const resp = await axios.get(apiUrl);
         const data = resp.data;
-        const product = data.find((item) => item?.id == id);
-        console.log(data);
+        const product = data.find((item) => item?.id.toString() === id);
         setDataShow(product);
       } catch (err) {
         console.log("Error:", err);

@@ -57,7 +57,6 @@ const Login = () => {
       try {
         const response = await axios.post(apiUrl, requestData);
         if (response.status === 200) {
-          console.log(response?.data?.user);
           const name = response?.data?.user?.name;
           const username = response?.data?.user?.username;
           const userType = response?.data?.user?.userType;
@@ -69,11 +68,11 @@ const Login = () => {
           localStorage.setItem("userId", userId);
           navigate("/dashboard");
         } else {
-          setErrorMsg("Login failed. Please try again.");
+          console.log("Login failed. Please try again.");
         }
       } catch (error) {
         if (error.response && error.response.status === 401) {
-          alert(error?.response?.data?.message);
+          window.alert(error?.response?.data?.message);
           setErrorMsg("Username or password is incorrect.");
         } else {
           setErrorMsg("An error occurred. Please try again.");

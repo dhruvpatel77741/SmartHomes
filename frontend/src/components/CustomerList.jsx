@@ -32,7 +32,7 @@ const CustomerList = () => {
 
   const [isAddModelOpen, setAddModelOpen] = useState(false);
   const [isViewCustomerOpen, setViewCustomerOpen] = useState(false);
-  const [isEditCustomerOpen, setEditCustomerOpen] = useState(false);
+  // const [isEditCustomerOpen, setEditCustomerOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   const viewCustomer = (id) => {
@@ -42,11 +42,11 @@ const CustomerList = () => {
     document.body.classList.add("page-modal-open");
   };
 
-  const editCustomer = (id) => {
-    localStorage.setItem("customerId", id);
+  // const editCustomer = (id) => {
+  //   localStorage.setItem("customerId", id);
 
-    setEditCustomerOpen(true);
-  };
+  //   setEditCustomerOpen(true);
+  // };
 
   const getIdToDelete = (id) => {
     localStorage.setItem("customerId", id);

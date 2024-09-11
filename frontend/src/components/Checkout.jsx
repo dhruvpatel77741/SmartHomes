@@ -65,10 +65,7 @@ const Checkout = () => {
         address: {},
       };
       try {
-        await axios.post(
-          "http://localhost:8080/csp584_war_exploded/orders",
-          orderData
-        );
+        await axios.post(`${baseURL}/orders`, orderData);
         window.alert(
           "Order placed Successfully. You can pick up your order from the store and pay by cash or card."
         );

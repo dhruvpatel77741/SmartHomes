@@ -9,7 +9,7 @@ const AddCustomer = ({ onClose }) => {
     name: "",
     username: "",
     password: "",
-    userType: "Customer"
+    userType: "Customer",
   });
 
   const handleChange = (e) => {

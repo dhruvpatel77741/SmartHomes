@@ -19,7 +19,6 @@ const ProductsList = () => {
     try {
       const resp = await axios.get(apiUrl);
       const data = resp.data;
-      console.log(data);
       setDataShow(data);
     } catch (err) {
       console.log("Error:", err);
