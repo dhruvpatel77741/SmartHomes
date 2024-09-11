@@ -4,6 +4,7 @@ import "./List.css";
 import axios from "axios";
 import Aside from "./Aside";
 import ViewCustomer from "./Customer/ViewCustomer";
+import AddCustomer from "./Customer/AddCustomer";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 const image = process.env.PUBLIC_URL;
@@ -131,7 +132,7 @@ const CustomerList = () => {
                         <td className="team-data-email">{data?.username}</td>
 
                         <td className="team-data-actions">
-                          <button
+                          {/* <button
                             className="add-action"
                             onClick={() => editCustomer(data._id)}
                           >
@@ -139,7 +140,7 @@ const CustomerList = () => {
                               src={`${image}/Assets/Teams/add-btn.svg`}
                               alt=""
                             />
-                          </button>
+                          </button> */}
                           <button
                             className="view-action"
                             onClick={() => viewCustomer(data._id)}
@@ -149,7 +150,6 @@ const CustomerList = () => {
                               alt=""
                             />
                           </button>
-                          {console.log(data)}
                           <button
                             className="notview-action"
                             onClick={() => getIdToDelete(data._id)}
@@ -180,17 +180,14 @@ const CustomerList = () => {
           </div>
 
           <div className="row">
-            {/* {isAddModelOpen && (
-              <AddTraderAndRetailer
+            {isAddModelOpen && (
+              <AddCustomer
                 onClose={() => {
                   setAddModelOpen(false);
-                  localStorage.removeItem("traderId");
-                  localStorage.removeItem("retailerId");
-                  localStorage.removeItem("installerId");
                 }}
               />
             )}
-            {isEditCustomerOpen && (
+            {/* {isEditCustomerOpen && (
               <EditInstallationTeam
                 onClose={() => {
                   setEditCustomerOpen(false);

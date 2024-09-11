@@ -748,3 +748,7 @@ label.label-text {
   margin: 0;
   color: rgba(44, 58, 100, 1);
 }
+
+.inputFieldCustomer {
+  height: 25px;
+}
