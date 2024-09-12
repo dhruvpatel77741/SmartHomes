@@ -1,0 +1,23 @@
+[
+  {
+    "_id": 1,
+    "name": "Dhruv Patel",
+    "username": "Dhruv",
+    "password": "Dhruv@777",
+    "userType": "StoreManager"
+  },
+  {
+    "_id": 2,
+    "name": "Dev Patel",
+    "username": "Dev",
+    "password": "Dev@777",
+    "userType": "Salesman"
+  },
+  {
+    "_id": 3,
+    "name": "Princy Patel",
+    "username": "Princy",
+    "password": "Princy@777",
+    "userType": "Customer"
+  }
+]
