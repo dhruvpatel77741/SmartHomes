@@ -1,13 +1,19 @@
 package com.smarthomes.csp584.servlets;
 
-import java.io.*;
-import javax.servlet.ServletException;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 @WebServlet(name = "productManagementServlet", value = "/manageProducts")
 public class ProductManagementServlet extends HttpServlet {
@@ -16,7 +22,6 @@ public class ProductManagementServlet extends HttpServlet {
     private String filePath;
 
     public void init() throws ServletException {
-        // Load the Products.json file during servlet initialization
         try {
             filePath = getServletContext().getRealPath("/WEB-INF/Products.json");
             String content = new String(Files.readAllBytes(Paths.get(filePath)));
@@ -42,67 +47,55 @@ public class ProductManagementServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        response.setStatus(HttpServletResponse.SC_OK); // 200 OK
+        response.setStatus(HttpServletResponse.SC_OK);
         out.println(products.toString());
     }
 
-    private void handleRequest(HttpServletRequest request, HttpServletResponse response, String method) throws IOException {
+    private void handleRequest(HttpServletRequest request, HttpServletResponse response, String method)
+            throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
-        try {
-            String requestBody = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
+        String requestBody = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
 
-            // Validate request body
-            if (requestBody == null || requestBody.isEmpty()) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
-                out.println(new JSONObject().put("status", "error").put("message", "Request body is missing"));
-                return;
-            }
+        if (requestBody == null || requestBody.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.println(new JSONObject().put("status", "error").put("message", "Request body is missing"));
+            return;
+        }
 
-            JSONObject requestBodyJson = new JSONObject(requestBody);
+        JSONObject requestBodyJson = new JSONObject(requestBody);
 
-            switch (method) {
-                case "POST":
-                    addProduct(requestBodyJson, response, out);
-                    break;
-                case "PUT":
-                    updateProduct(requestBodyJson, response, out);
-                    break;
-                case "DELETE":
-                    deleteProduct(requestBodyJson, response, out);
-                    break;
-                default:
-                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
-                    out.println(new JSONObject().put("status", "error").put("message", "Invalid request method"));
-                    break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
-            out.println(new JSONObject().put("status", "error").put("message", "An error occurred while processing the request"));
+        switch (method) {
+            case "POST":
+                addProduct(requestBodyJson, response, out);
+                break;
+            case "PUT":
+                updateProduct(requestBodyJson, response, out);
+                break;
+            case "DELETE":
+                deleteProduct(requestBodyJson, response, out);
+                break;
+            default:
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.println(new JSONObject().put("status", "error").put("message", "Invalid request method"));
+                break;
         }
     }
 
     private void addProduct(JSONObject product, HttpServletResponse response, PrintWriter out) throws IOException {
-        // Automatically assign a new ID by finding the max ID and adding 1
         int newId = getNextProductId();
-
-        // Assign the new ID to the product
         product.put("id", newId);
-
-        // Add new product to the products array
         products.put(product);
         saveProductsToFile();
 
-        response.setStatus(HttpServletResponse.SC_CREATED); // 201 Created
+        response.setStatus(HttpServletResponse.SC_CREATED);
         out.println(new JSONObject().put("status", "success").put("message", "Product added successfully"));
     }
 
     private int getNextProductId() {
         int maxId = 0;
 
-        // Find the max ID in the products array
         for (int i = 0; i < products.length(); i++) {
             JSONObject existingProduct = products.getJSONObject(i);
             if (existingProduct.has("id")) {
@@ -113,14 +106,12 @@ public class ProductManagementServlet extends HttpServlet {
             }
         }
 
-        // Return the next ID by adding 1 to the max ID
         return maxId + 1;
     }
 
     private void updateProduct(JSONObject product, HttpServletResponse response, PrintWriter out) throws IOException {
         boolean productFound = false;
 
-        // Search for product by ID and update it
         for (int i = 0; i < products.length(); i++) {
             JSONObject existingProduct = products.getJSONObject(i);
             if (existingProduct.getInt("id") == product.getInt("id")) {
@@ -132,10 +123,10 @@ public class ProductManagementServlet extends HttpServlet {
 
         if (productFound) {
             saveProductsToFile();
-            response.setStatus(HttpServletResponse.SC_OK); // 200 OK
+            response.setStatus(HttpServletResponse.SC_OK);
             out.println(new JSONObject().put("status", "success").put("message", "Product updated successfully"));
         } else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404 Not Found
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             out.println(new JSONObject().put("status", "error").put("message", "Product not found"));
         }
     }
@@ -143,7 +134,6 @@ public class ProductManagementServlet extends HttpServlet {
     private void deleteProduct(JSONObject product, HttpServletResponse response, PrintWriter out) throws IOException {
         boolean productFound = false;
 
-        // Search for product by ID and remove it
         for (int i = 0; i < products.length(); i++) {
             JSONObject existingProduct = products.getJSONObject(i);
             if (existingProduct.getInt("id") == product.getInt("id")) {
@@ -155,22 +145,17 @@ public class ProductManagementServlet extends HttpServlet {
 
         if (productFound) {
             saveProductsToFile();
-            response.setStatus(HttpServletResponse.SC_OK); // 200 OK
+            response.setStatus(HttpServletResponse.SC_OK);
             out.println(new JSONObject().put("status", "success").put("message", "Product deleted successfully"));
         } else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND); // 404 Not Found
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             out.println(new JSONObject().put("status", "error").put("message", "Product not found"));
         }
     }
 
     private void saveProductsToFile() throws IOException {
-        // Write updated products array back to the Products.json file
         try (FileWriter file = new FileWriter(filePath)) {
-            file.write(products.toString(4)); // Indent by 4 spaces for readability
+            file.write(products.toString(4));
         }
-    }
-
-    public void destroy() {
-        // Cleanup code (if needed)
     }
 }

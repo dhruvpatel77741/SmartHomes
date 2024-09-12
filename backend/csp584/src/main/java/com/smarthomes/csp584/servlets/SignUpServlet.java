@@ -1,12 +1,18 @@
 package com.smarthomes.csp584.servlets;
 
-import java.io.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 @WebServlet(name = "signUpServlet", value = "/signup")
 public class SignUpServlet extends HttpServlet {
@@ -14,7 +20,6 @@ public class SignUpServlet extends HttpServlet {
     private JSONArray users;
 
     public void init() {
-        // Load the Users.json file during servlet initialization
         try {
             String filePath = getServletContext().getRealPath("/WEB-INF/Users.json");
             String content = new String(Files.readAllBytes(Paths.get(filePath)));
@@ -28,7 +33,6 @@ public class SignUpServlet extends HttpServlet {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
-        // Get request body (name, username, password)
         String requestBody = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
         JSONObject requestBodyJson = new JSONObject(requestBody);
 
@@ -36,7 +40,6 @@ public class SignUpServlet extends HttpServlet {
         String username = requestBodyJson.getString("username");
         String password = requestBodyJson.getString("password");
 
-        // Check if the username already exists
         boolean userExists = false;
         for (int i = 0; i < users.length(); i++) {
             JSONObject user = users.getJSONObject(i);
@@ -47,15 +50,10 @@ public class SignUpServlet extends HttpServlet {
         }
 
         if (userExists) {
-            // Username already exists
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             out.println(new JSONObject().put("status", "error").put("message", "Username already exists"));
         } else {
-            // Create new user
-            int newId = 1;
-            if (users.length() > 0) {
-                newId = users.getJSONObject(users.length() - 1).getInt("_id") + 1;
-            }
+            int newId = (users.length() > 0) ? users.getJSONObject(users.length() - 1).getInt("_id") + 1 : 1;
 
             JSONObject newUser = new JSONObject()
                     .put("_id", newId)
@@ -64,26 +62,18 @@ public class SignUpServlet extends HttpServlet {
                     .put("password", password)
                     .put("userType", "Customer");
 
-            // Add new user to JSON array
             users.put(newUser);
 
-            // Save updated JSON array to file
-            try (FileWriter fileWriter = new FileWriter(getServletContext().getRealPath("/WEB-INF/Users.json"), false)) {
+            try (FileWriter fileWriter = new FileWriter(getServletContext().getRealPath("/WEB-INF/Users.json"),
+                    false)) {
                 fileWriter.write(users.toString());
-                fileWriter.flush();
             } catch (IOException e) {
                 e.printStackTrace();
                 out.println(new JSONObject().put("status", "error").put("message", "Failed to save user"));
                 return;
             }
 
-            // Respond with success
             out.println(new JSONObject().put("status", "success").put("message", "User registered successfully"));
         }
-    }
-
-
-    public void destroy() {
-        // Cleanup code (if needed)
     }
 }

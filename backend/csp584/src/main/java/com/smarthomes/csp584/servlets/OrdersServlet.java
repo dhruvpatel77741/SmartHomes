@@ -1,13 +1,18 @@
 package com.smarthomes.csp584.servlets;
 
-import java.io.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 @WebServlet(name = "ordersServlet", value = "/orders")
 public class OrdersServlet extends HttpServlet {
@@ -38,7 +43,7 @@ public class OrdersServlet extends HttpServlet {
             users = new JSONArray(content);
         } catch (IOException e) {
             e.printStackTrace();
-            users = new JSONArray(); // Fallback to empty array on failure
+            users = new JSONArray();
         }
     }
 
@@ -49,10 +54,9 @@ public class OrdersServlet extends HttpServlet {
                 return user.getString("name");
             }
         }
-        return "Unknown"; // Return "Unknown" if user not found
+        return "Unknown";
     }
 
-    // Add a new order for a user
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
@@ -62,16 +66,14 @@ public class OrdersServlet extends HttpServlet {
 
         int userId = requestBodyJson.getInt("userId");
         JSONObject orderData = requestBodyJson.getJSONObject("orderData");
-        String checkout = requestBodyJson.getString("checkout"); // HomeDelivery or PickUp
-        String paymentMode = requestBodyJson.getString("paymentMode"); // cod or creditCard
-        JSONObject paymentDetails = requestBodyJson.getJSONObject("paymentDetails"); // Credit card or COD details
-        JSONObject address = requestBodyJson.getJSONObject("address"); // Delivery Address
+        String checkout = requestBodyJson.getString("checkout");
+        String paymentMode = requestBodyJson.getString("paymentMode");
+        JSONObject paymentDetails = requestBodyJson.getJSONObject("paymentDetails");
+        JSONObject address = requestBodyJson.getJSONObject("address");
         String status = "Order Placed";
 
-        // Generate a random orderId
         String orderId = UUID.randomUUID().toString();
 
-        // Create a new order object
         JSONObject newOrder = new JSONObject();
         newOrder.put("orderId", orderId);
         newOrder.put("userId", userId);
@@ -82,10 +84,8 @@ public class OrdersServlet extends HttpServlet {
         newOrder.put("address", address);
         newOrder.put("status", status);
 
-        // Add the new order to the orders array
         orders.put(newOrder);
 
-        // Save the updated orders to the Orders.json file
         try {
             String filePath = getServletContext().getRealPath("/WEB-INF/Orders.json");
             Files.write(Paths.get(filePath), orders.toString().getBytes());
@@ -100,7 +100,6 @@ public class OrdersServlet extends HttpServlet {
         out.println(new JSONObject().put("status", "success").put("message", "Order placed successfully").put("orderId", orderId));
     }
 
-    // Get all orders for a particular user by userId
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
@@ -138,7 +137,6 @@ public class OrdersServlet extends HttpServlet {
         }
     }
 
-    // Update the status of an existing order (e.g., Order Placed, In-Transit, Delivered)
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
@@ -151,18 +149,16 @@ public class OrdersServlet extends HttpServlet {
 
         boolean orderFound = false;
 
-        // Find the order by orderId and update its status
         for (int i = 0; i < orders.length(); i++) {
             JSONObject order = orders.getJSONObject(i);
             if (order.getString("orderId").equals(orderId)) {
-                order.put("status", newStatus); // Update status of the order
+                order.put("status", newStatus);
                 orderFound = true;
                 break;
             }
         }
 
         if (orderFound) {
-            // Save the updated orders to the Orders.json file
             try {
                 String filePath = getServletContext().getRealPath("/WEB-INF/Orders.json");
                 Files.write(Paths.get(filePath), orders.toString().getBytes());
@@ -181,7 +177,6 @@ public class OrdersServlet extends HttpServlet {
         }
     }
 
-    // Cancel an existing order by deleting it
     public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
@@ -189,18 +184,16 @@ public class OrdersServlet extends HttpServlet {
         String orderId = request.getParameter("orderId");
         boolean orderFound = false;
 
-        // Search for the order by orderId and remove it if found
         for (int i = 0; i < orders.length(); i++) {
             JSONObject order = orders.getJSONObject(i);
             if (order.getString("orderId").equals(orderId)) {
-                orders.remove(i);  // Remove the order from the array
+                orders.remove(i);
                 orderFound = true;
                 break;
             }
         }
 
         if (orderFound) {
-            // Save the updated orders to the Orders.json file
             try {
                 String filePath = getServletContext().getRealPath("/WEB-INF/Orders.json");
                 Files.write(Paths.get(filePath), orders.toString().getBytes());
@@ -217,9 +210,5 @@ public class OrdersServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             out.println(new JSONObject().put("status", "error").put("message", "Order not found"));
         }
-    }
-
-    public void destroy() {
-        // Cleanup code if needed
     }
 }
