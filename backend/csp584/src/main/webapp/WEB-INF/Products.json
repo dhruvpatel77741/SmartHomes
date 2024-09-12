@@ -1,0 +1,497 @@
+[
+  {
+    "id": 1,
+    "name": "Smart Doorbell",
+    "price": 99.99,
+    "description": "A high-tech doorbell with motion detection and camera features.",
+    "category": "Smart Doorbells",
+    "accessories": [
+      {
+        "name": "Extra Chime",
+        "price": 19.99
+      },
+      {
+        "name": "Battery Pack",
+        "price": 29.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 9.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": false
+  },
+  {
+    "id": 2,
+    "name": "Advanced Doorbell",
+    "price": 119.99,
+    "description": "A wireless doorbell with AI-based motion detection.",
+    "category": "Smart Doorbells",
+    "accessories": [
+      {
+        "name": "Rechargeable Battery",
+        "price": 39.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 12.99
+    },
+    "specialDiscount": false,
+    "manufacturerRebate": true
+  },
+  {
+    "id": 3,
+    "name": "Wireless Doorbell",
+    "price": 79.99,
+    "description": "A simple wireless doorbell with multiple chimes.",
+    "category": "Smart Doorbells",
+    "accessories": [
+      {
+        "name": "Wall Mount",
+        "price": 9.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 7.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": false
+  },
+  {
+    "id": 4,
+    "name": "Pro Doorbell",
+    "price": 199.99,
+    "description": "A premium doorbell with HD video and night vision.",
+    "category": "Smart Doorbells",
+    "accessories": [
+      {
+        "name": "Cloud Storage",
+        "price": 49.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 19.99
+    },
+    "specialDiscount": false,
+    "manufacturerRebate": true
+  },
+  {
+    "id": 5,
+    "name": "Basic Doorbell",
+    "price": 49.99,
+    "description": "A basic doorbell with adjustable chime volume.",
+    "category": "Smart Doorbells",
+    "accessories": [
+      {
+        "name": "Extra Batteries",
+        "price": 9.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 4.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": false
+  },
+  {
+    "id": 6,
+    "name": "Smart Doorlock",
+    "price": 149.99,
+    "description": "A secure doorlock with keyless entry and remote control.",
+    "category": "Smart Doorlocks",
+    "accessories": [
+      {
+        "name": "Remote Keypad",
+        "price": 29.99
+      },
+      {
+        "name": "Fingerprint Reader",
+        "price": 49.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 14.99
+    },
+    "specialDiscount": false,
+    "manufacturerRebate": true
+  },
+  {
+    "id": 7,
+    "name": "Keyless Doorlock",
+    "price": 129.99,
+    "description": "A doorlock with keyless entry and mobile app control.",
+    "category": "Smart Doorlocks",
+    "accessories": [
+      {
+        "name": "Smart Key",
+        "price": 24.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 13.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": false
+  },
+  {
+    "id": 8,
+    "name": "Biometric Doorlock",
+    "price": 199.99,
+    "description": "A high-tech doorlock with biometric entry.",
+    "category": "Smart Doorlocks",
+    "accessories": [
+      {
+        "name": "Face Recognition",
+        "price": 79.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 19.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": true
+  },
+  {
+    "id": 9,
+    "name": "Simple Doorlock",
+    "price": 99.99,
+    "description": "A simple smart lock with remote control.",
+    "category": "Smart Doorlocks",
+    "accessories": [
+      {
+        "name": "Wireless Charger",
+        "price": 19.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 9.99
+    },
+    "specialDiscount": false,
+    "manufacturerRebate": false
+  },
+  {
+    "id": 10,
+    "name": "Pro Doorlock",
+    "price": 249.99,
+    "description": "A premium smart doorlock with advanced security.",
+    "category": "Smart Doorlocks",
+    "accessories": [
+      {
+        "name": "Encryption Module",
+        "price": 99.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 29.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": true
+  },
+  {
+    "id": 11,
+    "name": "Smart Speaker",
+    "price": 79.99,
+    "description": "Voice-controlled speaker with smart home integration.",
+    "category": "Smart Speakers",
+    "accessories": [
+      {
+        "name": "Wall Mount",
+        "price": 14.99
+      },
+      {
+        "name": "Carrying Case",
+        "price": 9.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 7.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": false
+  },
+  {
+    "id": 12,
+    "name": "Portable Smart Speaker",
+    "price": 99.99,
+    "description": "A compact portable smart speaker with high-quality sound.",
+    "category": "Smart Speakers",
+    "accessories": [
+      {
+        "name": "Extra Battery",
+        "price": 19.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 9.99
+    },
+    "specialDiscount": false,
+    "manufacturerRebate": true
+  },
+  {
+    "id": 13,
+    "name": "Smart Home Speaker",
+    "price": 129.99,
+    "description": "A premium home speaker with full smart home integration.",
+    "category": "Smart Speakers",
+    "accessories": [
+      {
+        "name": "Voice Assistant Module",
+        "price": 49.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 11.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": true
+  },
+  {
+    "id": 14,
+    "name": "Soundbar Speaker",
+    "price": 199.99,
+    "description": "A smart soundbar with Dolby Atmos integration.",
+    "category": "Smart Speakers",
+    "accessories": [
+      {
+        "name": "Mounting Kit",
+        "price": 29.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 17.99
+    },
+    "specialDiscount": false,
+    "manufacturerRebate": false
+  },
+  {
+    "id": 15,
+    "name": "Wireless Speaker",
+    "price": 59.99,
+    "description": "A wireless speaker with multi-room audio support.",
+    "category": "Smart Speakers",
+    "accessories": [
+      {
+        "name": "Charging Dock",
+        "price": 14.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 6.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": false
+  },
+  {
+    "id": 16,
+    "name": "Smart Lighting",
+    "price": 49.99,
+    "description": "Energy-efficient smart lighting with app control.",
+    "category": "Smart Lightings",
+    "accessories": [
+      {
+        "name": "Remote Dimmer",
+        "price": 14.99
+      },
+      {
+        "name": "Extra Bulbs",
+        "price": 9.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 5.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": false
+  },
+  {
+    "id": 17,
+    "name": "LED Smart Lighting",
+    "price": 69.99,
+    "description": "A set of LED lights with full app control.",
+    "category": "Smart Lightings",
+    "accessories": [
+      {
+        "name": "Color Changing Kit",
+        "price": 29.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 9.99
+    },
+    "specialDiscount": false,
+    "manufacturerRebate": true
+  },
+  {
+    "id": 18,
+    "name": "Smart Ceiling Light",
+    "price": 99.99,
+    "description": "A smart ceiling light with motion detection.",
+    "category": "Smart Lightings",
+    "accessories": [
+      {
+        "name": "Motion Sensor",
+        "price": 19.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 12.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": true
+  },
+  {
+    "id": 19,
+    "name": "Outdoor Smart Light",
+    "price": 89.99,
+    "description": "A weatherproof outdoor smart lighting solution.",
+    "category": "Smart Lightings",
+    "accessories": [
+      {
+        "name": "Solar Charger",
+        "price": 39.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 11.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": false
+  },
+  {
+    "id": 20,
+    "name": "Smart Bulb",
+    "price": 29.99,
+    "description": "A simple smart bulb with Wi-Fi control.",
+    "category": "Smart Lightings",
+    "accessories": [
+      {
+        "name": "Wi-Fi Bridge",
+        "price": 19.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 4.99
+    },
+    "specialDiscount": false,
+    "manufacturerRebate": true
+  },
+  {
+    "id": 21,
+    "name": "Smart Thermostat",
+    "price": 129.99,
+    "description": "A programmable thermostat with learning capabilities.",
+    "category": "Smart Thermostats",
+    "accessories": [
+      {
+        "name": "Temperature Sensors",
+        "price": 24.99
+      },
+      {
+        "name": "Remote Control",
+        "price": 19.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 12.99
+    },
+    "specialDiscount": false,
+    "manufacturerRebate": true
+  },
+  {
+    "id": 22,
+    "name": "Wi-Fi Thermostat",
+    "price": 149.99,
+    "description": "A thermostat with Wi-Fi and remote access.",
+    "category": "Smart Thermostats",
+    "accessories": [
+      {
+        "name": "Smart Sensors",
+        "price": 29.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 14.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": false
+  },
+  {
+    "id": 23,
+    "name": "Learning Thermostat",
+    "price": 179.99,
+    "description": "A thermostat that learns your schedule and saves energy.",
+    "category": "Smart Thermostats",
+    "accessories": [
+      {
+        "name": "Energy Monitor",
+        "price": 39.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 17.99
+    },
+    "specialDiscount": false,
+    "manufacturerRebate": true
+  },
+  {
+    "id": 24,
+    "name": "Smart Heating Thermostat",
+    "price": 199.99,
+    "description": "A high-efficiency heating thermostat with mobile control.",
+    "category": "Smart Thermostats",
+    "accessories": [
+      {
+        "name": "Humidity Sensor",
+        "price": 49.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 19.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": false
+  },
+  {
+    "id": 25,
+    "name": "Basic Thermostat",
+    "price": 99.99,
+    "description": "A simple programmable thermostat with basic features.",
+    "category": "Smart Thermostats",
+    "accessories": [
+      {
+        "name": "Wall Mount",
+        "price": 9.99
+      }
+    ],
+    "warranty": {
+      "available": true,
+      "price": 9.99
+    },
+    "specialDiscount": true,
+    "manufacturerRebate": false
+  }
+]

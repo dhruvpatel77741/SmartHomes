@@ -1,0 +1,120 @@
+{
+    "products": [
+      {
+        "id": 1,
+        "name": "Smart Doorbell",
+        "price": 99.99,
+        "description": "A high-tech doorbell with motion detection and camera features.",
+        "category": "Smart Doorbells",
+        "accessories": [
+          {
+            "name": "Extra Chime",
+            "price": 19.99
+          },
+          {
+            "name": "Battery Pack",
+            "price": 29.99
+          }
+        ],
+        "warranty": {
+          "available": true,
+          "price": 9.99
+        },
+        "specialDiscount": true,
+        "manufacturerRebate": false
+      },
+      {
+        "id": 2,
+        "name": "Smart Doorlock",
+        "price": 149.99,
+        "description": "A secure doorlock with keyless entry and remote control.",
+        "category": "Smart Doorlocks",
+        "accessories": [
+          {
+            "name": "Remote Keypad",
+            "price": 29.99
+          },
+          {
+            "name": "Fingerprint Reader",
+            "price": 49.99
+          }
+        ],
+        "warranty": {
+          "available": true,
+          "price": 14.99
+        },
+        "specialDiscount": false,
+        "manufacturerRebate": true
+      },
+      {
+        "id": 3,
+        "name": "Smart Speaker",
+        "price": 79.99,
+        "description": "Voice-controlled speaker with smart home integration.",
+        "category": "Smart Speakers",
+        "accessories": [
+          {
+            "name": "Wall Mount",
+            "price": 14.99
+          },
+          {
+            "name": "Carrying Case",
+            "price": 9.99
+          }
+        ],
+        "warranty": {
+          "available": true,
+          "price": 7.99
+        },
+        "specialDiscount": true,
+        "manufacturerRebate": false
+      },
+      {
+        "id": 4,
+        "name": "Smart Lighting",
+        "price": 49.99,
+        "description": "Energy-efficient smart lighting with app control.",
+        "category": "Smart Lightings",
+        "accessories": [
+          {
+            "name": "Remote Dimmer",
+            "price": 14.99
+          },
+          {
+            "name": "Extra Bulbs",
+            "price": 9.99
+          }
+        ],
+        "warranty": {
+          "available": true,
+          "price": 5.99
+        },
+        "specialDiscount": true,
+        "manufacturerRebate": false
+      },
+      {
+        "id": 5,
+        "name": "Smart Thermostat",
+        "price": 129.99,
+        "description": "A programmable thermostat with learning capabilities.",
+        "category": "Smart Thermostats",
+        "accessories": [
+          {
+            "name": "Temperature Sensors",
+            "price": 24.99
+          },
+          {
+            "name": "Remote Control",
+            "price": 19.99
+          }
+        ],
+        "warranty": {
+          "available": true,
+          "price": 12.99
+        },
+        "specialDiscount": false,
+        "manufacturerRebate": true
+      }
+    ]
+  }
+  
