@@ -1,10 +1,21 @@
-# Getting Started with Create React App
+# Smart Homes Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a full-stack web application with separate frontend and backend components.
 
-## Available Scripts
+- The **Frontend** is built using **React**.
+- The **Backend** is built using **Java Servlets** and deployed on **Tomcat**.
 
-In the project directory, you can run:
+## Table of Contents
+
+1. [Available Scripts for Frontend](#available-scripts-for-frontend)
+2. [Frontend Setup](#frontend-setup)
+3. [Backend Setup](#backend-setup)
+4. [Running the Application](#running-the-application)
+5. [Learn More](#learn-more)
+
+## Available Scripts for Frontend
+
+In the project directory `frontend`, you can run:
 
 ### `npm start`
 
@@ -35,36 +46,66 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point, you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However, we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
+## Frontend Setup
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Steps to run the React frontend:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Clone the repository:
 
-### Code Splitting
+   ```bash
+   git clone https://github.com/dhruvpatel77741/csp584-ewa.git
+   cd csp584-ewa
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+2. Navigate to the frontend folder:
+   cd frontend
 
-### Analyzing the Bundle Size
+3. Install the dependencies:
+   npm install
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+4. Note about API Base URL:
+   Currently, the API base URL is not included since this is a university project. If needed, update the API endpoint in the frontend code to connect with the backend.
 
-### Making a Progressive Web App
+5. Run the React app:
+   npm start
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Backend Setup
 
-### Advanced Configuration
+### Steps to run the Java Servlet backend using Tomcat:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+1. **Download and install Apache Tomcat:**
+   You can download Tomcat from [this link](https://tomcat.apache.org/download-90.cgi).
 
-### Deployment
+2. **Deploy the Java Servlet app (csp584):**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+   - After cloning the project, copy the `csp584` folder (located inside the `backend` folder) to the `webapps` directory of your local Tomcat installation.
+   - Your directory structure should look something like this:
+     tomcat/ ├── bin/ ├── webapps/ │ └── csp584/
 
-### `npm run build` fails to minify
+3. **Start Tomcat:**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- For **Windows**, run `startup.bat` located in the `bin` folder of Tomcat.
+- For **Mac/Linux**, run the following command:
+  ```bash
+  ./startup.sh
+  ```
+
+4. **Access the backend:**
+   By default, Tomcat runs on `http://localhost:8080`. You can access the backend API at:
+   "The backend URL will be provided later or needs to be configured manually based on your setup."
+
+### Notes for Backend:
+
+- Ensure that the **Java Development Kit (JDK)** is installed and configured.
+- Update any configuration files, such as `web.xml`, to match your project’s requirements.
+
+## Running the Application
+
+1. **Start the Frontend**: Follow the steps in the [Frontend Setup](#frontend-setup) section to start the React frontend.
+2. **Start the Backend**: Follow the steps in the [Backend Setup](#backend-setup) section to start the Java Servlet backend using Tomcat.
+
+Ensure both the frontend and backend are running concurrently. The frontend will communicate with the backend through the API endpoints.
