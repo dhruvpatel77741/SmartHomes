@@ -5,27 +5,28 @@ import "../List.css";
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const AddCustomer = ({ onClose }) => {
-  const [newCustomer, setNewCustomer] = useState({
+  const userType = localStorage.getItem("userType");
+
+  const [newUser, setNewUser] = useState({
     name: "",
     username: "",
     password: "",
-    userType: "Customer",
+    userType: userType === "StoreManager" ? "Salesman" : "Customer",
   });
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
-      setNewCustomer({ ...newCustomer, [name]: checked });
+      setNewUser({ ...newUser, [name]: checked });
     } else {
-      setNewCustomer({ ...newCustomer, [name]: value });
+      setNewUser({ ...newUser, [name]: value });
     }
   };
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(`${baseURL}/signup`, newCustomer);
+      const response = await axios.post(`${baseURL}/signup`, newUser);
       if (response.status === 200 || response.status === 201) {
-        window.alert("Customer Added Successfully");
+        window.alert("User Added Successfully");
         window.location.reload();
       }
     } catch (err) {
@@ -41,7 +42,9 @@ const AddCustomer = ({ onClose }) => {
           style={{ height: "300px", width: "400px" }}
         >
           <div className="profile-model-header">
-            <h3 style={{ display: "flex", gap: "10px" }}>Add Customer</h3>
+            <h3 style={{ display: "flex", gap: "10px" }}>
+              Add {userType === "StoreManager" ? `Salesman` : `Customer`}
+            </h3>
             <button
               className="invite-model-close-btn"
               onClick={() => onClose()}
@@ -54,22 +57,25 @@ const AddCustomer = ({ onClose }) => {
           </div>
           <div className="row">
             <div className="want-serve">
-              <b>Customer Information</b>
+              <b>
+                {userType === "StoreManager" ? `Salesman` : `Customer`}{" "}
+                Information
+              </b>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <input
                   type="text"
                   name="name"
                   className="inputFieldCustomer"
-                  value={newCustomer.name}
+                  value={newUser.name}
                   onChange={handleChange}
                   style={{ marginTop: "5px" }}
-                  placeholder="Customer Name"
+                  placeholder="Name"
                 />
                 <input
                   type="text"
                   name="username"
                   className="inputFieldCustomer"
-                  value={newCustomer.username}
+                  value={newUser.username}
                   onChange={handleChange}
                   style={{ marginTop: "5px" }}
                   placeholder="Username"
@@ -78,7 +84,7 @@ const AddCustomer = ({ onClose }) => {
                   type="text"
                   name="password"
                   className="inputFieldCustomer"
-                  value={newCustomer.password}
+                  value={newUser.password}
                   onChange={handleChange}
                   style={{ marginTop: "5px" }}
                   placeholder="Password"

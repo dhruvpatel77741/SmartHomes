@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Aside from "./Aside";
 import HeaderComponent from "./HeaderComponent";
 import "./Checkout.css";
@@ -9,7 +9,8 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const Checkout = () => {
   const navigate = useNavigate();
-
+  const userId = localStorage.getItem("userId");
+  const [userData, setUserData] = useState();
   const name = localStorage.getItem("name");
   const location = useLocation();
   const { totalAmount, cartItems } = location.state;
@@ -23,6 +24,21 @@ const Checkout = () => {
     state: "",
     zipCode: "",
   });
+
+  useEffect(() => {
+    const getData = async () => {
+      let apiUrl = `${baseURL}/users`;
+      try {
+        const resp = await axios.get(apiUrl);
+        const data = resp.data;
+        const userData = data.find((item) => item?._id.toString() === userId);
+        setUserData(userData);
+      } catch (err) {
+        console.log("Error:", err);
+      }
+    };
+    getData();
+  }, [userId]);
 
   const handleTabSelect = (selectedTab) => {
     setTab(selectedTab);
@@ -39,19 +55,18 @@ const Checkout = () => {
 
   const clearCart = async () => {
     const userId = localStorage.getItem("userId");
-
     try {
       await axios.post(`${baseURL}/cart`, {
         action: "clearCart",
         userId: userId,
       });
     } catch (error) {
-      console.error("Error adding address:", error);
+      console.error("Error clearing cart:", error);
     }
   };
+
   const handleProceed = async () => {
     if (tab === "pickup") {
-      const userId = localStorage.getItem("userId");
       const orderData = {
         userId: userId,
         orderData: {
@@ -67,38 +82,27 @@ const Checkout = () => {
       try {
         await axios.post(`${baseURL}/orders`, orderData);
         window.alert(
-          "Order placed Successfully. You can pick up your order from the store and pay by cash or card."
+          "Order placed successfully. You can pick up your order from the store and pay by cash or card."
         );
       } catch (error) {
         console.error("Error placing order:", error);
       }
-      window.alert(
-        "Order placed Succesfully. You can pickup your order from store and pay by cash or card."
-      );
       clearCart();
       navigate("/dashboard");
     } else if (tab === "homeDelivery") {
-      const userId = localStorage.getItem("userId");
-
-      const data = {
-        id: userId,
-        phone: formData?.phone,
-        address: {
-          addressLine1: formData?.addressLine1,
-          addressLine2: formData?.addressLine2,
-          city: formData?.city,
-          state: formData?.state,
-          zipCode: formData?.zipCode,
-        },
-      };
-
-      try {
-        await axios.post(`${baseURL}/updateUser`, data);
-      } catch (error) {
-        console.error("Error clearing cart:", error);
+      if (userData) {
+        setFormData({
+          name: userData.name || "",
+          phone: userData.phone || "",
+          addressLine1: userData.addressLine1 || "",
+          addressLine2: userData.addressLine2 || "",
+          city: userData.city || "",
+          state: userData.state || "",
+          zipCode: userData.zipCode || "",
+        });
       }
       navigate("/payment", {
-        state: { totalAmount, address: data?.address, cartItems, formData },
+        state: { totalAmount, address: formData, cartItems },
       });
     }
   };
@@ -203,6 +207,12 @@ const Checkout = () => {
                   required
                 />
               </form>
+              {userData && (
+                <div className="user-address">
+                  <h3>Your Saved Address</h3>
+                  <p>{`${userData.addressLine1}, ${userData.addressLine2}, ${userData.city}, ${userData.state}, ${userData.zipCode}`}</p>
+                </div>
+              )}
               <div className="checkout-actions">
                 <button className="back-btn" onClick={handleBack}>
                   Back

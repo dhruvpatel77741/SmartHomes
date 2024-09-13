@@ -6,15 +6,17 @@ import "../List.css";
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const ViewCustomer = ({ onClose }) => {
+  const userType = localStorage.getItem("userType");
   const location = useLocation();
-
   const id = localStorage.getItem("customerId");
-
   const [dataShow, setDataShow] = useState();
   useEffect(() => {
     const getData = async () => {
       const id = localStorage.getItem("customerId");
-      let apiUrl = `${baseURL}/customers`;
+      let apiUrl =
+        userType === "Salesman"
+          ? `${baseURL}/customers`
+          : `${baseURL}/salesman`;
       try {
         const resp = await axios.get(apiUrl);
         const data = resp.data;
@@ -35,7 +37,10 @@ const ViewCustomer = ({ onClose }) => {
           style={{ height: "300px", width: "400px", borderRadius: "10px" }}
         >
           <div className="profile-model-header">
-            <h3 style={{ display: "flex", gap: "10px" }}> View Customer</h3>
+            <h3 style={{ display: "flex", gap: "10px" }}>
+              {" "}
+              View {userType === "StoreManager" ? `Salesman` : `Customer`}
+            </h3>
             <button
               className="invite-model-close-btn"
               onClick={() => {
@@ -51,7 +56,10 @@ const ViewCustomer = ({ onClose }) => {
           </div>
           <div className="row">
             <div className="want-serve">
-              <b>Customer Information</b>
+              <b>
+                {userType === "StoreManager" ? `Salesman` : `Customer`}{" "}
+                Information
+              </b>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <span
                   style={{

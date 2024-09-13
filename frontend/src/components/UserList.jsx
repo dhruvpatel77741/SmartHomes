@@ -3,18 +3,20 @@ import { useLocation } from "react-router-dom";
 import "./List.css";
 import axios from "axios";
 import Aside from "./Aside";
-import ViewCustomer from "./Customer/ViewCustomer";
-import AddCustomer from "./Customer/AddCustomer";
+import ViewCustomer from "./Users/ViewUser";
+import AddCustomer from "./Users/AddUser";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 const image = process.env.PUBLIC_URL;
 
-const CustomerList = () => {
+const UserList = () => {
+  const userType = localStorage.getItem("userType");
   const location = useLocation();
 
   const [dataShow, setDataShow] = useState([]);
   const getData = async () => {
-    let apiUrl = `${baseURL}/customers`;
+    let apiUrl =
+      userType === "Salesman" ? `${baseURL}/customers` : `${baseURL}/salesman`;
     try {
       const resp = await axios.get(apiUrl, {});
       const data = resp.data;
@@ -24,9 +26,8 @@ const CustomerList = () => {
     }
   };
   useEffect(() => {
-    setDataShow([]);
     getData();
-  }, [location.pathname]);
+  }, []);
 
   const reverseData = [...dataShow].reverse();
 
@@ -60,7 +61,7 @@ const CustomerList = () => {
       const response = await axios.delete(`${baseURL}/updateUser?id=${id}`);
 
       if (response.status === 200 || response.status === 201) {
-        alert(`This customer has been deleted`);
+        alert(`This user has been deleted`);
         window.location.reload();
       } else {
         console.log("Error: " + (response.data || response.statusText));
@@ -81,7 +82,7 @@ const CustomerList = () => {
           <div className="row">
             <div className="TemsTableHeadingContainer">
               <div style={{ padding: "10px" }}>
-                <b>Customers</b>
+                <b>{userType === "StoreManager" ? `Salesmans` : `Customers`}</b>
               </div>
 
               <div className="team-btn" style={{ left: "1075px" }}>
@@ -172,7 +173,7 @@ const CustomerList = () => {
                       padding: "20px 100px 0px 20px",
                     }}
                   >
-                    <p>No Customers Found</p>
+                    <p>No Salesmans Found</p>
                   </div>
                 )}
               </table>
@@ -247,4 +248,4 @@ const CustomerList = () => {
   );
 };
 
-export default CustomerList;
+export default UserList;

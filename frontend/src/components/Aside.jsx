@@ -12,7 +12,9 @@ const Aside = () => {
     location.pathname.startsWith("/dashboard") ||
     location.pathname === "/cart" ||
     location.pathname === "/checkout";
-  const isCustomerListActive = location.pathname === "/customer-list";
+  const isUserListActive =
+    location.pathname === "/customer-list" ||
+    location.pathname === "/salesman-list";
   const isProductListActive = location.pathname === "/product-list";
   const isOrderListActive = location.pathname === "/order-list";
 
@@ -45,7 +47,7 @@ const Aside = () => {
         </button>
         {userType === "Salesman" ? (
           <button
-            className={`left-part ${isCustomerListActive ? "active" : ""}`}
+            className={`left-part ${isUserListActive ? "active" : ""}`}
             style={{ border: "none" }}
             onClick={() => {
               navigate("/customer-list");
@@ -55,19 +57,37 @@ const Aside = () => {
               <img
                 src={`${image}/Assets/LeftPanel/teams.svg`}
                 alt=""
-                className={`default-image ${
-                  isCustomerListActive ? "hide" : ""
-                }`}
+                className={`default-image ${isUserListActive ? "hide" : ""}`}
               />
               <img
                 src={`${image}/Assets/LeftPanel/teams-white.svg`}
                 alt=""
-                className={`selected-image ${
-                  isCustomerListActive ? "" : "hide"
-                }`}
+                className={`selected-image ${isUserListActive ? "" : "hide"}`}
               />
             </div>
             <div className="left-text">Customers</div>
+          </button>
+        ) : userType === "StoreManager" ? (
+          <button
+            className={`left-part ${isUserListActive ? "active" : ""}`}
+            style={{ border: "none" }}
+            onClick={() => {
+              navigate("/salesman-list");
+            }}
+          >
+            <div className="left-img">
+              <img
+                src={`${image}/Assets/LeftPanel/teams.svg`}
+                alt=""
+                className={`default-image ${isUserListActive ? "hide" : ""}`}
+              />
+              <img
+                src={`${image}/Assets/LeftPanel/teams-white.svg`}
+                alt=""
+                className={`selected-image ${isUserListActive ? "" : "hide"}`}
+              />
+            </div>
+            <div className="left-text">Salesman</div>
           </button>
         ) : null}
         {userType === "StoreManager" ? (

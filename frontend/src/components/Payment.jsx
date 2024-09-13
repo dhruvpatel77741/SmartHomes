@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Aside from "./Aside";
 import HeaderComponent from "./HeaderComponent";
 import "./Checkout.css";
@@ -9,12 +9,15 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const Payment = () => {
   const navigate = useNavigate();
-
+  const userId = localStorage.getItem("userId");
+  const [userData, setUserData] = useState();
   const name = localStorage.getItem("name");
   const location = useLocation();
   const { totalAmount, address, cartItems } = location.state;
-  console.log(totalAmount, address, cartItems);
   const [tab, setTab] = useState(null);
+  const [cvvInput, setCvvInput] = useState("");
+  const [cvvError, setCvvError] = useState(false);
+  const [useSavedCard, setUseSavedCard] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -22,6 +25,21 @@ const Payment = () => {
     expiryDate: "",
     cvv: "",
   });
+
+  useEffect(() => {
+    const getData = async () => {
+      let apiUrl = `${baseURL}/users`;
+      try {
+        const resp = await axios.get(apiUrl);
+        const data = resp.data;
+        const userData = data.find((item) => item?._id.toString() === userId);
+        setUserData(userData);
+      } catch (err) {
+        console.log("Error:", err);
+      }
+    };
+    getData();
+  }, [userId]);
 
   const handleTabSelect = (selectedTab) => {
     setTab(selectedTab);
@@ -47,7 +65,31 @@ const Payment = () => {
         userId: userId,
       });
     } catch (error) {
-      console.error("Error adding address:", error);
+      console.error("Error clearing cart:", error);
+    }
+  };
+
+  const handleSavedCardCVV = (e) => {
+    setCvvInput(e.target.value);
+  };
+
+  const handleUseSavedCard = () => {
+    setUseSavedCard(true);
+  };
+
+  const handleSavedCardSelect = () => {
+    if (cvvInput === userData?.cvv) {
+      setFormData({
+        name: userData?.name || "",
+        phone: userData?.phone || "",
+        creditCardNumber: userData?.creditCardNumber || "",
+        expiryDate: userData?.expiryDate || "",
+        cvv: userData?.cvv,
+      });
+      setCvvError(false);
+      setUseSavedCard(false);
+    } else {
+      setCvvError(true);
     }
   };
 
@@ -77,7 +119,7 @@ const Payment = () => {
       } catch (error) {
         console.error("Error placing order:", error);
       }
-      console.log("Order Placed Succesfully.");
+      console.log("Order Placed Successfully.");
     } else {
       const data = {
         id: userId,
@@ -122,7 +164,7 @@ const Payment = () => {
         console.error("Error placing order:", error);
       }
     }
-    window.alert("Order Placed Succesfully.");
+    window.alert("Order Placed Successfully.");
     navigate("/dashboard");
     clearCart();
   };
@@ -149,22 +191,7 @@ const Payment = () => {
                 Credit Card
               </button>
             </div>
-          ) : tab === "cod" ? (
-            <div className="pickup-details">
-              <h2>{`Hello, ${name}!`}</h2>
-              <p>
-                Total Amount: <b>${totalAmount.toFixed(2)}</b>
-              </p>
-              <div className="checkout-actions">
-                <button className="back-btn" onClick={handleBack}>
-                  Back
-                </button>
-                <button className="proceed-btn" onClick={handlePay}>
-                  Confirm
-                </button>
-              </div>
-            </div>
-          ) : (
+          ) : tab === "creditCard" ? (
             <div className="home-delivery-form">
               <h2>Enter Your Credit Card Details</h2>
               <p>
@@ -215,12 +242,69 @@ const Payment = () => {
                   maxLength={3}
                 />
               </form>
+
+              {userData?.creditCardNumber && (
+                <div className="saved-card-section">
+                  <h3>Or Use Saved Card</h3>
+                  <p>
+                    Card ending in **** {userData.creditCardNumber.slice(-4)}
+                  </p>
+                  <button
+                    className="use-saved-card-btn"
+                    onClick={handleUseSavedCard}
+                  >
+                    Use this Card
+                  </button>
+                </div>
+              )}
+
+              {useSavedCard && (
+                <div className="saved-card-cvv-form">
+                  <h4>Enter CVV for Saved Card</h4>
+                  <input
+                    type="password"
+                    name="cvvInput"
+                    placeholder="CVV"
+                    value={cvvInput}
+                    onChange={handleSavedCardCVV}
+                    required
+                    maxLength={3}
+                  />
+                  {cvvError && (
+                    <p className="error-message">
+                      Invalid CVV. Please try again.
+                    </p>
+                  )}
+                  <button
+                    className="verify-saved-card-btn"
+                    onClick={handleSavedCardSelect}
+                  >
+                    Verify
+                  </button>
+                </div>
+              )}
+
               <div className="checkout-actions">
                 <button className="back-btn" onClick={handleBack}>
                   Back
                 </button>
                 <button className="proceed-btn" onClick={handlePay}>
                   Pay
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="pickup-details">
+              <h2>{`Hello, ${name}!`}</h2>
+              <p>
+                Total Amount: <b>${totalAmount.toFixed(2)}</b>
+              </p>
+              <div className="checkout-actions">
+                <button className="back-btn" onClick={handleBack}>
+                  Back
+                </button>
+                <button className="proceed-btn" onClick={handlePay}>
+                  Confirm
                 </button>
               </div>
             </div>

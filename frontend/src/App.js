@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Dashboard from "./components/Dashboard";
-import CustomerList from "./components/CustomerList";
+import UserList from "./components/UserList";
 import ProductsList from "./components/ProductsList";
 import ProductDetails from "./components/ProductDetails";
 import Cart from "./components/Cart";
@@ -38,7 +38,15 @@ function App() {
         path="/customer-list"
         element={
           <PrivateRoute>
-            <CustomerList />
+            <UserList />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/salesman-list"
+        element={
+          <PrivateRoute>
+            <UserList />
           </PrivateRoute>
         }
       />
