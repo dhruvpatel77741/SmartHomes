@@ -20,7 +20,7 @@ public class LoginServlet extends HttpServlet {
 
     public void init() {
         try {
-            String filePath = getServletContext().getRealPath("/WEB-INF/Users.json");
+            String filePath = getServletContext().getRealPath("/resources/Users.json");
             String content = new String(Files.readAllBytes(Paths.get(filePath)));
             users = new JSONArray(content);
         } catch (IOException e) {

@@ -21,7 +21,7 @@ public class SignUpServlet extends HttpServlet {
 
     public void init() {
         try {
-            String filePath = getServletContext().getRealPath("/WEB-INF/Users.json");
+            String filePath = getServletContext().getRealPath("/resources/Users.json");
             String content = new String(Files.readAllBytes(Paths.get(filePath)));
             users = new JSONArray(content);
         } catch (IOException e) {
@@ -39,6 +39,7 @@ public class SignUpServlet extends HttpServlet {
         String name = requestBodyJson.getString("name");
         String username = requestBodyJson.getString("username");
         String password = requestBodyJson.getString("password");
+        String userType = requestBodyJson.getString("userType");
 
         boolean userExists = false;
         for (int i = 0; i < users.length(); i++) {
@@ -60,12 +61,11 @@ public class SignUpServlet extends HttpServlet {
                     .put("name", name)
                     .put("username", username)
                     .put("password", password)
-                    .put("userType", "Customer");
+                    .put("userType", userType);
 
             users.put(newUser);
 
-            try (FileWriter fileWriter = new FileWriter(getServletContext().getRealPath("/WEB-INF/Users.json"),
-                    false)) {
+            try (FileWriter fileWriter = new FileWriter(getServletContext().getRealPath("/resources/Users.json"), false)) {
                 fileWriter.write(users.toString());
             } catch (IOException e) {
                 e.printStackTrace();

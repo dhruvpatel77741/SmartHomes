@@ -17,10 +17,12 @@ import org.json.JSONObject;
 public class UpdateUserServlet extends HttpServlet {
 
     private JSONArray users;
+    private String filePath;
 
     public void init() {
         try {
-            String filePath = getServletContext().getRealPath("/WEB-INF/Users.json");
+            // Adjust file path to use the resources folder instead of WEB-INF
+            filePath = getServletContext().getRealPath("/resources/Users.json");
             String content = new String(Files.readAllBytes(Paths.get(filePath)));
             users = new JSONArray(content);
         } catch (IOException e) {
@@ -51,25 +53,17 @@ public class UpdateUserServlet extends HttpServlet {
                 }
 
                 if (address != null) {
-                    if (address.has("addressLine1"))
-                        user.put("addressLine1", address.getString("addressLine1"));
-                    if (address.has("addressLine2"))
-                        user.put("addressLine2", address.getString("addressLine2"));
-                    if (address.has("city"))
-                        user.put("city", address.getString("city"));
-                    if (address.has("state"))
-                        user.put("state", address.getString("state"));
-                    if (address.has("zipCode"))
-                        user.put("zipCode", address.getString("zipCode"));
+                    if (address.has("addressLine1")) user.put("addressLine1", address.getString("addressLine1"));
+                    if (address.has("addressLine2")) user.put("addressLine2", address.getString("addressLine2"));
+                    if (address.has("city")) user.put("city", address.getString("city"));
+                    if (address.has("state")) user.put("state", address.getString("state"));
+                    if (address.has("zipCode")) user.put("zipCode", address.getString("zipCode"));
                 }
 
                 if (creditCard != null) {
-                    if (creditCard.has("creditCardNumber"))
-                        user.put("creditCardNumber", creditCard.getString("creditCardNumber"));
-                    if (creditCard.has("expiryDate"))
-                        user.put("expiryDate", creditCard.getString("expiryDate"));
-                    if (creditCard.has("cvv"))
-                        user.put("cvv", creditCard.getString("cvv"));
+                    if (creditCard.has("creditCardNumber")) user.put("creditCardNumber", creditCard.getString("creditCardNumber"));
+                    if (creditCard.has("expiryDate")) user.put("expiryDate", creditCard.getString("expiryDate"));
+                    if (creditCard.has("cvv")) user.put("cvv", creditCard.getString("cvv"));
                 }
 
                 userFound = true;
@@ -79,7 +73,7 @@ public class UpdateUserServlet extends HttpServlet {
 
         if (userFound) {
             try {
-                String filePath = getServletContext().getRealPath("/WEB-INF/Users.json");
+                // Use the updated file path to save the changes
                 Files.write(Paths.get(filePath), users.toString().getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -122,12 +116,16 @@ public class UpdateUserServlet extends HttpServlet {
 
         if (userFound) {
             try {
-                String filePath = getServletContext().getRealPath("/WEB-INF/Users.json");
+                // Use the updated file path to save the changes
                 Files.write(Paths.get(filePath), users.toString().getBytes());
+
+                // Refresh the users data after deletion
+                String content = new String(Files.readAllBytes(Paths.get(filePath)));
+                users = new JSONArray(content);
             } catch (IOException e) {
                 e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                out.println(new JSONObject().put("status", "error").put("message", "Failed to delete user"));
+                out.println(new JSONObject().put("status", "error").put("message", "Failed to delete user or refresh data"));
                 return;
             }
 
@@ -138,4 +136,5 @@ public class UpdateUserServlet extends HttpServlet {
             out.println(new JSONObject().put("status", "error").put("message", "User not found"));
         }
     }
+
 }

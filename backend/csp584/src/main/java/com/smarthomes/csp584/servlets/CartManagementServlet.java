@@ -14,18 +14,25 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-@WebServlet(name = "CartManagementServlet", urlPatterns = { "/cart" })
+@WebServlet(name = "CartManagementServlet", urlPatterns = {"/cart"})
 public class CartManagementServlet extends HttpServlet {
 
     private JSONArray cart;
+    private String cartFilePath;
 
     public void init() {
+        // Adjust the file path to point to the resources folder
+        cartFilePath = getServletContext().getRealPath("/resources/Cart.json");
+        loadCart();
+    }
+
+    private void loadCart() {
         try {
-            String cartFilePath = getServletContext().getRealPath("/WEB-INF/Cart.json");
             String cartContent = new String(Files.readAllBytes(Paths.get(cartFilePath)));
             cart = new JSONArray(cartContent);
         } catch (IOException e) {
             e.printStackTrace();
+            cart = new JSONArray(); // Initialize as empty if file read fails
         }
     }
 
@@ -66,15 +73,13 @@ public class CartManagementServlet extends HttpServlet {
         }
     }
 
-    private void handleAddToCart(JSONObject jsonBody, HttpServletResponse response, PrintWriter out, String userId)
-            throws IOException {
+    private void handleAddToCart(JSONObject jsonBody, HttpServletResponse response, PrintWriter out, String userId) throws IOException {
         try {
             String productId = jsonBody.optString("productId", null);
             String productName = jsonBody.optString("productName", null);
             if (productId == null || productName == null) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.println(new JSONObject().put("status", "error").put("message",
-                        "productId and productName are required"));
+                out.println(new JSONObject().put("status", "error").put("message", "productId and productName are required"));
                 return;
             }
 
@@ -115,8 +120,7 @@ public class CartManagementServlet extends HttpServlet {
                 JSONObject item = cart.getJSONObject(i);
                 if (item.getString("userId").equals(userId) && item.getString("productId").equals(productId)) {
                     item.put("quantity", item.getInt("quantity") + quantity);
-                    item.put("totalPrice", (item.getDouble("productPrice") * item.getInt("quantity"))
-                            + item.getDouble("warrantyPrice") + item.getDouble("accessoriesPrice"));
+                    item.put("totalPrice", (item.getDouble("productPrice") * item.getInt("quantity")) + item.getDouble("warrantyPrice") + item.getDouble("accessoriesPrice"));
                     productExists = true;
                     break;
                 }
@@ -135,8 +139,7 @@ public class CartManagementServlet extends HttpServlet {
         }
     }
 
-    private void handleRemoveFromCart(JSONObject jsonBody, HttpServletResponse response, PrintWriter out, String userId)
-            throws IOException {
+    private void handleRemoveFromCart(JSONObject jsonBody, HttpServletResponse response, PrintWriter out, String userId) throws IOException {
         String productId = jsonBody.getString("productId");
 
         for (int i = 0; i < cart.length(); i++) {
@@ -166,7 +169,6 @@ public class CartManagementServlet extends HttpServlet {
     }
 
     private void saveCart() throws IOException {
-        String cartFilePath = getServletContext().getRealPath("/WEB-INF/Cart.json");
         try (FileWriter file = new FileWriter(cartFilePath)) {
             file.write(cart.toString());
         }

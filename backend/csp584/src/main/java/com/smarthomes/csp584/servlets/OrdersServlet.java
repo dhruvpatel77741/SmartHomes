@@ -27,7 +27,7 @@ public class OrdersServlet extends HttpServlet {
 
     private void loadOrders() {
         try {
-            String filePath = getServletContext().getRealPath("/WEB-INF/Orders.json");
+            String filePath = getServletContext().getRealPath("/resources/Orders.json");
             String content = new String(Files.readAllBytes(Paths.get(filePath)));
             orders = new JSONArray(content);
         } catch (IOException e) {
@@ -38,7 +38,7 @@ public class OrdersServlet extends HttpServlet {
 
     private void loadUsers() {
         try {
-            String filePath = getServletContext().getRealPath("/WEB-INF/Users.json");
+            String filePath = getServletContext().getRealPath("/resources/Users.json");
             String content = new String(Files.readAllBytes(Paths.get(filePath)));
             users = new JSONArray(content);
         } catch (IOException e) {
@@ -87,7 +87,7 @@ public class OrdersServlet extends HttpServlet {
         orders.put(newOrder);
 
         try {
-            String filePath = getServletContext().getRealPath("/WEB-INF/Orders.json");
+            String filePath = getServletContext().getRealPath("/resources/Orders.json");
             Files.write(Paths.get(filePath), orders.toString().getBytes());
         } catch (IOException e) {
             e.printStackTrace();
@@ -160,7 +160,7 @@ public class OrdersServlet extends HttpServlet {
 
         if (orderFound) {
             try {
-                String filePath = getServletContext().getRealPath("/WEB-INF/Orders.json");
+                String filePath = getServletContext().getRealPath("/resources/Orders.json");
                 Files.write(Paths.get(filePath), orders.toString().getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -195,7 +195,7 @@ public class OrdersServlet extends HttpServlet {
 
         if (orderFound) {
             try {
-                String filePath = getServletContext().getRealPath("/WEB-INF/Orders.json");
+                String filePath = getServletContext().getRealPath("/resources/Orders.json");
                 Files.write(Paths.get(filePath), orders.toString().getBytes());
             } catch (IOException e) {
                 e.printStackTrace();

@@ -23,7 +23,8 @@ public class ProductManagementServlet extends HttpServlet {
 
     public void init() throws ServletException {
         try {
-            filePath = getServletContext().getRealPath("/WEB-INF/Products.json");
+            // Adjust file path to use the resources folder instead of WEB-INF
+            filePath = getServletContext().getRealPath("/resources/Products.json");
             String content = new String(Files.readAllBytes(Paths.get(filePath)));
             products = new JSONArray(content);
         } catch (IOException e) {
@@ -51,8 +52,7 @@ public class ProductManagementServlet extends HttpServlet {
         out.println(products.toString());
     }
 
-    private void handleRequest(HttpServletRequest request, HttpServletResponse response, String method)
-            throws IOException {
+    private void handleRequest(HttpServletRequest request, HttpServletResponse response, String method) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
