@@ -67,10 +67,13 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
 3. Install the dependencies:
    npm install
 
-4. Note about API Base URL:
+4. Setup env file in frontend folder named .env
+     Inside it enter: REACT_APP_API_BASE_URL="Your Backend API Base URL"
+   
+5. Note about API Base URL:
    Currently, the API base URL is not included since this is a university project. If needed, update the API endpoint in the frontend code to connect with the backend.
 
-5. Run the React app:
+6. Run the React app:
    npm start
 
 ## Backend Setup
