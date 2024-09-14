@@ -103,7 +103,7 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
 
 ### Notes for Backend:
 
-- Ensure that the **Java Development Kit (JDK)** is installed and configured.
+- Ensure that the **Java Development Kit 11 (JDK)** is installed and configured.
 - Update any configuration files, such as `web.xml`, to match your project’s requirements.
 
 ## Running the Application
