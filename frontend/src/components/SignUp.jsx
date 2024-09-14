@@ -35,9 +35,10 @@ const SignUp = () => {
     let apiUrl = `${baseURL}/signup`;
     try {
       const response = await axios.post(apiUrl, requestData);
+      window.alert("Customer created successfully.")
+      navigate("/");
       if (response.statusCode === 200) {
-        console.log(response);
-        navigate("/login");
+        // navigate("/");
       } else {
       }
     } catch (error) {

@@ -207,7 +207,7 @@ const Checkout = () => {
                   required
                 />
               </form>
-              {userData && (
+              {userData?.addressLine1 && (
                 <div className="user-address">
                   <h3>Your Saved Address</h3>
                   <p>{`${userData.addressLine1}, ${userData.addressLine2}, ${userData.city}, ${userData.state}, ${userData.zipCode}`}</p>
