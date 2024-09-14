@@ -80,7 +80,7 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
 
 ### Steps to run the Java Servlet backend using Tomcat:
 
-1. **Download and install Apache Tomcat:**
+1. **Download and install Apache Tomcat 9.0.93:**
    You can download Tomcat from [this link](https://tomcat.apache.org/download-90.cgi).
 
 2. **Deploy the Java Servlet app (csp584):**
