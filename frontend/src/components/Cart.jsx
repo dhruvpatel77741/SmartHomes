@@ -14,13 +14,12 @@ const Cart = () => {
   const [loading, setLoading] = useState(true);
   const [totalAmount, setTotalAmount] = useState(0);
 
-  // Fetch cart items from the API
   const fetchCartItems = async () => {
     const userId = localStorage.getItem("userId");
 
     try {
       const response = await axios.get(`${baseURL}/cart?userId=${userId}`);
-      const cartData = response.data; // The cart data is directly an array
+      const cartData = response.data;
       setCartItems(cartData);
       calculateTotalAmount(cartData);
       setLoading(false);
@@ -30,7 +29,6 @@ const Cart = () => {
     }
   };
 
-  // Calculate total amount
   const calculateTotalAmount = (items) => {
     const total = items.reduce((acc, item) => acc + item.totalPrice, 0);
     setTotalAmount(total);
@@ -38,7 +36,7 @@ const Cart = () => {
 
   useEffect(() => {
     fetchCartItems();
-  }, []);
+  });
 
   const removeItemFromCart = async (productId) => {
     const userId = localStorage.getItem("userId");
