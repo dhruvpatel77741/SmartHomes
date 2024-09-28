@@ -8,15 +8,16 @@ const AddProduct = ({ onClose }) => {
   const [newProduct, setNewProduct] = useState({
     name: "",
     category: "",
-    price: 0,
+    price: 0.0,
     description: "",
     accessories: [],
-    warranty: {
-      available: false,
-      price: 0,
-    },
+    warranty: false,
+    warrantyPrice: 0.0,
     specialDiscount: false,
+    discountPrice: 0.0,
     manufacturerRebate: false,
+    rebatePrice: 0.0,
+    likes: 0,
   });
 
   const handleChange = (e) => {
@@ -51,15 +52,13 @@ const AddProduct = ({ onClose }) => {
     const productToSend = {
       ...newProduct,
       price: parseFloat(newProduct.price),
-      accessories: newProduct.accessories.map((accessory) => ({
-        ...accessory,
-        price: parseFloat(accessory.price),
-      })),
-      warranty: {
-        ...newProduct.warranty,
-        price: parseFloat(newProduct.warranty.price),
-      },
+      warrantyPrice: parseFloat(newProduct.warrantyPrice),
+      discountPrice: parseFloat(newProduct.discountPrice),
+      rebatePrice: parseFloat(newProduct.rebatePrice),
+      likes: parseFloat(newProduct.likes),
     };
+
+    delete productToSend.accessories;
 
     try {
       const response = await axios.post(
@@ -80,7 +79,7 @@ const AddProduct = ({ onClose }) => {
       <div className="profileview-model-backdrop">
         <div
           className="profileview-model-content"
-          style={{ height: "500px", width: "600px" }}
+          style={{ height: "650px", width: "600px" }}
         >
           <div className="profile-model-header">
             <h3 style={{ display: "flex", gap: "10px" }}>Add Product</h3>
@@ -140,7 +139,7 @@ const AddProduct = ({ onClose }) => {
               </div>
             </div>
           </div>
-          <br />
+
           <div className="want-serve">
             <b>Accessories</b>
             <div style={{ display: "flex", flexDirection: "column" }}>
@@ -182,65 +181,85 @@ const AddProduct = ({ onClose }) => {
             </div>
           </div>
           <br />
+
+          <br />
           <div className="want-serve">
             <b>Warranty</b>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <label>
                 <input
                   type="checkbox"
-                  name="warranty.available"
-                  checked={newProduct.warranty.available}
-                  onChange={(e) =>
-                    setNewProduct({
-                      ...newProduct,
-                      warranty: {
-                        ...newProduct.warranty,
-                        available: e.target.checked,
-                      },
-                    })
-                  }
+                  name="warranty"
+                  checked={newProduct.warranty}
+                  onChange={handleChange}
                 />
                 Warranty Available
               </label>
-              {newProduct.warranty.available && (
+              {newProduct.warranty && (
                 <input
                   type="number"
-                  name="warranty.price"
-                  value={newProduct.warranty.price}
-                  onChange={(e) =>
-                    setNewProduct({
-                      ...newProduct,
-                      warranty: {
-                        ...newProduct.warranty,
-                        price: e.target.value,
-                      },
-                    })
-                  }
+                  name="warrantyPrice"
+                  value={newProduct.warrantyPrice}
+                  onChange={handleChange}
                   placeholder="Warranty Price"
+                  style={{ marginTop: "5px" }}
                 />
               )}
             </div>
           </div>
+
+          <br />
           <div className="want-serve">
-            <label>
-              <input
-                type="checkbox"
-                name="specialDiscount"
-                checked={newProduct.specialDiscount}
-                onChange={handleChange}
-              />
-              Special Discount
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="manufacturerRebate"
-                checked={newProduct.manufacturerRebate}
-                onChange={handleChange}
-              />
-              Manufacturer Rebate
-            </label>
+            <b>Special Discount</b>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <label>
+                <input
+                  type="checkbox"
+                  name="specialDiscount"
+                  checked={newProduct.specialDiscount}
+                  onChange={handleChange}
+                />
+                Special Discount
+              </label>
+              {newProduct.specialDiscount && (
+                <input
+                  type="number"
+                  name="discountPrice"
+                  value={newProduct.discountPrice}
+                  onChange={handleChange}
+                  placeholder="Discount Price"
+                  style={{ marginTop: "5px" }}
+                />
+              )}
+            </div>
           </div>
+
+          <br />
+          <div className="want-serve">
+            <b>Manufacturer Rebate</b>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <label>
+                <input
+                  type="checkbox"
+                  name="manufacturerRebate"
+                  checked={newProduct.manufacturerRebate}
+                  onChange={handleChange}
+                />
+                Manufacturer Rebate Available
+              </label>
+              {newProduct.manufacturerRebate && (
+                <input
+                  type="number"
+                  name="rebatePrice"
+                  value={newProduct.rebatePrice}
+                  onChange={handleChange}
+                  placeholder="Rebate Price"
+                  style={{ marginTop: "5px" }}
+                />
+              )}
+            </div>
+          </div>
+
           <br />
           <div className="row">
             <span className="viewbottom-border"></span>

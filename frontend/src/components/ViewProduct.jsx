@@ -131,9 +131,45 @@ const ViewProduct = ({ onClose }) => {
               )}
             </div>
           </div>
-
           <br />
-
+          <div className="row">
+            <div className="want-serve">
+              <b>Other Information</b>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <span
+                  style={{
+                    display: "flex",
+                    marginTop: "5px",
+                    color: "rgba(44, 58, 100, 1)",
+                    fontWeight: "400",
+                    fontSize: "16px",
+                  }}
+                >
+                  {dataShow?.warranty ? `Warranty: $${dataShow.warrantyPrice}` : "No warranty available"}
+                </span>
+                <span
+                  style={{
+                    display: "flex",
+                    color: "rgba(44, 58, 100, 1)",
+                    fontWeight: "400",
+                    fontSize: "16px",
+                  }}
+                >
+                  {dataShow?.specialDiscount ? `Discount: $${dataShow.discountPrice}` : "No discount available"}
+                </span>
+                <span
+                  style={{
+                    display: "flex",
+                    color: "rgba(44, 58, 100, 1)",
+                    fontWeight: "400",
+                    fontSize: "16px",
+                  }}
+                >
+                  {dataShow?.manufacturerRebate ? `Manufacturer Rebate: $${dataShow.rebatePrice}` : "No rebate available"}
+                </span>
+              </div>
+            </div>
+          </div>
           <div className="row">
             <span className="viewbottom-border"></span>
           </div>

@@ -60,7 +60,7 @@ const Login = () => {
           const name = response?.data?.user?.name;
           const username = response?.data?.user?.username;
           const userType = response?.data?.user?.userType;
-          const userId = response?.data?.user?._id;
+          const userId = response?.data?.user?.id;
 
           localStorage.setItem("name", name);
           localStorage.setItem("username", username);

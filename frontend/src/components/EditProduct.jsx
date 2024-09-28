@@ -7,7 +7,6 @@ const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const EditProduct = ({ onClose }) => {
   const location = useLocation();
-
   const id = localStorage.getItem("productId");
 
   const [dataShow, setDataShow] = useState({
@@ -16,12 +15,12 @@ const EditProduct = ({ onClose }) => {
     price: 0,
     description: "",
     accessories: [],
-    warranty: {
-      available: false,
-      price: 0,
-    },
+    warranty: false,
+    warrantyPrice: 0,
     specialDiscount: false,
+    discountPrice: 0,
     manufacturerRebate: false,
+    rebatePrice: 0,
   });
 
   const [updatedProduct, setUpdatedProduct] = useState(dataShow);
@@ -74,12 +73,22 @@ const EditProduct = ({ onClose }) => {
   };
 
   const handleSubmit = async () => {
+    const productToSend = {
+      ...updatedProduct,
+      price: parseFloat(updatedProduct.price),
+      warrantyPrice: updatedProduct.warranty ? parseFloat(updatedProduct.warrantyPrice) : 0,
+      discountPrice: updatedProduct.specialDiscount ? parseFloat(updatedProduct.discountPrice) : 0,
+      rebatePrice: updatedProduct.manufacturerRebate ? parseFloat(updatedProduct.rebatePrice) : 0,
+    };
+
+    delete productToSend.accessories;
+
     try {
       const response = await axios.put(
         `${baseURL}/manageProducts`,
-        updatedProduct
+        productToSend
       );
-      if (response.status === 200 || response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         window.alert("Product Details Updated Successfully");
         window.location.reload();
       }
@@ -93,7 +102,7 @@ const EditProduct = ({ onClose }) => {
       <div className="profileview-model-backdrop">
         <div
           className="profileview-model-content"
-          style={{ height: "540px", width: "600px" }}
+          style={{ height: "650px", width: "600px" }}
         >
           <div className="profile-model-header">
             <h3 style={{ display: "flex", gap: "10px" }}>Edit Product</h3>
@@ -157,7 +166,8 @@ const EditProduct = ({ onClose }) => {
               </div>
             </div>
           </div>
-          <br />
+
+          {/* Accessory Section */}
           <div className="want-serve">
             <b>Accessories</b>
             <div style={{ display: "flex", flexDirection: "column" }}>
@@ -199,71 +209,85 @@ const EditProduct = ({ onClose }) => {
             </div>
           </div>
 
-          <br />
-
+          {/* Warranty Section */}
           <div className="want-serve">
             <b>Warranty</b>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <label>
                 <input
                   type="checkbox"
-                  name="warranty.available"
-                  checked={updatedProduct.warranty.available}
-                  onChange={(e) =>
-                    setUpdatedProduct({
-                      ...updatedProduct,
-                      warranty: {
-                        ...updatedProduct.warranty,
-                        available: e.target.checked,
-                      },
-                    })
-                  }
+                  name="warranty"
+                  checked={updatedProduct.warranty}
+                  onChange={handleChange}
                 />
                 Warranty Available
               </label>
-              {updatedProduct.warranty.available && (
+              {updatedProduct.warranty && (
                 <input
                   type="number"
                   name="warranty.price"
-                  value={updatedProduct.warranty.price}
-                  onChange={(e) =>
-                    setUpdatedProduct({
-                      ...updatedProduct,
-                      warranty: {
-                        ...updatedProduct.warranty,
-                        price: e.target.value,
-                      },
-                    })
-                  }
+                  value={updatedProduct.warrantyPrice}
+                  onChange={handleChange}
                   placeholder="Warranty Price"
+                  style={{ marginTop: "5px" }}
                 />
               )}
             </div>
           </div>
 
+          {/* Discount Section */}
           <div className="want-serve">
-            <label>
-              <input
-                type="checkbox"
-                name="specialDiscount"
-                checked={updatedProduct.specialDiscount}
-                onChange={handleChange}
-              />
-              Special Discount
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="manufacturerRebate"
-                checked={updatedProduct.manufacturerRebate}
-                onChange={handleChange}
-              />
-              Manufacturer Rebate
-            </label>
+            <b>Special Discount</b>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <label>
+                <input
+                  type="checkbox"
+                  name="specialDiscount"
+                  checked={updatedProduct.specialDiscount}
+                  onChange={handleChange}
+                />
+                Special Discount
+              </label>
+              {updatedProduct.specialDiscount && (
+                <input
+                  type="number"
+                  name="discountPrice"
+                  value={updatedProduct.discountPrice}
+                  onChange={handleChange}
+                  placeholder="Discount Price"
+                  style={{ marginTop: "5px" }}
+                />
+              )}
+            </div>
+          </div>
+
+          {/* Manufacturer Rebate Section */}
+          <div className="want-serve">
+            <b>Manufacturer Rebate</b>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <label>
+                <input
+                  type="checkbox"
+                  name="manufacturerRebate"
+                  checked={updatedProduct.manufacturerRebate}
+                  onChange={handleChange}
+                />
+                Manufacturer Rebate
+              </label>
+              {updatedProduct.manufacturerRebate && (
+                <input
+                  type="number"
+                  name="rebatePrice"
+                  value={updatedProduct.rebatePrice}
+                  onChange={handleChange}
+                  placeholder="Rebate Price"
+                  style={{ marginTop: "5px" }}
+                />
+              )}
+            </div>
           </div>
 
           <br />
-
           <div className="row">
             <span className="viewbottom-border"></span>
           </div>

@@ -58,11 +58,8 @@ const ProductsList = () => {
     e.preventDefault();
     const id = localStorage.getItem("productId");
     try {
-      const response = await axios.delete(`${baseURL}/manageProducts`, {
+      const response = await axios.delete(`${baseURL}/manageProducts?id=${id}`, {
         withCredentials: true,
-        data: {
-          id: id,
-        },
       });
 
       if (response.status === 200 || response.status === 201) {
