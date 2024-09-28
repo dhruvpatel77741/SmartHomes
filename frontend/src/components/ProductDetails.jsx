@@ -66,7 +66,7 @@ const ProductDetails = () => {
       productPrice: product.price,
       quantity: quantity,
       warrantyAdded: warrantyAdded,
-      warrantyPrice: product.warranty.price,
+      warrantyPrice: product?.warrantyPrice || 0,
       accessories: selectedAccessories.map((name) => {
         const accessory = product.accessories.find(
           (accessory) => accessory.name === name

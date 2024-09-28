@@ -14,13 +14,15 @@ const Cart = () => {
   const [loading, setLoading] = useState(true);
   const [totalAmount, setTotalAmount] = useState(0);
 
+  // Fetch cart items from the API
   const fetchCartItems = async () => {
     const userId = localStorage.getItem("userId");
 
     try {
       const response = await axios.get(`${baseURL}/cart?userId=${userId}`);
-      setCartItems(response.data);
-      calculateTotalAmount(response.data);
+      const cartData = response.data; // The cart data is directly an array
+      setCartItems(cartData);
+      calculateTotalAmount(cartData);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching cart items:", error);
@@ -28,6 +30,7 @@ const Cart = () => {
     }
   };
 
+  // Calculate total amount
   const calculateTotalAmount = (items) => {
     const total = items.reduce((acc, item) => acc + item.totalPrice, 0);
     setTotalAmount(total);
@@ -93,29 +96,28 @@ const Cart = () => {
                   <li key={index} className="cart-item">
                     <div className="item-details">
                       <p>
-                        <strong>Product:</strong> {item.productName}
+                        <strong>Product Name:</strong> {item.productName}
                       </p>
                       <p>
                         <strong>Quantity:</strong> {item.quantity}
                       </p>
-                      <p className="accessories">
-                        {item.accessories.length > 0 && (
-                          <>
-                            <strong>Accessories:</strong>
-                            {item.accessories.map((acc, idx) => (
-                              <span key={idx} className="accessory-item">
-                                {acc.name} (${acc.price.toFixed(2)})
-                                {idx < item.accessories.length - 1 ? ", " : ""}
-                              </span>
-                            ))}
-                          </>
-                        )}
+                      <p>
+                        <strong>Product Price:</strong> ${item.productPrice.toFixed(2)} each
+                      </p>
+                      {item.warrantyAdded && (
+                        <p>
+                          <strong>Warranty Price:</strong> ${item.warrantyPrice.toFixed(2)}
+                        </p>
+                      )}
+                      {item.accessoriesPrice > 0 && (
+                        <p>
+                          <strong>Accessories Price:</strong> ${item.accessoriesPrice.toFixed(2)}
+                        </p>
+                      )}
+                      <p>
+                        <strong>Total Price:</strong> ${item.totalPrice.toFixed(2)}
                       </p>
                     </div>
-                    <p className="item-total-price">
-                      <strong>Total Price:</strong> $
-                      {item.totalPrice.toFixed(2)}
-                    </p>
                     <button
                       className="remove-btn"
                       onClick={() => removeItemFromCart(item.productId)}
