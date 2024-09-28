@@ -10,6 +10,9 @@ const OrdersList = () => {
   const userId = localStorage.getItem("userId");
 
   const [dataShow, setDataShow] = useState([]);
+  const [users, setUsers] = useState({});
+  const [products, setProducts] = useState({});
+
   const getData = async () => {
     const endPoint =
       userType === "Customer" ? `orders?userId=${userId}` : `orders`;
@@ -18,12 +21,44 @@ const OrdersList = () => {
       const resp = await axios.get(apiUrl);
       const data = resp.data.orders;
       setDataShow(data);
+      console.log(data);
     } catch (err) {
       console.log("Error:", err);
     }
   };
+
+  // Fetch users
+  const getUsers = async () => {
+    try {
+      const resp = await axios.get(`${baseURL}/users`);
+      const usersData = resp?.data.reduce((acc, user) => {
+        acc[user.id] = user.name;
+        return acc;
+      }, {});
+      setUsers(usersData);
+    } catch (err) {
+      console.log("Error fetching users:", err);
+    }
+  };
+
+  // Fetch products
+  const getProducts = async () => {
+    try {
+      const resp = await axios.get(`${baseURL}/manageProducts`);
+      const productsData = resp?.data.reduce((acc, product) => {
+        acc[product.id] = product.name;
+        return acc;
+      }, {});
+      setProducts(productsData);
+    } catch (err) {
+      console.log("Error fetching products:", err);
+    }
+  };
+
   useEffect(() => {
     getData();
+    getUsers();
+    getProducts();
   }, []);
 
   const reverseData = [...dataShow].reverse();
@@ -37,7 +72,7 @@ const OrdersList = () => {
         orderId: data?.orderId,
         status: status,
       });
-      if (response.status === 200 || response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         window.alert("Order Details Updated Successfully");
         window.location.reload();
       }
@@ -55,10 +90,7 @@ const OrdersList = () => {
     e.preventDefault();
     const orderId = localStorage.getItem("orderId");
     try {
-      const response = await axios.delete(
-        `${baseURL}/orders?orderId=${orderId}`
-      );
-
+      const response = await axios.delete(`${baseURL}/orders?orderId=${orderId}`);
       if (response.status === 200 || response.status === 201) {
         alert(`The order has been deleted`);
         localStorage.removeItem("orderId");
@@ -95,95 +127,92 @@ const OrdersList = () => {
                 }}
                 className="team-details"
               >
-                <th
-                  className="team-main-bg TeamsTableHeading"
-                  style={{ width: "100%" }}
-                >
-                  <td className="team-data-main">Sr. No.</td>
-                  <td className="team-data-role">Product Name</td>
-                  <td className="team-data-email" style={{ width: "24%" }}>
-                    {userType === "Customer" ? "Price" : "Customer Name"}
-                  </td>
-                  <td className="team-data-actions">
-                    {userType === "Customer" ? "Status" : "Actions"}
-                  </td>
-                </th>
-                {reverseData.length > 0 ? (
-                  reverseData.map((data, groupIndex) => {
-                    return (
-                      <tr className="TeamDetailsRowData" key={groupIndex}>
-                        <td
-                          className="team-data-main"
-                          style={{
-                            overflowWrap: "break-word",
-                          }}
-                        >
-                          {groupIndex + 1}
-                        </td>
-                        <td className="team-data-role">
-                          {data?.orderData?.product}
-                        </td>
-                        <td className="team-data-email">
-                          {userType === "Customer"
-                            ? `$${data?.orderData?.price.toFixed(2)}`
-                            : `${data?.username}`}
-                        </td>
+                <thead>
+                  <tr className="team-main-bg TeamsTableHeading">
+                    <td className="team-data-main">Sr. No.</td>
+                    <td className="team-data-role">Product Name</td>
+                    <td className="team-data-email" style={{ width: "24%" }}>
+                      {userType === "Customer" ? "Price" : "Customer Name"}
+                    </td>
+                    <td className="team-data-actions">
+                      {userType === "Customer" ? "Status" : "Actions"}
+                    </td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reverseData.length > 0 ? (
+                    reverseData.map((data, groupIndex) => {
+                      const productName = products[data?.productId] || "Unknown Product";
+                      const customerName = users[data?.userId] || "Unknown Customer";
 
-                        <td className="team-data-actions">
-                          {userType === "Customer" ? (
-                            data?.status
-                          ) : (
-                            <>
-                              <button
-                                className="notview-action"
-                                onClick={() => handleUpdate(data)}
-                                style={{
-                                  backgroundColor: "blue",
-                                  color: "white",
-                                  border: "none",
-                                  padding: "8px 16px",
-                                  fontSize: "16px",
-                                  borderRadius: "4px",
-                                  cursor: "pointer",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                Update
-                              </button>
-                              <button
-                                className="notview-action"
-                                onClick={() => getIdToDelete(data?.orderId)}
-                                style={{
-                                  backgroundColor: "#ff4d4d",
-                                  color: "white",
-                                  border: "none",
-                                  padding: "8px 16px",
-                                  fontSize: "16px",
-                                  borderRadius: "4px",
-                                  cursor: "pointer",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                DELETE
-                              </button>
-                            </>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })
-                ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      padding: "20px 100px 0px 20px",
-                    }}
-                  >
-                    <p>No Orders Found</p>
-                  </div>
-                )}
+                      return (
+                        <tr className="TeamDetailsRowData" key={groupIndex}>
+                          <td
+                            className="team-data-main"
+                            style={{
+                              overflowWrap: "break-word",
+                            }}
+                          >
+                            {groupIndex + 1}
+                          </td>
+                          <td className="team-data-role">
+                            {productName}
+                          </td>
+                          <td className="team-data-email">
+                            {userType === "Customer"
+                              ? `$${data?.total}`
+                              : `${customerName}`}
+                          </td>
+
+                          <td className="team-data-actions">
+                            {userType === "Customer" ? (
+                              data?.status
+                            ) : (
+                              <>
+                                <button
+                                  className="notview-action"
+                                  onClick={() => handleUpdate(data)}
+                                  style={{
+                                    backgroundColor: "blue",
+                                    color: "white",
+                                    border: "none",
+                                    padding: "8px 16px",
+                                    fontSize: "16px",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  Update
+                                </button>
+                                <button
+                                  className="notview-action"
+                                  onClick={() => getIdToDelete(data?.orderId)}
+                                  style={{
+                                    backgroundColor: "#ff4d4d",
+                                    color: "white",
+                                    border: "none",
+                                    padding: "8px 16px",
+                                    fontSize: "16px",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  DELETE
+                                </button>
+                              </>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="4">No Orders Found</td>
+                    </tr>
+                  )}
+                </tbody>
               </table>
             </div>
           </div>
