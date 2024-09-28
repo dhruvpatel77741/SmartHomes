@@ -145,7 +145,7 @@ const UserList = () => {
                           </button> */}
                           <button
                             className="view-action"
-                            onClick={() => viewCustomer(data._id)}
+                            onClick={() => viewCustomer(data.id)}
                           >
                             <img
                               src={`${image}/Assets/Teams/view.svg`}
@@ -154,7 +154,7 @@ const UserList = () => {
                           </button>
                           <button
                             className="notview-action"
-                            onClick={() => getIdToDelete(data._id)}
+                            onClick={() => getIdToDelete(data.id)}
                           >
                             <img
                               src={`${image}/Assets/Teams/not-view.svg`}
