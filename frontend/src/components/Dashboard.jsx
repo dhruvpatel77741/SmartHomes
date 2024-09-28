@@ -19,11 +19,12 @@ const Dashboard = () => {
       const resp = await axios.get(apiUrl);
       const data = resp.data;
       setData(data);
+      console.log(data);
       setFilteredData(data);
       const uniqueCategories = Array.from(
         new Set(data.map((item) => item.category))
       );
-      setCategories(["All", ...uniqueCategories]);
+      setCategories(["All", "Trending", ...uniqueCategories]);
     } catch (err) {
       console.log("Error:", err);
     }

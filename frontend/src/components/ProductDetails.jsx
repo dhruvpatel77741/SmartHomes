@@ -23,9 +23,9 @@ const ProductDetails = () => {
 
   const toggleWarranty = () => {
     if (warrantyAdded) {
-      setTotalPrice(totalPrice - product.warranty.price);
+      setTotalPrice(totalPrice - product?.warrantyPrice);
     } else {
-      setTotalPrice(totalPrice + product.warranty.price);
+      setTotalPrice(totalPrice + product?.warrantyPrice);
     }
     setWarrantyAdded(!warrantyAdded);
   };
@@ -101,8 +101,8 @@ const ProductDetails = () => {
             <p>Category: {product.category}</p>
             <p>
               Warranty:{" "}
-              {product.warranty.available
-                ? `Available for $${product.warranty.price}`
+              {product?.warranty === true
+                ? `Available for $${product?.warrantyPrice}`
                 : "Not Available"}
             </p>
           </div>
@@ -129,7 +129,7 @@ const ProductDetails = () => {
               </div>
             )}
 
-            {product.warranty.available && (
+            {product?.warranty && (
               <div>
                 <input
                   type="checkbox"
@@ -138,7 +138,7 @@ const ProductDetails = () => {
                   onChange={toggleWarranty}
                 />
                 <label htmlFor="add-warranty">
-                  Add Warranty for ${product.warranty.price}
+                  Add Warranty for ${product?.warrantyPrice}
                 </label>
               </div>
             )}

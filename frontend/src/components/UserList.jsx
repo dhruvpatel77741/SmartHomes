@@ -21,6 +21,7 @@ const UserList = () => {
       const resp = await axios.get(apiUrl, {});
       const data = resp.data;
       setDataShow(data);
+      console.log(data);
     } catch (err) {
       console.log("Error:", err);
     }
@@ -127,7 +128,7 @@ const UserList = () => {
                             overflowWrap: "break-word",
                           }}
                         >
-                          {data?._id}
+                          {data?.id}
                         </td>
                         <td className="team-data-role">{data?.name}</td>
                         <td className="team-data-email">{data?.username}</td>
