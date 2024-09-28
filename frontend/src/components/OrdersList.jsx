@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./List.css";
 import axios from "axios";
 import Aside from "./Aside";
+import ReviewPopup from "./ReviewPopup";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
@@ -21,7 +22,6 @@ const OrdersList = () => {
       const resp = await axios.get(apiUrl);
       const data = resp.data.orders;
       setDataShow(data);
-      console.log(data);
     } catch (err) {
       console.log("Error:", err);
     }
@@ -90,7 +90,9 @@ const OrdersList = () => {
     e.preventDefault();
     const orderId = localStorage.getItem("orderId");
     try {
-      const response = await axios.delete(`${baseURL}/orders?orderId=${orderId}`);
+      const response = await axios.delete(
+        `${baseURL}/orders?orderId=${orderId}`
+      );
       if (response.status === 200 || response.status === 201) {
         alert(`The order has been deleted`);
         localStorage.removeItem("orderId");
@@ -102,6 +104,19 @@ const OrdersList = () => {
       console.log("Error status:", error.response?.status);
     }
     setShowDeleteConfirmation(false);
+  };
+
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showReviewPopup, setShowReviewPopup] = useState(false);
+
+  const openReviewPopup = (order) => {
+    setSelectedProduct(order);
+    setShowReviewPopup(true);
+  };
+
+  const closeReviewPopup = () => {
+    setShowReviewPopup(false);
+    setSelectedProduct(null);
   };
 
   return (
@@ -128,7 +143,10 @@ const OrdersList = () => {
                 className="team-details"
               >
                 <thead>
-                  <tr className="team-main-bg TeamsTableHeading">
+                  <tr
+                    className="team-main-bg TeamsTableHeading"
+                    style={{ width: "100%" }}
+                  >
                     <td className="team-data-main">Sr. No.</td>
                     <td className="team-data-role">Product Name</td>
                     <td className="team-data-email" style={{ width: "24%" }}>
@@ -137,13 +155,21 @@ const OrdersList = () => {
                     <td className="team-data-actions">
                       {userType === "Customer" ? "Status" : "Actions"}
                     </td>
+                    {userType === "Customer" ? (
+                      <>
+                        <td className="team-data-actions">Date</td>
+                        <td className="team-data-actions">Review</td>
+                      </>
+                    ) : null}
                   </tr>
                 </thead>
                 <tbody>
                   {reverseData.length > 0 ? (
                     reverseData.map((data, groupIndex) => {
-                      const productName = products[data?.productId] || "Unknown Product";
-                      const customerName = users[data?.userId] || "Unknown Customer";
+                      const productName =
+                        products[data?.productId] || "Unknown Product";
+                      const customerName =
+                        users[data?.userId] || "Unknown Customer";
 
                       return (
                         <tr className="TeamDetailsRowData" key={groupIndex}>
@@ -155,9 +181,7 @@ const OrdersList = () => {
                           >
                             {groupIndex + 1}
                           </td>
-                          <td className="team-data-role">
-                            {productName}
-                          </td>
+                          <td className="team-data-role">{productName}</td>
                           <td className="team-data-email">
                             {userType === "Customer"
                               ? `$${data?.total}`
@@ -204,6 +228,20 @@ const OrdersList = () => {
                               </>
                             )}
                           </td>
+                          {userType === "Customer" ? (
+                            <>
+                              <td className="team-data-actions">
+                                {data?.orderDate}
+                              </td>
+                              <td className="team-data-actions">
+                                <button
+                                  onClick={() => openReviewPopup(data)}
+                                >
+                                  Review
+                                </button>
+                              </td>
+                            </>
+                          ) : null}
                         </tr>
                       );
                     })
@@ -216,6 +254,14 @@ const OrdersList = () => {
               </table>
             </div>
           </div>
+
+          {showReviewPopup && selectedProduct && (
+            <ReviewPopup
+              product={selectedProduct}
+              userId={userId}
+              onClose={closeReviewPopup}
+            />
+          )}
 
           <div className="row">
             {showDeleteConfirmation && (
