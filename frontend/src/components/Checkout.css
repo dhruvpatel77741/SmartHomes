@@ -58,3 +58,17 @@
   border: none;
   border-radius: 5px;
 }
+
+ul {
+  list-style-type: none; /* Removes the bullet points */
+  padding: 0; /* Removes default padding */
+}
+
+li {
+  cursor: pointer;
+  padding: 5px 0;
+}
+
+li:hover {
+  background-color: #f0f0f0; /* Adds a hover effect to highlight the store */
+}

@@ -25,13 +25,16 @@ const Checkout = () => {
     zipCode: "",
   });
 
+  const [stores, setStores] = useState([]);
+  const [selectedStore, setSelectedStore] = useState(null);
+
   useEffect(() => {
     const getData = async () => {
       let apiUrl = `${baseURL}/users`;
       try {
         const resp = await axios.get(apiUrl);
         const data = resp.data;
-        const userData = data.find((item) => item?._id.toString() === userId);
+        const userData = data.find((item) => item?.id.toString() === userId);
         setUserData(userData);
       } catch (err) {
         console.log("Error:", err);
@@ -39,6 +42,20 @@ const Checkout = () => {
     };
     getData();
   }, [userId]);
+
+  useEffect(() => {
+    if (tab === "pickup") {
+      const fetchStores = async () => {
+        try {
+          const resp = await axios.get(`${baseURL}/stores`);
+          setStores(resp.data);
+        } catch (error) {
+          console.error("Error fetching stores:", error);
+        }
+      };
+      fetchStores();
+    }
+  }, [tab]);
 
   const handleTabSelect = (selectedTab) => {
     setTab(selectedTab);
@@ -51,6 +68,10 @@ const Checkout = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleStoreSelect = (store) => {
+    setSelectedStore(store);
   };
 
   const clearCart = async () => {
@@ -66,27 +87,54 @@ const Checkout = () => {
   };
 
   const handleProceed = async () => {
-    if (tab === "pickup") {
+    if (tab === "pickup" && selectedStore) {
       const orderData = {
         userId: userId,
-        orderData: {
-          product: cartItems[0]?.productName,
-          price: totalAmount,
-          quantity: cartItems[0]?.quantity,
-        },
-        checkout: "Pick Up",
-        paymentMode: "",
-        paymentDetails: {},
-        address: {},
+        productId: cartItems[0]?.productId,
+        quantity: cartItems[0]?.quantity,
+        price: cartItems[0]?.productPrice,
+        shippingCost: 0,
+        total: totalAmount,
+        orderDate: new Date().toISOString().split("T")[0],
+        shipDate: new Date(Date.now() + 86400000).toISOString().split("T")[0],
+        deliveryMethod: "Pick Up",
+        storeId: selectedStore.storeId,
+        shippingAddress: `${selectedStore.street}, ${selectedStore.city}, ${selectedStore.state}`,
+        status: "Order Placed",
+        discount: cartItems[0]?.warrantyAdded ? cartItems[0]?.warrantyPrice : 0,
       };
       try {
-        await axios.post(`${baseURL}/orders`, orderData);
+        const orderResponse = await axios.post(`${baseURL}/orders`, orderData);
+
+        const transactionData = {
+          orderId: orderResponse?.data?.order?.orderId,
+          userId: userId,
+          customerName: name,
+          shippingAddress: `${selectedStore.street}, ${selectedStore.city}, ${selectedStore.state}`,
+          creditCardNumber: "",
+          transactionDate: new Date().toISOString().split("T")[0],
+          transactionAmount: totalAmount,
+          paymentStatus: "Pending",
+          productId: cartItems[0]?.productId,
+          category: "Smart Doorbells",
+          quantity: cartItems[0]?.quantity,
+          shippingCost: 0,
+          discount: cartItems[0]?.warrantyAdded
+            ? cartItems[0]?.warrantyPrice
+            : 0,
+          storeAddress: `${selectedStore.street}, ${selectedStore.city}, ${selectedStore.state}`,
+        };
+        await axios.post(`${baseURL}/transactions`, transactionData);
+
         window.alert(
-          "Order placed successfully. You can pick up your order from the store and pay by cash or card."
+          `Order placed successfully. Your Order Id is ${orderResponse?.data?.order?.orderId} You can pick up your item from ${
+            selectedStore.city
+          } on ${new Date(Date.now() + 86400000).toISOString().split("T")[0]}.`
         );
       } catch (error) {
-        console.error("Error placing order:", error);
+        console.error("Error placing order or transaction:", error);
       }
+
       clearCart();
       navigate("/dashboard");
     } else if (tab === "homeDelivery") {
@@ -135,11 +183,43 @@ const Checkout = () => {
               <p>
                 Total Amount: <b>${totalAmount.toFixed(2)}</b>
               </p>
+              <h3>Select a Store for Pickup</h3>
+              {stores.length > 0 ? (
+                <ul>
+                  {stores.map((store) => (
+                    <li
+                      key={store.storeId}
+                      onClick={() => handleStoreSelect(store)}
+                      style={{
+                        cursor: "pointer",
+                        fontWeight: store === selectedStore ? "bold" : "normal",
+                      }}
+                    >
+                      {`${store.city}, ${store.street}, ${store.state}`}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Loading stores...</p>
+              )}
+              {selectedStore && (
+                <p>
+                  <b>Selected Store:</b> {selectedStore.city},{" "}
+                  {selectedStore.street}, {selectedStore.state}
+                </p>
+              )}
               <div className="checkout-actions">
                 <button className="back-btn" onClick={handleBack}>
                   Back
                 </button>
-                <button className="proceed-btn" onClick={handleProceed}>
+                <button
+                  className="proceed-btn"
+                  onClick={handleProceed}
+                  disabled={!selectedStore}
+                  style={{
+                    backgroundColor: !selectedStore ? "grey" : `#007bff`,
+                  }}
+                >
                   Proceed
                 </button>
               </div>
