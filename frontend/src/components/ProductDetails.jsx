@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Aside from "./Aside";
 import HeaderComponent from "./HeaderComponent";
@@ -16,6 +16,24 @@ const ProductDetails = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [warrantyAdded, setWarrantyAdded] = useState(false);
   const [selectedAccessories, setSelectedAccessories] = useState([]);
+
+  const [reviews, setReviews] = useState([]);
+
+  const getData = async () => {
+    let apiUrl = `${baseURL}/getAllReviews`;
+    try {
+      const resp = await axios.get(apiUrl);
+      const data = resp.data.reviews;
+      const filteredReview = data.filter((review) => review.productModelName === product.name);
+      setReviews(filteredReview);
+    } catch (err) {
+      console.log("Error:", err);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  },[product]);
 
   if (!product) {
     return <p>Loading...</p>;
@@ -87,6 +105,8 @@ const ProductDetails = () => {
       console.error("Error:", error);
     }
   };
+
+  console.log(reviews);
 
   return (
     <div className="MainOuterContainer">
@@ -177,6 +197,31 @@ const ProductDetails = () => {
               </div>
             ))}
           </div>
+        </div>
+        <br/>
+
+        <div className="reviews-section">
+          <h3>Customer's Reviews</h3>
+          {reviews.length > 0 ? (
+            <div className="review-cards">
+              {reviews.map((review, index) => (
+                <div key={index} className="review-card">
+                  <p style={{ fontWeight: "bold" }}>Rating: {review.reviewRating}/5</p>
+                  <p>{review.reviewText}</p>
+                  <p>
+                    <span style={{ fontStyle: "italic" }}>
+                      {review.userOccupation}, Age: {review.userAge}, {review.userGender}
+                    </span>
+                  </p>
+                  <p style={{ fontSize: "12px", color: "gray" }}>
+                    Review Date: {new Date(review.reviewDate).toLocaleDateString()}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p>No reviews available for this product.</p>
+          )}
         </div>
       </div>
     </div>
