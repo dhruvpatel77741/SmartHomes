@@ -88,3 +88,55 @@
 .filter-btn.active {
   background-color: #0056b3;
 }
+
+
+/* Main container for trending section */
+.trending-container {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+}
+
+/* Heading for each category */
+.trending-container h2 {
+  margin: 20px 0;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Container for the product cards under each heading */
+.cards-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px; /* Spacing between cards */
+  overflow-x: auto; /* Make it scrollable horizontally if necessary */
+  margin-bottom: 40px; /* Space between product rows */
+}
+
+/* Individual product card */
+.cards-row .card {
+  min-width: 200px; /* Adjust width of each card */
+  max-width: 200px;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  text-align: center;
+}
+
+.cards-row .card h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.cards-row .card p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Adjust prices */
+.cards-row .card p.price {
+  font-weight: bold;
+  color: #000;
+  margin-top: 15px;
+}
