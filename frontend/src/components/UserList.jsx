@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import "./List.css";
 import axios from "axios";
 import Aside from "./Aside";
@@ -11,7 +10,6 @@ const image = process.env.PUBLIC_URL;
 
 const UserList = () => {
   const userType = localStorage.getItem("userType");
-  const location = useLocation();
 
   const [dataShow, setDataShow] = useState([]);
   const getData = async () => {
@@ -28,7 +26,7 @@ const UserList = () => {
   };
   useEffect(() => {
     getData();
-  }, []);
+  });
 
   const reverseData = [...dataShow].reverse();
 

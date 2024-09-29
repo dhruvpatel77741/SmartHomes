@@ -74,7 +74,6 @@ const ReviewPopup = ({ product, userId, onClose }) => {
       console.error("Error submitting review:", err);
     }
   };
-  
 
   return (
     <div className="popup-overlay">
@@ -108,18 +107,10 @@ const ReviewPopup = ({ product, userId, onClose }) => {
           <label>Store State:</label>
           <input type="text" value={store?.state} readOnly />
         </div>
-        {/* <div className="form-group">
-          <label>Product On Sale:</label>
-          <input type="checkbox" checked={productOnSale} onChange={(e) => setProductOnSale(e.target.checked)} />
-        </div> */}
         <div className="form-group">
           <label>Manufacturer Name:</label>
           <input type="text" value="Jinko" readOnly />
         </div>
-        {/* <div className="form-group">
-          <label>Manufacturer Rebate:</label>
-          <input type="checkbox" checked={manufacturerRebate} onChange={(e) => setManufacturerRebate(e.target.checked)} />
-        </div> */}
         <div className="form-group">
           <label>User Age:</label>
           <input

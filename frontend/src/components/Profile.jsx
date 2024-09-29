@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './Profile.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./Profile.css";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const Profile = () => {
-
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    zipCode: '',
-    cvv: '',
-    city: '',
-    expiryDate: '',
-    phone: '',
-    creditCardNumber: '',
-    name: '',
-    addressLine1: '',
-    addressLine2: '',
-    id: '',
-    userType: '',
-    state: '',
-    username: ''
+    zipCode: "",
+    cvv: "",
+    city: "",
+    expiryDate: "",
+    phone: "",
+    creditCardNumber: "",
+    name: "",
+    addressLine1: "",
+    addressLine2: "",
+    id: "",
+    userType: "",
+    state: "",
+    username: "",
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -32,7 +31,9 @@ const Profile = () => {
 
     try {
       const response = await axios.get(`${baseURL}/customers`);
-      const data = response?.data.filter((user) => user?.id.toString() === userId);
+      const data = response?.data.filter(
+        (user) => user?.id.toString() === userId
+      );
       console.log(data[0]);
       setFormData(data[0]);
     } catch (error) {
@@ -47,7 +48,7 @@ const Profile = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -73,12 +74,12 @@ const Profile = () => {
 
     try {
       const response = await axios.post(`${baseURL}/updateUser`, updatedData);
-      console.log('User data updated successfully:', response.data);
+      console.log("User data updated successfully:", response.data);
       setIsEditing(false);
       window.alert("User Details Updated Successfully");
       navigate("/dashboard");
     } catch (error) {
-      console.error('There was an error updating the user data!', error);
+      console.error("There was an error updating the user data!", error);
     }
   };
 
@@ -207,9 +208,19 @@ const Profile = () => {
           />
         </label>
         {isEditing ? (
-          <button type="button" className="profile-save-button" onClick={() => handleSubmit()}>Save</button>
+          <button
+            type="button"
+            className="profile-save-button"
+            onClick={() => handleSubmit()}
+          >
+            Save
+          </button>
         ) : (
-          <button type="button" className="profile-edit-button" onClick={() => setIsEditing(true)}>
+          <button
+            type="button"
+            className="profile-edit-button"
+            onClick={() => setIsEditing(true)}
+          >
             Edit
           </button>
         )}

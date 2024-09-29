@@ -27,7 +27,6 @@ const OrdersList = () => {
     }
   };
 
-  // Fetch users
   const getUsers = async () => {
     try {
       const resp = await axios.get(`${baseURL}/users`);
@@ -41,7 +40,6 @@ const OrdersList = () => {
     }
   };
 
-  // Fetch products
   const getProducts = async () => {
     try {
       const resp = await axios.get(`${baseURL}/manageProducts`);
@@ -59,7 +57,7 @@ const OrdersList = () => {
     getData();
     getUsers();
     getProducts();
-  }, []);
+  });
 
   const reverseData = [...dataShow].reverse();
 
@@ -234,9 +232,7 @@ const OrdersList = () => {
                                 {data?.orderDate}
                               </td>
                               <td className="team-data-actions">
-                                <button
-                                  onClick={() => openReviewPopup(data)}
-                                >
+                                <button onClick={() => openReviewPopup(data)}>
                                   Review
                                 </button>
                               </td>

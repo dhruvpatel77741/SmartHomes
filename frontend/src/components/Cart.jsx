@@ -100,20 +100,24 @@ const Cart = () => {
                         <strong>Quantity:</strong> {item.quantity}
                       </p>
                       <p>
-                        <strong>Product Price:</strong> ${item.productPrice.toFixed(2)} each
+                        <strong>Product Price:</strong> $
+                        {item.productPrice.toFixed(2)} each
                       </p>
                       {item.warrantyAdded && (
                         <p>
-                          <strong>Warranty Price:</strong> ${item.warrantyPrice.toFixed(2)}
+                          <strong>Warranty Price:</strong> $
+                          {item.warrantyPrice.toFixed(2)}
                         </p>
                       )}
                       {item.accessoriesPrice > 0 && (
                         <p>
-                          <strong>Accessories Price:</strong> ${item.accessoriesPrice.toFixed(2)}
+                          <strong>Accessories Price:</strong> $
+                          {item.accessoriesPrice.toFixed(2)}
                         </p>
                       )}
                       <p>
-                        <strong>Total Price:</strong> ${item.totalPrice.toFixed(2)}
+                        <strong>Total Price:</strong> $
+                        {item.totalPrice.toFixed(2)}
                       </p>
                     </div>
                     <button

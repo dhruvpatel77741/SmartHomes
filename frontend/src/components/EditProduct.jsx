@@ -76,9 +76,15 @@ const EditProduct = ({ onClose }) => {
     const productToSend = {
       ...updatedProduct,
       price: parseFloat(updatedProduct.price),
-      warrantyPrice: updatedProduct.warranty ? parseFloat(updatedProduct.warrantyPrice) : 0,
-      discountPrice: updatedProduct.specialDiscount ? parseFloat(updatedProduct.discountPrice) : 0,
-      rebatePrice: updatedProduct.manufacturerRebate ? parseFloat(updatedProduct.rebatePrice) : 0,
+      warrantyPrice: updatedProduct.warranty
+        ? parseFloat(updatedProduct.warrantyPrice)
+        : 0,
+      discountPrice: updatedProduct.specialDiscount
+        ? parseFloat(updatedProduct.discountPrice)
+        : 0,
+      rebatePrice: updatedProduct.manufacturerRebate
+        ? parseFloat(updatedProduct.rebatePrice)
+        : 0,
     };
 
     delete productToSend.accessories;
@@ -167,7 +173,6 @@ const EditProduct = ({ onClose }) => {
             </div>
           </div>
 
-          {/* Accessory Section */}
           <div className="want-serve">
             <b>Accessories</b>
             <div style={{ display: "flex", flexDirection: "column" }}>
@@ -209,7 +214,6 @@ const EditProduct = ({ onClose }) => {
             </div>
           </div>
 
-          {/* Warranty Section */}
           <div className="want-serve">
             <b>Warranty</b>
             <div style={{ display: "flex", flexDirection: "column" }}>
@@ -235,7 +239,6 @@ const EditProduct = ({ onClose }) => {
             </div>
           </div>
 
-          {/* Discount Section */}
           <div className="want-serve">
             <b>Special Discount</b>
             <div style={{ display: "flex", flexDirection: "column" }}>
@@ -261,7 +264,6 @@ const EditProduct = ({ onClose }) => {
             </div>
           </div>
 
-          {/* Manufacturer Rebate Section */}
           <div className="want-serve">
             <b>Manufacturer Rebate</b>
             <div style={{ display: "flex", flexDirection: "column" }}>

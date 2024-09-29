@@ -20,7 +20,7 @@ const Dashboard = () => {
 
   const getData = async () => {
     let apiUrl = `${baseURL}/manageProducts`;
-    let trendingUrl = `${baseURL}/trending`; // API endpoint for trending products
+    let trendingUrl = `${baseURL}/trending`;
     try {
       const resp = await axios.get(apiUrl);
       const trendingResp = await axios.get(trendingUrl);
@@ -30,7 +30,6 @@ const Dashboard = () => {
       setData(data);
       console.log(data);
 
-      // Update trending data from the new response
       setTrendingData({
         topLikedProducts: trendingProducts.topLikedProducts,
         topSoldProducts: trendingProducts.topSoldProducts,
@@ -56,7 +55,6 @@ const Dashboard = () => {
     if (category === "All") {
       setFilteredData(data);
     } else if (category === "Trending") {
-      // Sort liked products in descending order by likes
       const likedProducts = data
         .filter((item) =>
           trendingData.topLikedProducts.some(
@@ -70,7 +68,7 @@ const Dashboard = () => {
               (prod) => prod.productId === item.id
             )?.likes || 0,
         }))
-        .sort((a, b) => b.likes - a.likes); // Sort in descending order
+        .sort((a, b) => b.likes - a.likes);
 
       const soldProducts = data
         .filter((item) =>
@@ -86,7 +84,6 @@ const Dashboard = () => {
             )?.totalSold || 0,
         }));
 
-      // Adjust for displaying zip codes with total sales instead of individual products
       const zipProducts = trendingData.topZipProducts.map((zipProduct) => ({
         zipCode: zipProduct.zipCode,
         totalSold: zipProduct.totalSold,
@@ -143,7 +140,7 @@ const Dashboard = () => {
                       <h3>{item.name}</h3>
                       <p>{item.description}</p>
                       <p style={{ fontWeight: "bolder" }}>${item.price}</p>
-                      <p>Likes: {item.likes}</p> {/* Display likes */}
+                      <p>Likes: {item.likes}</p>
                     </Link>
                   ))
                 ) : (
@@ -169,7 +166,7 @@ const Dashboard = () => {
                       <h3>{item.name}</h3>
                       <p>{item.description}</p>
                       <p style={{ fontWeight: "bolder" }}>${item.price}</p>
-                      <p>Sold: {item.totalSold}</p> {/* Display total sold */}
+                      <p>Sold: {item.totalSold}</p>
                     </Link>
                   ))
                 ) : (
@@ -192,7 +189,6 @@ const Dashboard = () => {
                     >
                       <h3>Zip Code: {item.zipCode}</h3>
                       <p>Total Products Sold: {item.totalSold}</p>{" "}
-                      {/* Display total sales */}
                     </div>
                   ))
                 ) : (

@@ -89,33 +89,28 @@
   background-color: #0056b3;
 }
 
-
-/* Main container for trending section */
 .trending-container {
   display: flex;
   flex-direction: column;
   margin: 20px;
 }
 
-/* Heading for each category */
 .trending-container h2 {
   margin: 20px 0;
   font-size: 24px;
   color: #333;
 }
 
-/* Container for the product cards under each heading */
 .cards-row {
   display: flex;
   flex-wrap: nowrap;
-  gap: 20px; /* Spacing between cards */
-  overflow-x: auto; /* Make it scrollable horizontally if necessary */
-  margin-bottom: 40px; /* Space between product rows */
+  gap: 20px;
+  overflow-x: auto;
+  margin-bottom: 40px;
 }
 
-/* Individual product card */
 .cards-row .card {
-  min-width: 200px; /* Adjust width of each card */
+  min-width: 200px;
   max-width: 200px;
   padding: 10px;
   border-radius: 8px;
@@ -134,7 +129,6 @@
   color: #666;
 }
 
-/* Adjust prices */
 .cards-row .card p.price {
   font-weight: bold;
   color: #000;

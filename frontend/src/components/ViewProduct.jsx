@@ -145,7 +145,9 @@ const ViewProduct = ({ onClose }) => {
                     fontSize: "16px",
                   }}
                 >
-                  {dataShow?.warranty ? `Warranty: $${dataShow.warrantyPrice}` : "No warranty available"}
+                  {dataShow?.warranty
+                    ? `Warranty: $${dataShow.warrantyPrice}`
+                    : "No warranty available"}
                 </span>
                 <span
                   style={{
@@ -155,7 +157,9 @@ const ViewProduct = ({ onClose }) => {
                     fontSize: "16px",
                   }}
                 >
-                  {dataShow?.specialDiscount ? `Discount: $${dataShow.discountPrice}` : "No discount available"}
+                  {dataShow?.specialDiscount
+                    ? `Discount: $${dataShow.discountPrice}`
+                    : "No discount available"}
                 </span>
                 <span
                   style={{
@@ -165,7 +169,9 @@ const ViewProduct = ({ onClose }) => {
                     fontSize: "16px",
                   }}
                 >
-                  {dataShow?.manufacturerRebate ? `Manufacturer Rebate: $${dataShow.rebatePrice}` : "No rebate available"}
+                  {dataShow?.manufacturerRebate
+                    ? `Manufacturer Rebate: $${dataShow.rebatePrice}`
+                    : "No rebate available"}
                 </span>
               </div>
             </div>

@@ -58,9 +58,12 @@ const ProductsList = () => {
     e.preventDefault();
     const id = localStorage.getItem("productId");
     try {
-      const response = await axios.delete(`${baseURL}/manageProducts?id=${id}`, {
-        withCredentials: true,
-      });
+      const response = await axios.delete(
+        `${baseURL}/manageProducts?id=${id}`,
+        {
+          withCredentials: true,
+        }
+      );
 
       if (response.status === 200 || response.status === 201) {
         alert(`The product has been deleted`);

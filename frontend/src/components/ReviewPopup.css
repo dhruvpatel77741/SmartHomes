@@ -1,9 +1,7 @@
-/* Prevent background from scrolling when the popup is active */
 body.modal-open {
   overflow: hidden;
 }
 
-/* Popup overlay styling */
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -14,22 +12,20 @@ body.modal-open {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* Prevent the overlay from scrolling */
+  overflow: hidden;
 }
 
-/* Popup content styling */
 .popup-content {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
   width: 500px;
   max-width: 90%;
-  max-height: 80vh; /* Ensure popup has a max height */
-  overflow-y: auto; /* Enable scrolling inside the popup */
+  max-height: 80vh;
+  overflow-y: auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Other styles for form groups, inputs, and buttons */
 h2 {
   margin-bottom: 20px;
   text-align: center;
@@ -78,7 +74,7 @@ textarea {
 }
 
 .submit-button {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
 }
 

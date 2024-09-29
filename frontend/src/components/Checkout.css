@@ -60,8 +60,8 @@
 }
 
 ul {
-  list-style-type: none; /* Removes the bullet points */
-  padding: 0; /* Removes default padding */
+  list-style-type: none;
+  padding: 0;
 }
 
 li {
@@ -70,5 +70,5 @@ li {
 }
 
 li:hover {
-  background-color: #f0f0f0; /* Adds a hover effect to highlight the store */
+  background-color: #f0f0f0;
 }

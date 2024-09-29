@@ -19,12 +19,28 @@ const ProductDetails = () => {
 
   const [reviews, setReviews] = useState([]);
 
+  const calculateProductPrice = () => {
+    let finalPrice = product.price;
+
+    if (product?.specialDiscount && product?.manufacturerRebate) {
+      finalPrice = Math.min(product.discountPrice, product.rebatePrice);
+    } else if (product?.specialDiscount) {
+      finalPrice = product.discountPrice;
+    } else if (product?.manufacturerRebate) {
+      finalPrice = product.rebatePrice;
+    }
+
+    return finalPrice;
+  };
+
   const getData = async () => {
     let apiUrl = `${baseURL}/getAllReviews`;
     try {
       const resp = await axios.get(apiUrl);
       const data = resp.data.reviews;
-      const filteredReview = data.filter((review) => review.productModelName === product.name);
+      const filteredReview = data.filter(
+        (review) => review.productModelName === product.name
+      );
       setReviews(filteredReview);
     } catch (err) {
       console.log("Error:", err);
@@ -33,7 +49,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     getData();
-  },[product]);
+  });
 
   if (!product) {
     return <p>Loading...</p>;
@@ -62,16 +78,18 @@ const ProductDetails = () => {
   };
 
   const incrementQuantity = () => {
+    const productPrice = calculateProductPrice();
     setQuantity(quantity + 1);
-    setTotalPrice(totalPrice + product.price);
+    setTotalPrice(totalPrice + productPrice);
   };
 
   const decrementQuantity = () => {
+    const productPrice = calculateProductPrice();
     if (quantity > 0) {
       setQuantity(quantity - 1);
-      totalPrice - product.price === 0.0
+      totalPrice - productPrice === 0.0
         ? setTotalPrice(0)
-        : setTotalPrice(totalPrice - product.price);
+        : setTotalPrice(totalPrice - productPrice);
     }
   };
 
@@ -125,6 +143,18 @@ const ProductDetails = () => {
                 ? `Available for $${product?.warrantyPrice}`
                 : "Not Available"}
             </p>
+            <p>
+              Discounted Price:{" "}
+              {product?.specialDiscount === true
+                ? `$${product?.discountPrice}`
+                : "Not Available"}
+            </p>
+            <p>
+              Manufacturer Rebated Price:{" "}
+              {product?.manufacturerRebate === true
+                ? `$${product?.rebatePrice}`
+                : "Not Available"}
+            </p>
           </div>
 
           <div className="product-detail-right" style={{ marginLeft: "300px" }}>
@@ -136,7 +166,7 @@ const ProductDetails = () => {
                 className="add-to-cart-btn"
                 onClick={() => {
                   setQuantity(1);
-                  setTotalPrice(product.price);
+                  setTotalPrice(calculateProductPrice());
                 }}
               >
                 Add to Cart
@@ -198,7 +228,7 @@ const ProductDetails = () => {
             ))}
           </div>
         </div>
-        <br/>
+        <br />
 
         <div className="reviews-section">
           <h3>Customer's Reviews</h3>
@@ -206,15 +236,19 @@ const ProductDetails = () => {
             <div className="review-cards">
               {reviews.map((review, index) => (
                 <div key={index} className="review-card">
-                  <p style={{ fontWeight: "bold" }}>Rating: {review.reviewRating}/5</p>
+                  <p style={{ fontWeight: "bold" }}>
+                    Rating: {review.reviewRating}/5
+                  </p>
                   <p>{review.reviewText}</p>
                   <p>
                     <span style={{ fontStyle: "italic" }}>
-                      {review.userOccupation}, Age: {review.userAge}, {review.userGender}
+                      {review.userOccupation}, Age: {review.userAge},{" "}
+                      {review.userGender}
                     </span>
                   </p>
                   <p style={{ fontSize: "12px", color: "gray" }}>
-                    Review Date: {new Date(review.reviewDate).toLocaleDateString()}
+                    Review Date:{" "}
+                    {new Date(review.reviewDate).toLocaleDateString()}
                   </p>
                 </div>
               ))}

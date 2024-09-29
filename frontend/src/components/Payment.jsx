@@ -12,7 +12,7 @@ const Payment = () => {
   const userId = localStorage.getItem("userId");
   const name = localStorage.getItem("name");
   const location = useLocation();
-  const { totalAmount, address, cartItems } = location.state; // Passed from Checkout component
+  const { totalAmount, address, cartItems } = location.state;
   const [tab, setTab] = useState(null);
   const [cvvInput, setCvvInput] = useState("");
   const [cvvError, setCvvError] = useState(false);
@@ -42,7 +42,7 @@ const Payment = () => {
       }
     };
     getData();
-  }, [userId]);
+  });
 
   const handleTabSelect = (selectedTab) => {
     setTab(selectedTab);

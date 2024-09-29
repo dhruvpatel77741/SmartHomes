@@ -127,9 +127,11 @@ const Checkout = () => {
         await axios.post(`${baseURL}/transactions`, transactionData);
 
         window.alert(
-          `Order placed successfully. Your Order Id is ${orderResponse?.data?.order?.orderId} You can pick up your item from ${
-            selectedStore.city
-          } on ${new Date(Date.now() + 86400000).toISOString().split("T")[0]}.`
+          `Order placed successfully. Your Order Id is ${
+            orderResponse?.data?.order?.orderId
+          } You can pick up your item from ${selectedStore.city} on ${
+            new Date(Date.now() + 86400000).toISOString().split("T")[0]
+          }.`
         );
       } catch (error) {
         console.error("Error placing order or transaction:", error);
