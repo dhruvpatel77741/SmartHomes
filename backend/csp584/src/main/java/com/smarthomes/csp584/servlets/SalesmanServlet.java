@@ -1,44 +1,68 @@
 package com.smarthomes.csp584.servlets;
 
-import java.io.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import com.smarthomes.csp584.models.User;
+import com.smarthomes.csp584.utils.MySQLDataStoreUtilities;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "salesmanServlet", value = "/salesman")
 public class SalesmanServlet extends HttpServlet {
 
-    private String filePath;
-
-    public void init() {
-        // Store the file path in init() but load the content in doGet()
-        filePath = getServletContext().getRealPath("/resources/Users.json");
-    }
-
-    // Method to load users from the file
-    private JSONArray loadUsers() throws IOException {
-        String content = new String(Files.readAllBytes(Paths.get(filePath)));
-        return new JSONArray(content);
-    }
-
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        // Reload users every time a request is made
-        JSONArray users = loadUsers();
-        JSONArray salesmans = new JSONArray();
+        try {
+            List<User> salesmen = getSalesmenFromDatabase();
+            JSONArray salesmenJsonArray = new JSONArray();
+            for (User salesman : salesmen) {
+                JSONObject salesmanJson = new JSONObject();
+                salesmanJson.put("id", salesman.getId());
+                salesmanJson.put("username", salesman.getUsername());
+                salesmanJson.put("name", salesman.getName());
+                salesmanJson.put("userType", salesman.getUserType());
+                salesmenJsonArray.put(salesmanJson);
+            }
+            out.println(salesmenJsonArray.toString());
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.println(new JSONObject().put("error", "Error fetching salesmen data"));
+            e.printStackTrace();
+        }
+    }
 
-        for (int i = 0; i < users.length(); i++) {
-            JSONObject user = users.getJSONObject(i);
-            if ("Salesman".equals(user.getString("userType"))) {
-                salesmans.put(user);
+    private List<User> getSalesmenFromDatabase() throws Exception {
+        List<User> salesmen = new ArrayList<>();
+        try (Connection conn = MySQLDataStoreUtilities.getConnection();
+             PreparedStatement pst = conn.prepareStatement("SELECT id, username, name, userType FROM Users WHERE userType = ?")) {
+            pst.setString(1, "Salesman");
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    User user = new User(
+                            rs.getInt("id"),
+                            rs.getString("username"),
+                            null,
+                            rs.getString("name"),
+                            rs.getString("userType")
+                    );
+                    salesmen.add(user);
+                }
             }
         }
-
-        out.println(salesmans.toString());
+        return salesmen;
     }
 }

@@ -1,198 +1,204 @@
 package com.smarthomes.csp584.servlets;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import com.smarthomes.csp584.models.Cart;
+import com.smarthomes.csp584.utils.MySQLDataStoreUtilities;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @WebServlet(name = "CartManagementServlet", urlPatterns = {"/cart"})
 public class CartManagementServlet extends HttpServlet {
 
-    private JSONArray cart;
-    private String cartFilePath;
-
-    public void init() {
-        // Adjust the file path to point to the resources folder
-        cartFilePath = getServletContext().getRealPath("/resources/Cart.json");
-        loadCart();
-    }
-
-    private void loadCart() {
-        try {
-            String cartContent = new String(Files.readAllBytes(Paths.get(cartFilePath)));
-            cart = new JSONArray(cartContent);
-        } catch (IOException e) {
-            e.printStackTrace();
-            cart = new JSONArray(); // Initialize as empty if file read fails
-        }
-    }
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = request.getReader().readLine()) != null) {
-            sb.append(line);
-        }
-        JSONObject jsonBody = new JSONObject(sb.toString());
+        String requestBody = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
+        JSONObject requestBodyJson = new JSONObject(requestBody);
 
-        String action = jsonBody.getString("action");
-        String userId = jsonBody.getString("userId");
+        String action = requestBodyJson.getString("action");
+        int userId = requestBodyJson.getInt("userId");
 
-        if (userId == null || userId.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            out.println(new JSONObject().put("status", "error").put("message", "userId is required"));
-            return;
-        }
-
-        switch (action) {
-            case "addToCart":
-                handleAddToCart(jsonBody, response, out, userId);
-                break;
-            case "removeFromCart":
-                handleRemoveFromCart(jsonBody, response, out, userId);
-                break;
-            case "clearCart":
-                handleClearCart(response, out, userId);
-                break;
-            default:
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.println(new JSONObject().put("status", "error").put("message", "Invalid action"));
-                break;
-        }
-    }
-
-    private void handleAddToCart(JSONObject jsonBody, HttpServletResponse response, PrintWriter out, String userId) throws IOException {
         try {
-            String productId = jsonBody.optString("productId", null);
-            String productName = jsonBody.optString("productName", null);
-            if (productId == null || productName == null) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.println(new JSONObject().put("status", "error").put("message", "productId and productName are required"));
-                return;
-            }
-
-            double productPrice = jsonBody.optDouble("productPrice", 0.0);
-            int quantity = jsonBody.optInt("quantity", 1);
-            boolean warrantyAdded = jsonBody.optBoolean("warrantyAdded", false);
-            double warrantyPrice = warrantyAdded ? jsonBody.optDouble("warrantyPrice", 0.0) : 0.0;
-
-            JSONArray accessoriesArray = jsonBody.optJSONArray("accessories");
-            if (accessoriesArray == null) {
-                accessoriesArray = new JSONArray();
-            }
-
-            double accessoriesPrice = 0.0;
-            for (int i = 0; i < accessoriesArray.length(); i++) {
-                JSONObject accessory = accessoriesArray.optJSONObject(i);
-                if (accessory != null) {
-                    accessoriesPrice += accessory.optDouble("price", 0.0);
-                }
-            }
-
-            double totalPrice = (productPrice * quantity) + warrantyPrice + accessoriesPrice;
-
-            JSONObject newItem = new JSONObject();
-            newItem.put("userId", userId);
-            newItem.put("productId", productId);
-            newItem.put("productName", productName);
-            newItem.put("quantity", quantity);
-            newItem.put("productPrice", productPrice);
-            newItem.put("warrantyAdded", warrantyAdded);
-            newItem.put("warrantyPrice", warrantyPrice);
-            newItem.put("accessories", accessoriesArray);
-            newItem.put("accessoriesPrice", accessoriesPrice);
-            newItem.put("totalPrice", totalPrice);
-
-            boolean productExists = false;
-            for (int i = 0; i < cart.length(); i++) {
-                JSONObject item = cart.getJSONObject(i);
-                if (item.getString("userId").equals(userId) && item.getString("productId").equals(productId)) {
-                    item.put("quantity", item.getInt("quantity") + quantity);
-                    item.put("totalPrice", (item.getDouble("productPrice") * item.getInt("quantity")) + item.getDouble("warrantyPrice") + item.getDouble("accessoriesPrice"));
-                    productExists = true;
+            switch (action) {
+                case "addToCart":
+                    handleAddToCart(requestBodyJson, userId, out);
                     break;
-                }
+                case "removeFromCart":
+                    handleRemoveFromCart(requestBodyJson, userId, out);
+                    break;
+                case "clearCart":
+                    handleClearCart(userId, out);
+                    break;
+                default:
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    out.println(new JSONObject().put("status", "error").put("message", "Invalid action"));
+                    break;
             }
-
-            if (!productExists) {
-                cart.put(newItem);
-            }
-
-            saveCart();
-            out.println(new JSONObject().put("status", "success").put("message", "Item added to cart"));
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.println(new JSONObject().put("status", "error").put("message", e.getMessage()));
+            e.printStackTrace();
         }
     }
 
-    private void handleRemoveFromCart(JSONObject jsonBody, HttpServletResponse response, PrintWriter out, String userId) throws IOException {
-        String productId = jsonBody.getString("productId");
-
-        for (int i = 0; i < cart.length(); i++) {
-            JSONObject item = cart.getJSONObject(i);
-            if (item.getString("userId").equals(userId) && item.getString("productId").equals(productId)) {
-                cart.remove(i);
-                break;
-            }
-        }
-
-        saveCart();
-        out.println(new JSONObject().put("status", "success").put("message", "Item removed from cart"));
-    }
-
-    private void handleClearCart(HttpServletResponse response, PrintWriter out, String userId) throws IOException {
-        JSONArray updatedCart = new JSONArray();
-        for (int i = 0; i < cart.length(); i++) {
-            JSONObject item = cart.getJSONObject(i);
-            if (!item.getString("userId").equals(userId)) {
-                updatedCart.put(item);
-            }
-        }
-        cart = updatedCart;
-
-        saveCart();
-        out.println(new JSONObject().put("status", "success").put("message", "Cart cleared for user " + userId));
-    }
-
-    private void saveCart() throws IOException {
-        try (FileWriter file = new FileWriter(cartFilePath)) {
-            file.write(cart.toString());
-        }
-    }
-
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-
-        String userId = request.getParameter("userId");
-        if (userId == null || userId.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            out.println(new JSONObject().put("status", "error").put("message", "userId is required"));
+    private void handleAddToCart(JSONObject jsonBody, int userId, PrintWriter out) throws SQLException {
+        String productId = jsonBody.optString("productId", null);
+        String productName = jsonBody.optString("productName", null);
+        if (productId == null || productName == null) {
+            out.println(new JSONObject().put("status", "error").put("message", "productId and productName are required"));
             return;
         }
 
-        JSONArray userCart = new JSONArray();
-        for (int i = 0; i < cart.length(); i++) {
-            JSONObject item = cart.getJSONObject(i);
-            if (item.getString("userId").equals(userId)) {
-                userCart.put(item);
-            }
+        double productPrice = jsonBody.optDouble("productPrice", 0.0);
+        int quantity = jsonBody.optInt("quantity", 1);
+        boolean warrantyAdded = jsonBody.optBoolean("warrantyAdded", false);
+        double warrantyPrice = warrantyAdded ? jsonBody.optDouble("warrantyPrice", 0.0) : 0.0;
+
+        JSONArray accessoriesArray = jsonBody.optJSONArray("accessories");
+        double accessoriesPrice = 0.0;
+        for (int i = 0; i < accessoriesArray.length(); i++) {
+            JSONObject accessory = accessoriesArray.optJSONObject(i);
+            accessoriesPrice += accessory != null ? accessory.optDouble("price", 0.0) : 0.0;
         }
 
-        out.println(userCart.toString());
+        double totalPrice = (productPrice * quantity) + warrantyPrice + accessoriesPrice;
+
+        Connection conn = null;
+        try {
+            conn = MySQLDataStoreUtilities.getConnection();
+
+            boolean productExists = false;
+            String selectQuery = "SELECT * FROM cart WHERE userId = ? AND productId = ?";
+            PreparedStatement selectStmt = conn.prepareStatement(selectQuery);
+            selectStmt.setInt(1, userId);
+            selectStmt.setString(2, productId);
+            ResultSet rs = selectStmt.executeQuery();
+
+            if (rs.next()) {
+                productExists = true;
+            }
+            rs.close();
+            selectStmt.close();
+
+            if (productExists) {
+                String updateQuery = "UPDATE cart SET quantity = quantity + ?, totalPrice = (productPrice * quantity) + warrantyPrice + accessoriesPrice WHERE userId = ? AND productId = ?";
+                PreparedStatement updateStmt = conn.prepareStatement(updateQuery);
+                updateStmt.setInt(1, quantity);
+                updateStmt.setInt(2, userId);
+                updateStmt.setString(3, productId);
+                updateStmt.executeUpdate();
+                updateStmt.close();
+            } else {
+                String insertQuery = "INSERT INTO cart (userId, productId, productName, productPrice, quantity, warrantyAdded, warrantyPrice, accessoriesPrice, totalPrice) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
+                insertStmt.setInt(1, userId);
+                insertStmt.setString(2, productId);
+                insertStmt.setString(3, productName);
+                insertStmt.setDouble(4, productPrice);
+                insertStmt.setInt(5, quantity);
+                insertStmt.setBoolean(6, warrantyAdded);
+                insertStmt.setDouble(7, warrantyPrice);
+                insertStmt.setDouble(8, accessoriesPrice);
+                insertStmt.setDouble(9, totalPrice);
+                insertStmt.executeUpdate();
+                insertStmt.close();
+            }
+
+            out.println(new JSONObject().put("status", "success").put("message", "Item added to cart"));
+
+        } finally {
+            MySQLDataStoreUtilities.closeConnection(conn);
+        }
+    }
+
+    private void handleRemoveFromCart(JSONObject jsonBody, int userId, PrintWriter out) throws SQLException {
+        String productId = jsonBody.getString("productId");
+
+        Connection conn = null;
+        try {
+            conn = MySQLDataStoreUtilities.getConnection();
+            String query = "DELETE FROM cart WHERE userId = ? AND productId = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, userId);
+            stmt.setString(2, productId);
+            stmt.executeUpdate();
+            stmt.close();
+
+            out.println(new JSONObject().put("status", "success").put("message", "Item removed from cart"));
+        } finally {
+            MySQLDataStoreUtilities.closeConnection(conn);
+        }
+    }
+
+    private void handleClearCart(int userId, PrintWriter out) throws SQLException {
+        Connection conn = null;
+        try {
+            conn = MySQLDataStoreUtilities.getConnection();
+            String query = "DELETE FROM cart WHERE userId = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, userId);
+            stmt.executeUpdate();
+            stmt.close();
+
+            out.println(new JSONObject().put("status", "success").put("message", "Cart cleared"));
+        } finally {
+            MySQLDataStoreUtilities.closeConnection(conn);
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        int userId = Integer.parseInt(request.getParameter("userId"));
+
+        Connection conn = null;
+        try {
+            conn = MySQLDataStoreUtilities.getConnection();
+            String query = "SELECT * FROM cart WHERE userId = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            JSONArray userCart = new JSONArray();
+            while (rs.next()) {
+                JSONObject item = new JSONObject();
+                item.put("userId", rs.getInt("userId"));
+                item.put("productId", rs.getString("productId"));
+                item.put("productName", rs.getString("productName"));
+                item.put("productPrice", rs.getDouble("productPrice"));
+                item.put("quantity", rs.getInt("quantity"));
+                item.put("warrantyAdded", rs.getBoolean("warrantyAdded"));
+                item.put("warrantyPrice", rs.getDouble("warrantyPrice"));
+                item.put("accessoriesPrice", rs.getDouble("accessoriesPrice"));
+                item.put("totalPrice", rs.getDouble("totalPrice"));
+
+                userCart.put(item);
+            }
+
+            out.println(userCart.toString());
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.println(new JSONObject().put("status", "error").put("message", e.getMessage()));
+            e.printStackTrace();
+        } finally {
+            MySQLDataStoreUtilities.closeConnection(conn);
+        }
     }
 }

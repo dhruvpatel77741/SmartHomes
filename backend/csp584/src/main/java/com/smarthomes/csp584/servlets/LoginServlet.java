@@ -1,34 +1,25 @@
 package com.smarthomes.csp584.servlets;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import com.smarthomes.csp584.models.User;
+import com.smarthomes.csp584.utils.MySQLDataStoreUtilities;
+import org.json.JSONObject;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 @WebServlet(name = "loginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
 
-    private JSONArray users;
-
-    public void init() {
-        try {
-            String filePath = getServletContext().getRealPath("/resources/Users.json");
-            String content = new String(Files.readAllBytes(Paths.get(filePath)));
-            users = new JSONArray(content);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
@@ -39,29 +30,55 @@ public class LoginServlet extends HttpServlet {
         String password = requestBodyJson.getString("password");
         String userType = requestBodyJson.getString("userType");
 
-        JSONObject matchedUser = null;
-        boolean typeMismatch = false;
+        User authenticatedUser = authenticateUser(username, password, userType);
 
-        for (int i = 0; i < users.length(); i++) {
-            JSONObject user = users.getJSONObject(i);
-            if (user.getString("username").equals(username) && user.getString("password").equals(password)) {
-                matchedUser = user;
-                if (!user.getString("userType").equals(userType)) {
-                    typeMismatch = true;
-                }
-                break;
-            }
-        }
-
-        if (matchedUser != null && !typeMismatch) {
+        if (authenticatedUser != null) {
             response.setStatus(HttpServletResponse.SC_OK);
-            out.println(new JSONObject().put("status", "success").put("user", matchedUser));
-        } else if (matchedUser != null && typeMismatch) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            out.println(new JSONObject().put("status", "error").put("message", "Usertype does not match"));
+            JSONObject userJson = new JSONObject();
+            userJson.put("id", authenticatedUser.getId());
+            userJson.put("username", authenticatedUser.getUsername());
+            userJson.put("name", authenticatedUser.getName());
+            userJson.put("userType", authenticatedUser.getUserType());
+
+            out.println(new JSONObject().put("status", "success").put("user", userJson));
         } else {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            out.println(new JSONObject().put("status", "error").put("message", "Invalid username or password"));
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            out.println(new JSONObject().put("status", "error").put("message", "Invalid username, password, or userType"));
         }
+    }
+
+    private User authenticateUser(String username, String password, String userType) {
+        Connection conn = null;
+
+        try {
+            conn = MySQLDataStoreUtilities.getConnection();
+            String query = "SELECT id, username, name, userType FROM Users WHERE username = ? AND password = ?";
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setString(1, username);
+            pst.setString(2, password);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                String dbUserType = rs.getString("userType");
+                if (dbUserType.equals(userType)) {
+                    return new User(
+                            rs.getInt("id"),
+                            rs.getString("username"),
+                            "",
+                            rs.getString("name"),
+                            rs.getString("userType")
+                    );
+                }
+            }
+
+            rs.close();
+            pst.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            MySQLDataStoreUtilities.closeConnection(conn);
+        }
+
+        return null;
     }
 }

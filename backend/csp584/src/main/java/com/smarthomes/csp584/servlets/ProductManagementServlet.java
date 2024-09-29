@@ -1,161 +1,237 @@
 package com.smarthomes.csp584.servlets;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import com.smarthomes.csp584.models.Accessory;
+import com.smarthomes.csp584.models.Product;
+import com.smarthomes.csp584.utils.MySQLDataStoreUtilities;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "productManagementServlet", value = "/manageProducts")
 public class ProductManagementServlet extends HttpServlet {
 
-    private JSONArray products;
-    private String filePath;
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        PrintWriter out = response.getWriter();
 
-    public void init() throws ServletException {
-        try {
-            // Adjust file path to use the resources folder instead of WEB-INF
-            filePath = getServletContext().getRealPath("/resources/Products.json");
-            String content = new String(Files.readAllBytes(Paths.get(filePath)));
-            products = new JSONArray(content);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new ServletException("Failed to load products");
+        List<Product> products = getAllProducts();
+        JSONArray productArray = new JSONArray();
+
+        for (Product product : products) {
+            JSONObject productJson = new JSONObject();
+            productJson.put("id", product.getId());
+            productJson.put("name", product.getName());
+            productJson.put("description", product.getDescription());
+            productJson.put("category", product.getCategory());
+            productJson.put("price", product.getPrice());
+            productJson.put("specialDiscount", product.isSpecialDiscount());
+            productJson.put("discountPrice", product.getDiscountPrice());
+            productJson.put("manufacturerRebate", product.isManufacturerRebate());
+            productJson.put("rebatePrice", product.getRebatePrice());
+            productJson.put("warranty", product.isWarranty());
+            productJson.put("warrantyPrice", product.getWarrantyPrice());
+            productJson.put("likes", product.getLikes());
+
+            JSONArray accessoriesArray = new JSONArray();
+            for (Accessory accessory : product.getAccessories()) {
+                JSONObject accessoryJson = new JSONObject();
+                accessoryJson.put("id", accessory.getId());
+                accessoryJson.put("name", accessory.getName());
+                accessoryJson.put("price", accessory.getPrice());
+                accessoriesArray.put(accessoryJson);
+            }
+            productJson.put("accessories", accessoriesArray);
+
+            productArray.put(productJson);
+        }
+
+        out.println(productArray.toString());
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        JSONObject requestJson = new JSONObject(request.getReader().lines().reduce("", (acc, actual) -> acc + actual));
+
+        try (Connection conn = MySQLDataStoreUtilities.getConnection()) {
+            String query = "INSERT INTO Products (name, description, category, price, specialDiscount, discountPrice, manufacturerRebate, rebatePrice, warranty, warrantyPrice, likes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setString(1, requestJson.getString("name"));
+            pst.setString(2, requestJson.getString("description"));
+            pst.setString(3, requestJson.getString("category"));
+            pst.setDouble(4, requestJson.getDouble("price"));
+            pst.setBoolean(5, requestJson.getBoolean("specialDiscount"));
+            pst.setDouble(6, requestJson.getDouble("discountPrice"));
+            pst.setBoolean(7, requestJson.getBoolean("manufacturerRebate"));
+            pst.setDouble(8, requestJson.getDouble("rebatePrice"));
+            pst.setBoolean(9, requestJson.getBoolean("warranty"));
+            pst.setDouble(10, requestJson.getDouble("warrantyPrice"));
+            pst.setInt(11, requestJson.getInt("likes"));
+
+            int result = pst.executeUpdate();
+            if (result > 0) {
+                out.println("{\"status\": \"success\", \"message\": \"Product added successfully\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.println("{\"status\": \"error\", \"message\": \"Failed to add product\"}");
+            }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.println("{\"status\": \"error\", \"message\": \"Error while adding product: " + e.getMessage() + "\"}");
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        handleRequest(request, response, "POST");
-    }
-
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        handleRequest(request, response, "PUT");
-    }
-
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        handleRequest(request, response, "DELETE");
-    }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        response.setStatus(HttpServletResponse.SC_OK);
-        out.println(products.toString());
+        JSONObject requestJson = new JSONObject(request.getReader().lines().collect(Collectors.joining()));
+
+        try (Connection conn = MySQLDataStoreUtilities.getConnection()) {
+            String query = "UPDATE Products SET name = ?, description = ?, category = ?, price = ?, specialDiscount = ?, discountPrice = ?, manufacturerRebate = ?, rebatePrice = ?, warranty = ?, warrantyPrice = ?, likes = ? WHERE id = ?";
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setString(1, requestJson.getString("name"));
+            pst.setString(2, requestJson.getString("description"));
+            pst.setString(3, requestJson.getString("category"));
+            pst.setDouble(4, requestJson.getDouble("price"));
+            pst.setBoolean(5, requestJson.getBoolean("specialDiscount"));
+            pst.setDouble(6, requestJson.getDouble("discountPrice"));
+            pst.setBoolean(7, requestJson.getBoolean("manufacturerRebate"));
+            pst.setDouble(8, requestJson.getDouble("rebatePrice"));
+            pst.setBoolean(9, requestJson.getBoolean("warranty"));
+            pst.setDouble(10, requestJson.getDouble("warrantyPrice"));
+            pst.setInt(11, requestJson.getInt("likes"));
+            pst.setInt(12, requestJson.getInt("id"));
+
+            int result = pst.executeUpdate();
+            if (result > 0) {
+                out.println("{\"status\": \"success\", \"message\": \"Product updated successfully\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                out.println("{\"status\": \"error\", \"message\": \"Product not found or update failed\"}");
+            }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.println("{\"status\": \"error\", \"message\": \"Error while updating product: " + e.getMessage() + "\"}");
+        }
     }
 
-    private void handleRequest(HttpServletRequest request, HttpServletResponse response, String method) throws IOException {
-        response.setContentType("application/json");
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
-        String requestBody = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
-
-        if (requestBody == null || requestBody.isEmpty()) {
+        String productIdParam = request.getParameter("id");
+        if (productIdParam == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            out.println(new JSONObject().put("status", "error").put("message", "Request body is missing"));
+            out.println("{\"status\": \"error\", \"message\": \"Product ID is required\"}");
             return;
         }
 
-        JSONObject requestBodyJson = new JSONObject(requestBody);
-
-        switch (method) {
-            case "POST":
-                addProduct(requestBodyJson, response, out);
-                break;
-            case "PUT":
-                updateProduct(requestBodyJson, response, out);
-                break;
-            case "DELETE":
-                deleteProduct(requestBodyJson, response, out);
-                break;
-            default:
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.println(new JSONObject().put("status", "error").put("message", "Invalid request method"));
-                break;
+        int productId;
+        try {
+            productId = Integer.parseInt(productIdParam);
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.println("{\"status\": \"error\", \"message\": \"Invalid product ID format\"}");
+            return;
         }
-    }
 
-    private void addProduct(JSONObject product, HttpServletResponse response, PrintWriter out) throws IOException {
-        int newId = getNextProductId();
-        product.put("id", newId);
-        products.put(product);
-        saveProductsToFile();
+        try (Connection conn = MySQLDataStoreUtilities.getConnection()) {
+            String query = "DELETE FROM Products WHERE id = ?";
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setInt(1, productId);
 
-        response.setStatus(HttpServletResponse.SC_CREATED);
-        out.println(new JSONObject().put("status", "success").put("message", "Product added successfully"));
-    }
-
-    private int getNextProductId() {
-        int maxId = 0;
-
-        for (int i = 0; i < products.length(); i++) {
-            JSONObject existingProduct = products.getJSONObject(i);
-            if (existingProduct.has("id")) {
-                int currentId = existingProduct.getInt("id");
-                if (currentId > maxId) {
-                    maxId = currentId;
-                }
+            int result = pst.executeUpdate();
+            if (result > 0) {
+                out.println("{\"status\": \"success\", \"message\": \"Product deleted successfully\"}");
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                out.println("{\"status\": \"error\", \"message\": \"Product not found or deletion failed\"}");
             }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.println("{\"status\": \"error\", \"message\": \"Error while deleting product: " + e.getMessage() + "\"}");
+            e.printStackTrace(out);
         }
-
-        return maxId + 1;
     }
 
-    private void updateProduct(JSONObject product, HttpServletResponse response, PrintWriter out) throws IOException {
-        boolean productFound = false;
+    private List<Product> getAllProducts() {
+        List<Product> products = new ArrayList<>();
+        String query = "SELECT * FROM Products";
 
-        for (int i = 0; i < products.length(); i++) {
-            JSONObject existingProduct = products.getJSONObject(i);
-            if (existingProduct.getInt("id") == product.getInt("id")) {
-                products.put(i, product);
-                productFound = true;
-                break;
+        try (Connection conn = MySQLDataStoreUtilities.getConnection();
+             PreparedStatement pst = conn.prepareStatement(query);
+             ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                Product product = new Product(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getString("category"),
+                        rs.getDouble("price"),
+                        rs.getBoolean("specialDiscount"),
+                        rs.getDouble("discountPrice"),
+                        rs.getBoolean("manufacturerRebate"),
+                        rs.getDouble("rebatePrice"),
+                        rs.getBoolean("warranty"),
+                        rs.getDouble("warrantyPrice"),
+                        rs.getInt("likes"),
+                        getAccessoriesByProductId(rs.getInt("id"))
+                );
+                products.add(product);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        if (productFound) {
-            saveProductsToFile();
-            response.setStatus(HttpServletResponse.SC_OK);
-            out.println(new JSONObject().put("status", "success").put("message", "Product updated successfully"));
-        } else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            out.println(new JSONObject().put("status", "error").put("message", "Product not found"));
-        }
+        return products;
     }
 
-    private void deleteProduct(JSONObject product, HttpServletResponse response, PrintWriter out) throws IOException {
-        boolean productFound = false;
 
-        for (int i = 0; i < products.length(); i++) {
-            JSONObject existingProduct = products.getJSONObject(i);
-            if (existingProduct.getInt("id") == product.getInt("id")) {
-                products.remove(i);
-                productFound = true;
-                break;
+    private List<Accessory> getAccessoriesByProductId(int productId) {
+        List<Accessory> accessories = new ArrayList<>();
+        Connection conn = null;
+
+        try {
+            conn = MySQLDataStoreUtilities.getConnection();
+            String query = "SELECT * FROM Accessories WHERE product_id = ?";
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setInt(1, productId);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Accessory accessory = new Accessory(
+                        rs.getInt("id"),
+                        rs.getInt("product_id"),
+                        rs.getString("accessory_name"),
+                        rs.getDouble("accessory_price")
+                );
+                accessories.add(accessory);
             }
+
+            pst.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            MySQLDataStoreUtilities.closeConnection(conn);
         }
 
-        if (productFound) {
-            saveProductsToFile();
-            response.setStatus(HttpServletResponse.SC_OK);
-            out.println(new JSONObject().put("status", "success").put("message", "Product deleted successfully"));
-        } else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            out.println(new JSONObject().put("status", "error").put("message", "Product not found"));
-        }
-    }
-
-    private void saveProductsToFile() throws IOException {
-        try (FileWriter file = new FileWriter(filePath)) {
-            file.write(products.toString(4));
-        }
+        return accessories;
     }
 }

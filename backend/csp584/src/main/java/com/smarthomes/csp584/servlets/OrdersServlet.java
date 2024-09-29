@@ -1,63 +1,26 @@
 package com.smarthomes.csp584.servlets;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.UUID;
+import com.smarthomes.csp584.utils.MySQLDataStoreUtilities;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.UUID;
 
 @WebServlet(name = "ordersServlet", value = "/orders")
 public class OrdersServlet extends HttpServlet {
 
-    private JSONArray orders;
-    private JSONArray users;
-
-    public void init() {
-        loadOrders();
-        loadUsers();
-    }
-
-    private void loadOrders() {
-        try {
-            String filePath = getServletContext().getRealPath("/resources/Orders.json");
-            String content = new String(Files.readAllBytes(Paths.get(filePath)));
-            orders = new JSONArray(content);
-        } catch (IOException e) {
-            e.printStackTrace();
-            orders = new JSONArray();
-        }
-    }
-
-    private void loadUsers() {
-        try {
-            String filePath = getServletContext().getRealPath("/resources/Users.json");
-            String content = new String(Files.readAllBytes(Paths.get(filePath)));
-            users = new JSONArray(content);
-        } catch (IOException e) {
-            e.printStackTrace();
-            users = new JSONArray();
-        }
-    }
-
-    private String getUsername(int userId) {
-        for (int i = 0; i < users.length(); i++) {
-            JSONObject user = users.getJSONObject(i);
-            if (user.getInt("_id") == userId) {
-                return user.getString("name");
-            }
-        }
-        return "Unknown";
-    }
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
@@ -65,79 +28,147 @@ public class OrdersServlet extends HttpServlet {
         JSONObject requestBodyJson = new JSONObject(requestBody);
 
         int userId = requestBodyJson.getInt("userId");
-        JSONObject orderData = requestBodyJson.getJSONObject("orderData");
-        String checkout = requestBodyJson.getString("checkout");
-        String paymentMode = requestBodyJson.getString("paymentMode");
-        JSONObject paymentDetails = requestBodyJson.getJSONObject("paymentDetails");
-        JSONObject address = requestBodyJson.getJSONObject("address");
-        String status = "Order Placed";
+        int productId = requestBodyJson.getInt("productId");
+        int quantity = requestBodyJson.getInt("quantity");
+        double price = requestBodyJson.getDouble("price");
+        double shippingCost = requestBodyJson.optDouble("shippingCost", 0.0);
+        String orderDate = requestBodyJson.getString("orderDate");
+        String shipDate = requestBodyJson.getString("shipDate");
+        String deliveryMethod = requestBodyJson.getString("deliveryMethod");
+        int storeId = requestBodyJson.getInt("storeId");
+        String shippingAddress = requestBodyJson.getString("shippingAddress");
+        String status = requestBodyJson.getString("status");
+        double discount = requestBodyJson.optDouble("discount", 0.0);
 
-        String orderId = UUID.randomUUID().toString();
-
-        JSONObject newOrder = new JSONObject();
-        newOrder.put("orderId", orderId);
-        newOrder.put("userId", userId);
-        newOrder.put("orderData", orderData);
-        newOrder.put("checkout", checkout);
-        newOrder.put("paymentMode", paymentMode);
-        newOrder.put("paymentDetails", paymentDetails);
-        newOrder.put("address", address);
-        newOrder.put("status", status);
-
-        orders.put(newOrder);
-
+        Connection conn = null;
         try {
-            String filePath = getServletContext().getRealPath("/resources/Orders.json");
-            Files.write(Paths.get(filePath), orders.toString().getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.println(new JSONObject().put("status", "error").put("message", "Failed to place order"));
-            return;
-        }
+            conn = MySQLDataStoreUtilities.getConnection();
 
-        response.setStatus(HttpServletResponse.SC_OK);
-        out.println(new JSONObject().put("status", "success").put("message", "Order placed successfully").put("orderId", orderId));
+            String query = "INSERT INTO orders (userId, productId, quantity, price, shippingCost, orderDate, shipDate, deliveryMethod, storeId, shippingAddress, status, discount) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            pst.setInt(1, userId);
+            pst.setInt(2, productId);
+            pst.setInt(3, quantity);
+            pst.setDouble(4, price);
+            pst.setDouble(5, shippingCost);
+            pst.setString(6, orderDate);
+            pst.setString(7, shipDate);
+            pst.setString(8, deliveryMethod);
+            pst.setInt(9, storeId);
+            pst.setString(10, shippingAddress);
+            pst.setString(11, status);
+            pst.setDouble(12, discount);
+
+            int result = pst.executeUpdate();
+
+            if (result > 0) {
+                ResultSet rs = pst.getGeneratedKeys();
+                if (rs.next()) {
+                    int orderId = rs.getInt(1);
+
+                    query = "SELECT * FROM orders WHERE orderId = ?";
+                    pst = conn.prepareStatement(query);
+                    pst.setInt(1, orderId);
+
+                    rs = pst.executeQuery();
+
+                    if (rs.next()) {
+                        JSONObject orderJson = new JSONObject();
+                        orderJson.put("orderId", rs.getInt("orderId"));
+                        orderJson.put("userId", rs.getInt("userId"));
+                        orderJson.put("productId", rs.getInt("productId"));
+                        orderJson.put("quantity", rs.getInt("quantity"));
+                        orderJson.put("price", rs.getDouble("price"));
+                        orderJson.put("shippingCost", rs.getDouble("shippingCost"));
+                        orderJson.put("total", rs.getDouble("total"));
+                        orderJson.put("orderDate", rs.getString("orderDate"));
+                        orderJson.put("shipDate", rs.getString("shipDate"));
+                        orderJson.put("deliveryMethod", rs.getString("deliveryMethod"));
+                        orderJson.put("storeId", rs.getInt("storeId"));
+                        orderJson.put("shippingAddress", rs.getString("shippingAddress"));
+                        orderJson.put("status", rs.getString("status"));
+                        orderJson.put("discount", rs.getDouble("discount"));
+
+                        out.println(new JSONObject().put("status", "success").put("order", orderJson));
+                    }
+                }
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.println(new JSONObject().put("status", "error").put("message", "Failed to place order"));
+            }
+            pst.close();
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.println(new JSONObject().put("status", "error").put("message", e.getMessage()));
+            e.printStackTrace();
+        } finally {
+            MySQLDataStoreUtilities.closeConnection(conn);
+        }
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
         String userIdParam = request.getParameter("userId");
+        Connection conn = null;
 
-        if (userIdParam != null) {
-            int userId = Integer.parseInt(userIdParam);
-            JSONArray userOrders = new JSONArray();
-
-            for (int i = 0; i < orders.length(); i++) {
-                JSONObject order = orders.getJSONObject(i);
-                if (order.getInt("userId") == userId) {
-                    order.put("username", getUsername(userId));
-                    userOrders.put(order);
-                }
-            }
-
-            if (userOrders.length() > 0) {
-                response.setStatus(HttpServletResponse.SC_OK);
-                out.println(new JSONObject().put("status", "success").put("orders", userOrders));
+        try {
+            conn = MySQLDataStoreUtilities.getConnection();
+            String query;
+            PreparedStatement pst;
+            if (userIdParam != null) {
+                int userId = Integer.parseInt(userIdParam);
+                query = "SELECT * FROM orders WHERE userId = ?";
+                pst = conn.prepareStatement(query);
+                pst.setInt(1, userId);
             } else {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                out.println(new JSONObject().put("status", "error").put("message", "No orders found for the user"));
-            }
-        } else {
-            for (int i = 0; i < orders.length(); i++) {
-                JSONObject order = orders.getJSONObject(i);
-                int userId = order.getInt("userId");
-                order.put("username", getUsername(userId));
+                query = "SELECT * FROM orders";
+                pst = conn.prepareStatement(query);
             }
 
-            response.setStatus(HttpServletResponse.SC_OK);
-            out.println(new JSONObject().put("status", "success").put("orders", orders));
+            ResultSet rs = pst.executeQuery();
+            JSONArray ordersArray = new JSONArray();
+
+            while (rs.next()) {
+                JSONObject orderJson = new JSONObject();
+                orderJson.put("orderId", rs.getString("orderId"));
+                orderJson.put("userId", rs.getInt("userId"));
+                orderJson.put("productId", rs.getInt("productId"));
+                orderJson.put("quantity", rs.getInt("quantity"));
+                orderJson.put("price", rs.getDouble("price"));
+                orderJson.put("shippingCost", rs.getDouble("shippingCost"));
+                orderJson.put("total", rs.getDouble("total"));
+                orderJson.put("orderDate", rs.getString("orderDate"));
+                orderJson.put("shipDate", rs.getString("shipDate"));
+                orderJson.put("deliveryMethod", rs.getString("deliveryMethod"));
+                orderJson.put("storeId", rs.getInt("storeId"));
+                orderJson.put("shippingAddress", rs.getString("shippingAddress"));
+                orderJson.put("status", rs.getString("status"));
+                orderJson.put("discount", rs.getDouble("discount"));
+                ordersArray.put(orderJson);
+            }
+
+            out.println(new JSONObject().put("status", "success").put("orders", ordersArray));
+            rs.close();
+            pst.close();
+
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.println(new JSONObject().put("status", "error").put("message", e.getMessage()));
+            e.printStackTrace();
+        } finally {
+            MySQLDataStoreUtilities.closeConnection(conn);
         }
     }
 
-    public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
@@ -147,68 +178,63 @@ public class OrdersServlet extends HttpServlet {
         String orderId = requestBodyJson.getString("orderId");
         String newStatus = requestBodyJson.getString("status");
 
-        boolean orderFound = false;
+        Connection conn = null;
+        try {
+            conn = MySQLDataStoreUtilities.getConnection();
+            String query = "UPDATE orders SET status = ? WHERE orderId = ?";
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setString(1, newStatus);
+            pst.setString(2, orderId);
 
-        for (int i = 0; i < orders.length(); i++) {
-            JSONObject order = orders.getJSONObject(i);
-            if (order.getString("orderId").equals(orderId)) {
-                order.put("status", newStatus);
-                orderFound = true;
-                break;
-            }
-        }
+            int result = pst.executeUpdate();
 
-        if (orderFound) {
-            try {
-                String filePath = getServletContext().getRealPath("/resources/Orders.json");
-                Files.write(Paths.get(filePath), orders.toString().getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                out.println(new JSONObject().put("status", "error").put("message", "Failed to update order status"));
-                return;
+            if (result > 0) {
+                out.println(new JSONObject().put("status", "success").put("message", "Order status updated successfully"));
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                out.println(new JSONObject().put("status", "error").put("message", "Order not found"));
             }
 
-            response.setStatus(HttpServletResponse.SC_OK);
-            out.println(new JSONObject().put("status", "success").put("message", "Order status updated successfully"));
-        } else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            out.println(new JSONObject().put("status", "error").put("message", "Order not found"));
+            pst.close();
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.println(new JSONObject().put("status", "error").put("message", e.getMessage()));
+            e.printStackTrace();
+        } finally {
+            MySQLDataStoreUtilities.closeConnection(conn);
         }
     }
 
-    public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
         String orderId = request.getParameter("orderId");
-        boolean orderFound = false;
 
-        for (int i = 0; i < orders.length(); i++) {
-            JSONObject order = orders.getJSONObject(i);
-            if (order.getString("orderId").equals(orderId)) {
-                orders.remove(i);
-                orderFound = true;
-                break;
-            }
-        }
+        Connection conn = null;
+        try {
+            conn = MySQLDataStoreUtilities.getConnection();
+            String query = "DELETE FROM orders WHERE orderId = ?";
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setString(1, orderId);
 
-        if (orderFound) {
-            try {
-                String filePath = getServletContext().getRealPath("/resources/Orders.json");
-                Files.write(Paths.get(filePath), orders.toString().getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                out.println(new JSONObject().put("status", "error").put("message", "Failed to cancel order"));
-                return;
+            int result = pst.executeUpdate();
+
+            if (result > 0) {
+                out.println(new JSONObject().put("status", "success").put("message", "Order deleted successfully"));
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                out.println(new JSONObject().put("status", "error").put("message", "Order not found"));
             }
 
-            response.setStatus(HttpServletResponse.SC_OK);
-            out.println(new JSONObject().put("status", "success").put("message", "Order canceled successfully"));
-        } else {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            out.println(new JSONObject().put("status", "error").put("message", "Order not found"));
+            pst.close();
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.println(new JSONObject().put("status", "error").put("message", e.getMessage()));
+            e.printStackTrace();
+        } finally {
+            MySQLDataStoreUtilities.closeConnection(conn);
         }
     }
 }
