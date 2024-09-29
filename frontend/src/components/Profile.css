@@ -1,0 +1,87 @@
+/* Profile container styles */
+.profile-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Profile heading */
+.profile-container h2 {
+  text-align: center;
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Form label styles */
+.profile-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #555;
+  font-weight: bold;
+}
+
+/* Input field styles */
+.profile-form input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.profile-form input[type="text"]:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* Button styles */
+.profile-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.profile-form button:hover {
+  background-color: #45a049;
+}
+
+/* Disabled input styling */
+.profile-form input:disabled {
+  background-color: #e9e9e9;
+  color: #888;
+  cursor: not-allowed;
+}
+
+/* Edit button */
+.profile-form button.profile-edit-button {
+  background-color: #007bff;
+}
+
+.profile-form button.profile-edit-button:hover {
+  background-color: #0056b3;
+}
+
+/* Save button */
+.profile-form button.profile-save-button {
+  background-color: #28a745;
+}
+
+.profile-form button.profile-save-button:hover {
+  background-color: #218838;
+}

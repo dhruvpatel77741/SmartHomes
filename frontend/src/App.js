@@ -11,6 +11,7 @@ import Checkout from "./components/Checkout";
 import Payment from "./components/Payment";
 import PrivateRoute from "./components/PrivateRoute";
 import OrdersList from "./components/OrdersList";
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -87,6 +88,14 @@ function App() {
         element={
           <PrivateRoute>
             <OrdersList />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <PrivateRoute>
+            <Profile />
           </PrivateRoute>
         }
       />

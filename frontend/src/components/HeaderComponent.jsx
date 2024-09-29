@@ -23,7 +23,14 @@ const HeaderComponent = () => {
             navigate("/cart");
           }}
         />
-        <button className="profile-button">{NameInitials()}</button>
+        <button
+          className="profile-button"
+          onClick={() => {
+            navigate("/profile");
+          }}
+        >
+          {NameInitials()}
+        </button>
       </div>
     </div>
   );
