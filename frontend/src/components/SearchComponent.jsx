@@ -20,13 +20,13 @@ const SearchComponent = ({ data, setFilteredData }) => {
         const filteredItems = data.filter((item) =>
           response.data.includes(item.name)
         );
-        setFilteredData(filteredItems); // Filter products based on search results
+        setFilteredData(filteredItems);
       } catch (error) {
         console.error("Error fetching suggestions:", error);
       }
     } else {
       setSuggestions([]);
-      setFilteredData(data); // Reset to all products when search is cleared
+      setFilteredData(data);
     }
   };
 

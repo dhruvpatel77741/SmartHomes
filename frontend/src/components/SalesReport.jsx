@@ -25,7 +25,6 @@ const SalesReport = () => {
   const productSales = salesData.productSales || [];
   const dailySales = salesData.dailySales || [];
 
-  // Prepare data for bar chart
   const barChartData = [
     ["Product Name", "Total Sales"],
     ...productSales.map((item) => [item.name, item.totalSales || 0]),
@@ -53,14 +52,12 @@ const SalesReport = () => {
             <b>Sales Report</b>
           </div>
 
-          {/* Navigation buttons */}
           <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
             <button className={`filter-btn ${view === "allSales" ? "active" : ""}`} onClick={() => setView("allSales")}>All Product Sales</button>
             <button className={`filter-btn ${view === "barChart" ? "active" : ""}`} onClick={() => setView("barChart")}>Bar Chart</button>
             <button className={`filter-btn ${view === "dailySales" ? "active" : ""}`} onClick={() => setView("dailySales")}>Daily Sales</button>
           </div>
 
-          {/* Conditional rendering based on selected view */}
           {view === "allSales" && (
             <table
               style={{

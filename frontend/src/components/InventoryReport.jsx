@@ -38,13 +38,11 @@ const InventoryReport = () => {
     vAxis: {
       title: "Product Name",
     },
-    bars: 'horizontal',  // Required for horizontal bars.
+    bars: 'horizontal',
   };
 
-  // Filter products with discounts
   const onSaleProducts = inventoryData.filter((item) => item.specialDiscount === 1);
 
-  // Filter products with manufacturer rebates
   const rebateProducts = inventoryData.filter((item) => item.manufacturerRebate === 1);
 
   return (
@@ -56,7 +54,6 @@ const InventoryReport = () => {
             <b>Inventory Report</b>
           </div>
 
-          {/* Navigation buttons */}
           <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
             <button className={`filter-btn ${
                 view === "allProducts" ? "active" : ""
@@ -72,7 +69,6 @@ const InventoryReport = () => {
               }`} onClick={() => setView("rebates")}>Products with Rebates</button>
           </div>
 
-          {/* Conditional rendering based on selected view */}
           {view === "allProducts" && (
             <table
               style={{

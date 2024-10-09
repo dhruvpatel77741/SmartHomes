@@ -106,7 +106,6 @@ const Dashboard = () => {
       <div className="main-part-ratailer">
         <HeaderComponent />
         
-        {/* Show the search bar only for All Products */}
         {selectedCategory === "All" && (
           <SearchComponent data={data} setFilteredData={setFilteredData} />
         )}
