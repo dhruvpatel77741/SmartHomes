@@ -17,6 +17,8 @@ const Aside = () => {
     location.pathname === "/salesman-list";
   const isProductListActive = location.pathname === "/product-list";
   const isOrderListActive = location.pathname === "/order-list";
+  const isInventoryActive = location.pathname === "/inventory-report";
+  const isSalesActive = location.pathname === "/sales-report";
 
   return (
     <div className="left-panel">
@@ -91,29 +93,83 @@ const Aside = () => {
           </button>
         ) : null}
         {userType === "StoreManager" ? (
-          <button
-            className={`left-part ${isProductListActive ? "active" : ""}`}
-            style={{ border: "none" }}
-            onClick={() => {
-              navigate("/product-list");
-            }}
-          >
-            <div className="left-img">
-              <img
-                src={`${image}/Assets/LeftPanel/teams.svg`}
-                alt=""
-                className={`default-image ${isProductListActive ? "hide" : ""}`}
-              />
-              <img
-                src={`${image}/Assets/LeftPanel/teams-white.svg`}
-                alt=""
-                className={`selected-image ${
-                  isProductListActive ? "" : "hide"
-                }`}
-              />
-            </div>
-            <div className="left-text">Products</div>
-          </button>
+          <>
+            <button
+              className={`left-part ${isProductListActive ? "active" : ""}`}
+              style={{ border: "none" }}
+              onClick={() => {
+                navigate("/product-list");
+              }}
+            >
+              <div className="left-img">
+                <img
+                  src={`${image}/Assets/LeftPanel/teams.svg`}
+                  alt=""
+                  className={`default-image ${
+                    isProductListActive ? "hide" : ""
+                  }`}
+                />
+                <img
+                  src={`${image}/Assets/LeftPanel/teams-white.svg`}
+                  alt=""
+                  className={`selected-image ${
+                    isProductListActive ? "" : "hide"
+                  }`}
+                />
+              </div>
+              <div className="left-text">Products</div>
+            </button>
+            <button
+              className={`left-part ${isInventoryActive ? "active" : ""}`}
+              style={{ border: "none" }}
+              onClick={() => {
+                navigate("/inventory-report");
+              }}
+            >
+              <div className="left-img">
+                <img
+                  src={`${image}/Assets/LeftPanel/teams.svg`}
+                  alt=""
+                  className={`default-image ${
+                    isInventoryActive ? "hide" : ""
+                  }`}
+                />
+                <img
+                  src={`${image}/Assets/LeftPanel/teams-white.svg`}
+                  alt=""
+                  className={`selected-image ${
+                    isInventoryActive ? "" : "hide"
+                  }`}
+                />
+              </div>
+              <div className="left-text">Inventory Report</div>
+            </button>
+            <button
+              className={`left-part ${isSalesActive ? "active" : ""}`}
+              style={{ border: "none" }}
+              onClick={() => {
+                navigate("/sales-report");
+              }}
+            >
+              <div className="left-img">
+                <img
+                  src={`${image}/Assets/LeftPanel/teams.svg`}
+                  alt=""
+                  className={`default-image ${
+                    isSalesActive ? "hide" : ""
+                  }`}
+                />
+                <img
+                  src={`${image}/Assets/LeftPanel/teams-white.svg`}
+                  alt=""
+                  className={`selected-image ${
+                    isSalesActive ? "" : "hide"
+                  }`}
+                />
+              </div>
+              <div className="left-text">Sales Report</div>
+            </button>
+          </>
         ) : null}
 
         <button

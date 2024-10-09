@@ -12,13 +12,30 @@ import Payment from "./components/Payment";
 import PrivateRoute from "./components/PrivateRoute";
 import OrdersList from "./components/OrdersList";
 import Profile from "./components/Profile";
+import InventoryReport from "./components/InventoryReport";
+import SalesReport from "./components/SalesReport";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
-
+      <Route
+        path="/inventory-report"
+        element={
+          <PrivateRoute>
+            <InventoryReport />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/sales-report"
+        element={
+          <PrivateRoute>
+            <SalesReport />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/dashboard"
         element={

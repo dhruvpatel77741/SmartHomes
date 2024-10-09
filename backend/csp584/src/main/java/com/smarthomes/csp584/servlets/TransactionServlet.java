@@ -47,9 +47,9 @@ public class TransactionServlet extends HttpServlet {
         try {
             conn = MySQLDataStoreUtilities.getConnection();
 
-            String query = "INSERT INTO transactions (orderId, userId, customerName, shippingAddress, creditCardNumber, transactionDate, transactionAmount, paymentStatus, productId, category, quantity, shippingCost, discount, storeAddress) " +
+            String insertQuery = "INSERT INTO transactions (orderId, userId, customerName, shippingAddress, creditCardNumber, transactionDate, transactionAmount, paymentStatus, productId, category, quantity, shippingCost, discount, storeAddress) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement pst = conn.prepareStatement(query);
+            PreparedStatement pst = conn.prepareStatement(insertQuery);
             pst.setInt(1, orderId);
             pst.setInt(2, userId);
             pst.setString(3, customerName);
@@ -68,7 +68,24 @@ public class TransactionServlet extends HttpServlet {
             int result = pst.executeUpdate();
 
             if (result > 0) {
-                out.println(new JSONObject().put("status", "success").put("message", "Transaction recorded successfully"));
+                if (paymentStatus.equalsIgnoreCase("completed")) {
+                    // Query to reduce the availableItems in the products table
+                    String updateProductQuery = "UPDATE products SET availableItems = availableItems - ? WHERE id = ?";
+                    PreparedStatement updatePst = conn.prepareStatement(updateProductQuery);
+                    updatePst.setInt(1, quantity);
+                    updatePst.setInt(2, productId);
+                    int updateResult = updatePst.executeUpdate();
+
+                    if (updateResult > 0) {
+                        out.println(new JSONObject().put("status", "success").put("message", "Transaction recorded and product stock updated successfully"));
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                        out.println(new JSONObject().put("status", "error").put("message", "Failed to update product stock"));
+                    }
+                    updatePst.close();
+                } else {
+                    out.println(new JSONObject().put("status", "success").put("message", "Transaction recorded successfully"));
+                }
             } else {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 out.println(new JSONObject().put("status", "error").put("message", "Failed to record transaction"));

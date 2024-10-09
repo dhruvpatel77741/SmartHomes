@@ -4,6 +4,7 @@ import Aside from "./Aside";
 import HeaderComponent from "./HeaderComponent";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import SearchComponent from "./SearchComponent";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
@@ -28,7 +29,6 @@ const Dashboard = () => {
       const trendingProducts = trendingResp.data;
 
       setData(data);
-      console.log(data);
 
       setTrendingData({
         topLikedProducts: trendingProducts.topLikedProducts,
@@ -105,6 +105,11 @@ const Dashboard = () => {
       <Aside />
       <div className="main-part-ratailer">
         <HeaderComponent />
+        
+        {/* Show the search bar only for All Products */}
+        {selectedCategory === "All" && (
+          <SearchComponent data={data} setFilteredData={setFilteredData} />
+        )}
 
         <div className="filter-container">
           {categories.map((category) => (
