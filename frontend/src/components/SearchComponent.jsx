@@ -33,6 +33,9 @@ const SearchComponent = ({ data, setFilteredData }) => {
   const handleSuggestionClick = (suggestion) => {
     setQuery(suggestion);
     setSuggestions([]);
+
+    const filteredItems = data.filter((item) => item.name === suggestion);
+    setFilteredData(filteredItems);
   };
 
   return (

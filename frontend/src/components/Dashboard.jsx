@@ -18,6 +18,7 @@ const Dashboard = () => {
     topSoldProducts: [],
     topZipProducts: [],
   });
+  console.log(data);
 
   const getData = async () => {
     let apiUrl = `${baseURL}/manageProducts`;

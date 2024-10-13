@@ -108,7 +108,6 @@ const Payment = () => {
         status: "Order Placed",
         discount: cartItems[0]?.warrantyAdded ? cartItems[0]?.warrantyPrice : 0,
       };
-      console.log(orderData);
       try {
         const orderResponse = await axios.post(`${baseURL}/orders`, orderData);
 
@@ -120,7 +119,7 @@ const Payment = () => {
           creditCardNumber: "",
           transactionDate: new Date().toISOString().split("T")[0],
           transactionAmount: totalAmount,
-          paymentStatus: "Pending",
+          paymentStatus: "Completed",
           productId: cartItems[0]?.productId,
           category: "Smart Doorbells",
           quantity: cartItems[0]?.quantity,
