@@ -19,6 +19,7 @@ const Aside = () => {
   const isOrderListActive = location.pathname === "/order-list";
   const isInventoryActive = location.pathname === "/inventory-report";
   const isSalesActive = location.pathname === "/sales-report";
+  const isCustomerService = location.pathname === "/customer-service";
 
   return (
     <div className="left-panel">
@@ -130,9 +131,7 @@ const Aside = () => {
                 <img
                   src={`${image}/Assets/LeftPanel/teams.svg`}
                   alt=""
-                  className={`default-image ${
-                    isInventoryActive ? "hide" : ""
-                  }`}
+                  className={`default-image ${isInventoryActive ? "hide" : ""}`}
                 />
                 <img
                   src={`${image}/Assets/LeftPanel/teams-white.svg`}
@@ -155,16 +154,12 @@ const Aside = () => {
                 <img
                   src={`${image}/Assets/LeftPanel/teams.svg`}
                   alt=""
-                  className={`default-image ${
-                    isSalesActive ? "hide" : ""
-                  }`}
+                  className={`default-image ${isSalesActive ? "hide" : ""}`}
                 />
                 <img
                   src={`${image}/Assets/LeftPanel/teams-white.svg`}
                   alt=""
-                  className={`selected-image ${
-                    isSalesActive ? "" : "hide"
-                  }`}
+                  className={`selected-image ${isSalesActive ? "" : "hide"}`}
                 />
               </div>
               <div className="left-text">Sales Report</div>
@@ -192,6 +187,28 @@ const Aside = () => {
             />
           </div>
           <div className="left-text">Orders</div>
+        </button>
+
+        <button
+          className={`left-part ${isCustomerService ? "active" : ""}`}
+          style={{ border: "none" }}
+          onClick={() => {
+            navigate("/customer-service");
+          }}
+        >
+          <div className="left-img">
+            <img
+              src={`${image}/Assets/LeftPanel/teams.svg`}
+              alt=""
+              className={`default-image ${isCustomerService ? "hide" : ""}`}
+            />
+            <img
+              src={`${image}/Assets/LeftPanel/teams-white.svg`}
+              alt=""
+              className={`selected-image ${isCustomerService ? "" : "hide"}`}
+            />
+          </div>
+          <div className="left-text">Customer Service</div>
         </button>
 
         <button

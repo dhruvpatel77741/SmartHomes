@@ -14,6 +14,7 @@ import OrdersList from "./components/OrdersList";
 import Profile from "./components/Profile";
 import InventoryReport from "./components/InventoryReport";
 import SalesReport from "./components/SalesReport";
+import CustomerService from "./components/CustomerService";
 
 function App() {
   return (
@@ -113,6 +114,14 @@ function App() {
         element={
           <PrivateRoute>
             <Profile />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/customer-service"
+        element={
+          <PrivateRoute>
+            <CustomerService />
           </PrivateRoute>
         }
       />
