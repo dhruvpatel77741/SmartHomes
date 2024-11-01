@@ -14,7 +14,8 @@ import OrdersList from "./components/OrdersList";
 import Profile from "./components/Profile";
 import InventoryReport from "./components/InventoryReport";
 import SalesReport from "./components/SalesReport";
-import CustomerService from "./components/CustomerService";
+import OpenTicket from "./components/Tickets/OpenTicket";
+import TicketStatus from "./components/Tickets/TicketStatus";
 
 function App() {
   return (
@@ -118,10 +119,18 @@ function App() {
         }
       />
       <Route
-        path="/customer-service"
+        path="/customer-service/open-ticket"
         element={
           <PrivateRoute>
-            <CustomerService />
+            <OpenTicket />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/customer-service/ticket-status"
+        element={
+          <PrivateRoute>
+            <TicketStatus />
           </PrivateRoute>
         }
       />

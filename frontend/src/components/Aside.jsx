@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Aside.css";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -8,6 +8,12 @@ const Aside = () => {
   const userType = localStorage.getItem("userType");
   const navigate = useNavigate();
   const location = useLocation();
+  const [isCustomerDropdownOpen, setCustomerDropdownOpen] = useState(false);
+
+  const toggleCustomerDropdown = () => {
+    setCustomerDropdownOpen(!isCustomerDropdownOpen);
+  };
+
   const isHomeActive =
     location.pathname.startsWith("/dashboard") ||
     location.pathname === "/cart" ||
@@ -192,9 +198,8 @@ const Aside = () => {
         <button
           className={`left-part ${isCustomerService ? "active" : ""}`}
           style={{ border: "none" }}
-          onClick={() => {
-            navigate("/customer-service");
-          }}
+          onClick={toggleCustomerDropdown}
+          
         >
           <div className="left-img">
             <img
@@ -210,7 +215,24 @@ const Aside = () => {
           </div>
           <div className="left-text">Customer Service</div>
         </button>
-
+        {isCustomerDropdownOpen && (
+          <div style={{display:"flex", flexDirection:"column"}}>
+            <button
+              className="left-part"
+              style={{ border: "none", paddingLeft:"50px" }}
+              onClick={() => navigate("/customer-service/open-ticket")}
+            >
+              Open a Ticket
+            </button>
+            <button
+              className="left-part"
+              style={{ border: "none", paddingLeft:"50px" }}
+              onClick={() => navigate("/customer-service/ticket-status")}
+            >
+              Status of a Ticket
+            </button>
+          </div>
+        )}
         <button
           className={`left-part`}
           style={{ border: "none" }}

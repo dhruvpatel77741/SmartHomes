@@ -145,7 +145,7 @@ const OrdersList = () => {
                     className="team-main-bg TeamsTableHeading"
                     style={{ width: "100%" }}
                   >
-                    <td className="team-data-main">Sr. No.</td>
+                    <td className="team-data-main">Order ID</td>
                     <td className="team-data-role">Product Name</td>
                     <td className="team-data-email" style={{ width: "24%" }}>
                       {userType === "Customer" ? "Price" : "Customer Name"}
@@ -177,7 +177,7 @@ const OrdersList = () => {
                               overflowWrap: "break-word",
                             }}
                           >
-                            {groupIndex + 1}
+                            {data?.orderId}
                           </td>
                           <td className="team-data-role">{productName}</td>
                           <td className="team-data-email">
