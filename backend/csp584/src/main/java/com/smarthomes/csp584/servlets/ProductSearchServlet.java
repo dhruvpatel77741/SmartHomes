@@ -69,6 +69,7 @@ public class ProductSearchServlet extends HttpServlet {
 
         // Specify only required fields
         query.put("_source", new JSONArray()
+                .put("id")
                 .put("name")
                 .put("description")
                 .put("category")
