@@ -16,6 +16,7 @@ import InventoryReport from "./components/InventoryReport";
 import SalesReport from "./components/SalesReport";
 import OpenTicket from "./components/Tickets/OpenTicket";
 import TicketStatus from "./components/Tickets/TicketStatus";
+import SearchResultsPage from "./components/SearchResultsPage";
 
 function App() {
   return (
@@ -131,6 +132,14 @@ function App() {
         element={
           <PrivateRoute>
             <TicketStatus />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/search-results"
+        element={
+          <PrivateRoute>
+            <SearchResultsPage />
           </PrivateRoute>
         }
       />

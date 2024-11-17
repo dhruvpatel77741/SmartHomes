@@ -3,8 +3,8 @@ import "./Dashboard.css";
 import Aside from "./Aside";
 import HeaderComponent from "./HeaderComponent";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import SearchComponent from "./SearchComponent";
+import { Link, useNavigate } from "react-router-dom";
+// import SearchComponent from "./SearchComponent";
 
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
@@ -100,16 +100,61 @@ const Dashboard = () => {
     }
   };
 
+  const [reviewQuery, setReviewQuery] = useState("");
+  const [productQuery, setProductQuery] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSearchReviews = () => {
+    if (reviewQuery.trim() === "") {
+      alert("Please enter a review query.");
+      return;
+    }
+    navigate("/search-results", {
+      state: { query: reviewQuery, type: "reviews" },
+    });
+  };
+
+  const handleRecommendProduct = () => {
+    if (productQuery.trim() === "") {
+      alert("Please enter a product query.");
+      return;
+    }
+    navigate("/search-results", {
+      state: { query: productQuery, type: "products" },
+    });
+  };
+
   return (
     <div className="MainOuterContainer">
       <Aside />
       <div className="main-part-ratailer">
         <HeaderComponent />
-        
-        {selectedCategory === "All" && (
-          <SearchComponent data={data} setFilteredData={setFilteredData} />
-        )}
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          <div
+            style={{ display: "flex", justifyContent: "center", gap: "15px" }}
+          >
+            <input
+              type="text"
+              value={reviewQuery}
+              onChange={(e) => setReviewQuery(e.target.value)}
+              placeholder="Search Reviews"
+            />
+            <button onClick={handleSearchReviews}>Search Reviews</button>
+          </div>
 
+          <div
+            style={{ display: "flex", justifyContent: "center", gap: "15px" }}
+          >
+            <input
+              type="text"
+              value={productQuery}
+              onChange={(e) => setProductQuery(e.target.value)}
+              placeholder="Recommend Products"
+            />
+            <button onClick={handleRecommendProduct}>Recommend Product</button>
+          </div>
+        </div>
         <div className="filter-container">
           {categories.map((category) => (
             <button
