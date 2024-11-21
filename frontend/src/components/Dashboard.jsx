@@ -136,6 +136,7 @@ const Dashboard = () => {
       });
       if (response.status === 200) {
         alert("Products generated successfully! and stored in MySQL Database.");
+        window.location.reload();
       } else {
         alert(`Unexpected response: ${response.status}`);
       }
@@ -154,6 +155,7 @@ const Dashboard = () => {
       });
       if (response.status === 200) {
         alert("Reviews generated successfully! and stored in MongoDB.");
+        window.location.reload();
       } else {
         alert(`Unexpected response: ${response.status}`);
       }
