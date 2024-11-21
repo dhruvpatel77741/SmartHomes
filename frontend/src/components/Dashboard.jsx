@@ -9,6 +9,8 @@ import { Link, useNavigate } from "react-router-dom";
 const baseURL = process.env.REACT_APP_API_BASE_URL;
 
 const Dashboard = () => {
+  const userType = localStorage.getItem("userType");
+
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [categories, setCategories] = useState(["All"]);
@@ -125,6 +127,42 @@ const Dashboard = () => {
     });
   };
 
+  const handleGenerateProducts = async () => {
+    try {
+      const response = await axios.post(`${baseURL}/generateProducts`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status === 200) {
+        alert("Products generated successfully! and stored in MySQL Database.");
+      } else {
+        alert(`Unexpected response: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error generating products:", error);
+      alert("Failed to generate products. Please try again.");
+    }
+  };
+
+  const handleGenerateReviews = async () => {
+    try {
+      const response = await axios.post(`${baseURL}/generateReviews`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status === 200) {
+        alert("Reviews generated successfully! and stored in MongoDB.");
+      } else {
+        alert(`Unexpected response: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error generating products:", error);
+      alert("Failed to generate products. Please try again.");
+    }
+  };
+
   return (
     <div className="MainOuterContainer">
       <Aside />
@@ -155,6 +193,74 @@ const Dashboard = () => {
             <button onClick={handleRecommendProduct}>Recommend Product</button>
           </div>
         </div>
+
+        {userType !== "Customer" && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "20px 0",
+              gap: "15px",
+            }}
+          >
+            <button
+              onClick={handleGenerateProducts}
+              style={{
+                padding: "10px 20px",
+                fontSize: "16px",
+                fontWeight: "bold",
+                background: "linear-gradient(60deg, #960096, #28a745)",
+                color: "#FFFFFF",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                transition: "all 0.3s ease",
+              }}
+              onMouseOver={(e) =>
+                (e.target.style.background =
+                  "linear-gradient(60deg, #28a745, #960096)")
+              }
+              onMouseOut={(e) =>
+                (e.target.style.background =
+                  "linear-gradient(60deg, #960096, #28a745)")
+              }
+              onMouseDown={(e) => (e.target.style.transform = "scale(0.95)")}
+              onMouseUp={(e) => (e.target.style.transform = "scale(1)")}
+            >
+              Generate Product
+            </button>
+
+            <button
+              onClick={handleGenerateReviews}
+              style={{
+                padding: "10px 20px",
+                fontSize: "16px",
+                fontWeight: "bold",
+                background: "linear-gradient(60deg, #28a745, #960096)",
+                color: "#FFFFFF",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                transition: "all 0.3s ease",
+              }}
+              onMouseOver={(e) =>
+                (e.target.style.background =
+                  "linear-gradient(60deg, #960096, #28a745)")
+              }
+              onMouseOut={(e) =>
+                (e.target.style.background =
+                  "linear-gradient(60deg, #28a745, #960096)")
+              }
+              onMouseDown={(e) => (e.target.style.transform = "scale(0.95)")}
+              onMouseUp={(e) => (e.target.style.transform = "scale(1)")}
+            >
+              Generate Reviews
+            </button>
+          </div>
+        )}
+
         <div className="filter-container">
           {categories.map((category) => (
             <button
