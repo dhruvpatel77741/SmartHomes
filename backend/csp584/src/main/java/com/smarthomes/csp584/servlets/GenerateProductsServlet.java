@@ -45,6 +45,47 @@ public class GenerateProductsServlet extends HttpServlet {
         return 0;
     }
 
+    private String generateProductName(String category) throws IOException {
+        String requestUrl = "https://api.openai.com/v1/chat/completions";
+        URL url = new URL(requestUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Authorization", "Bearer " + OPENAI_API_KEY);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+
+        JSONObject payload = new JSONObject();
+        payload.put("model", "gpt-3.5-turbo");
+        JSONArray messages = new JSONArray();
+
+        // Add detailed instructions for generating the product name
+        messages.put(new JSONObject().put("role", "system")
+                .put("content", "You are an assistant that generates creative and descriptive product names."));
+        messages.put(new JSONObject().put("role", "user")
+                .put("content", "Generate a unique and descriptive product name for a product in the category '"
+                        + category + "'. The name should be concise and engaging."));
+
+        payload.put("messages", messages);
+
+        // Allow enough tokens for generating a concise name
+        payload.put("max_tokens", 20);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(payload.toString().getBytes());
+        }
+
+        StringBuilder response = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+        }
+
+        JSONObject jsonResponse = new JSONObject(response.toString());
+        return jsonResponse.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content").trim();
+    }
+
     private String generateProductDescription(String category) throws IOException {
         String requestUrl = "https://api.openai.com/v1/chat/completions";
         URL url = new URL(requestUrl);
@@ -57,11 +98,18 @@ public class GenerateProductsServlet extends HttpServlet {
         JSONObject payload = new JSONObject();
         payload.put("model", "gpt-3.5-turbo");
         JSONArray messages = new JSONArray();
-        messages.put(new JSONObject().put("role", "system").put("content", "You are an assistant that generates product descriptions."));
-        messages.put(new JSONObject().put("role", "user").put("content", "Generate a product description for a product in the category '"
-                + category + "'. The description must be concise and under 12 words."));
+
+        // Update instructions to request a description of approximately 100 words
+        messages.put(new JSONObject().put("role", "system")
+                .put("content", "You are an assistant that generates detailed product descriptions."));
+        messages.put(new JSONObject().put("role", "user")
+                .put("content", "Generate a detailed and engaging product description for a product in the category '"
+                        + category + "'. The description should be approximately 100 words long."));
+
         payload.put("messages", messages);
-        payload.put("max_tokens", 50);
+
+        // Increase max_tokens to ensure enough space for a 100-word response
+        payload.put("max_tokens", 150);
 
         try (OutputStream os = conn.getOutputStream()) {
             os.write(payload.toString().getBytes());
@@ -80,12 +128,13 @@ public class GenerateProductsServlet extends HttpServlet {
     }
 
     private JSONObject generateProduct(int productId, String category) throws IOException {
+        String productName = generateProductName(category);
         String description = generateProductDescription(category);
         Random random = new Random();
 
         JSONObject product = new JSONObject();
         product.put("id", productId);
-        product.put("name", category + " Product " + productId);
+        product.put("name", productName);
         product.put("description", description);
         product.put("category", category);
         product.put("price", 50 + productId * 10);
@@ -100,6 +149,7 @@ public class GenerateProductsServlet extends HttpServlet {
 
         return product;
     }
+
 
     private void storeProductsInDb(JSONArray products) throws SQLException {
         String insertQuery = "INSERT INTO products (id, name, description, category, price, specialDiscount, " +

@@ -23,55 +23,77 @@ public class ReviewServlet extends HttpServlet {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
-        String requestBody = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
-        JSONObject jsonBody = new JSONObject(requestBody);
+        try {
+            // Parse the JSON request body
+            StringBuilder requestBody = new StringBuilder();
+            String line;
+            while ((line = request.getReader().readLine()) != null) {
+                requestBody.append(line);
+            }
+            JSONObject jsonBody = new JSONObject(requestBody.toString());
 
-        String productModelName = jsonBody.getString("productModelName");
-        String productCategory = jsonBody.getString("productCategory");
-        double productPrice = jsonBody.getDouble("productPrice");
-        String storeID = jsonBody.getString("storeID");
-        String storeZip = jsonBody.getString("storeZip");
-        String storeCity = jsonBody.getString("storeCity");
-        String storeState = jsonBody.getString("storeState");
-        boolean productOnSale = jsonBody.getBoolean("productOnSale");
-        String manufacturerName = jsonBody.getString("manufacturerName");
-        boolean manufacturerRebate = jsonBody.getBoolean("manufacturerRebate");
-        String userID = jsonBody.getString("userID");
-        int userAge = jsonBody.getInt("userAge");
-        String userGender = jsonBody.getString("userGender");
-        String userOccupation = jsonBody.getString("userOccupation");
-        int reviewRating = jsonBody.getInt("reviewRating");
-        String reviewDate = jsonBody.getString("reviewDate");
-        String reviewText = jsonBody.getString("reviewText");
+            // Extract data from JSON
+            ProductReview review = new ProductReview(
+                    jsonBody.getString("productModelName"),
+                    jsonBody.getString("productCategory"),
+                    jsonBody.getDouble("productPrice"),
+                    jsonBody.getString("storeID"),
+                    jsonBody.getString("storeZip"),
+                    jsonBody.getString("storeCity"),
+                    jsonBody.getString("storeState"),
+                    jsonBody.getBoolean("productOnSale"),
+                    jsonBody.getString("manufacturerName"),
+                    jsonBody.getBoolean("manufacturerRebate"),
+                    jsonBody.getString("userID"),
+                    jsonBody.getInt("userAge"),
+                    jsonBody.getString("userGender"),
+                    jsonBody.getString("userOccupation"),
+                    jsonBody.getInt("reviewRating"),
+                    jsonBody.getString("reviewDate"),
+                    jsonBody.getString("reviewText")
+            );
 
-        ProductReview review = new ProductReview(productModelName, productCategory, productPrice, storeID, storeZip,
-                storeCity, storeState, productOnSale, manufacturerName,
-                manufacturerRebate, userID, userAge, userGender, userOccupation,
-                reviewRating, reviewDate, reviewText);
+            // Connect to MongoDB
+            MongoDatabase db = MongoDBDataStoreUtilities.getConnection();
+            if (db == null) {
+                throw new Exception("Failed to connect to MongoDB");
+            }
 
-        MongoDatabase db = MongoDBDataStoreUtilities.getConnection();
-        MongoCollection<Document> reviewCollection = db.getCollection("ProductReviews");
+            // Insert review into MongoDB collection
+            MongoCollection<Document> reviewCollection = db.getCollection("ProductReviews");
+            Document reviewDoc = new Document("productModelName", review.getProductModelName())
+                    .append("productCategory", review.getProductCategory())
+                    .append("productPrice", review.getProductPrice())
+                    .append("storeID", review.getStoreID())
+                    .append("storeZip", review.getStoreZip())
+                    .append("storeCity", review.getStoreCity())
+                    .append("storeState", review.getStoreState())
+                    .append("productOnSale", review.isProductOnSale())
+                    .append("manufacturerName", review.getManufacturerName())
+                    .append("manufacturerRebate", review.isManufacturerRebate())
+                    .append("userID", review.getUserID())
+                    .append("userAge", review.getUserAge())
+                    .append("userGender", review.getUserGender())
+                    .append("userOccupation", review.getUserOccupation())
+                    .append("reviewRating", review.getReviewRating())
+                    .append("reviewDate", review.getReviewDate())
+                    .append("reviewText", review.getReviewText());
 
-        Document reviewDoc = new Document("productModelName", review.getProductModelName())
-                .append("productCategory", review.getProductCategory())
-                .append("productPrice", review.getProductPrice())
-                .append("storeID", review.getStoreID())
-                .append("storeZip", review.getStoreZip())
-                .append("storeCity", review.getStoreCity())
-                .append("storeState", review.getStoreState())
-                .append("productOnSale", review.isProductOnSale())
-                .append("manufacturerName", review.getManufacturerName())
-                .append("manufacturerRebate", review.isManufacturerRebate())
-                .append("userID", review.getUserID())
-                .append("userAge", review.getUserAge())
-                .append("userGender", review.getUserGender())
-                .append("userOccupation", review.getUserOccupation())
-                .append("reviewRating", review.getReviewRating())
-                .append("reviewDate", review.getReviewDate())
-                .append("reviewText", review.getReviewText());
+            reviewCollection.insertOne(reviewDoc);
 
-        reviewCollection.insertOne(reviewDoc);
+            // Respond with success
+            JSONObject responseJson = new JSONObject()
+                    .put("status", "success")
+                    .put("message", "Review submitted successfully.");
+            out.println(responseJson.toString());
 
-        out.println(new JSONObject().put("status", "success").put("message", "Review submitted successfully."));
+        } catch (Exception e) {
+            // Handle exceptions
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            JSONObject errorJson = new JSONObject()
+                    .put("status", "error")
+                    .put("message", e.getMessage());
+            out.println(errorJson.toString());
+        }
     }
 }
